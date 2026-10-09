@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "engineVersion": "3.4.0",
-  "sourceCommit": "f5f9f24e9cb8d43c45c081a2474372836e15b215",
-  "version": "V0.3.0-room-visible-fast-edit",
+  "sourceCommit": "3bc4f79a1fb2a62dd5a8153b7c2415ed529deaf1",
+  "version": "V0.4.0-novice-journey-feedback",
   "buildMode": "direct-static-preview",
   "features": [
     "room-scene",
-    "manual-publish",
-    "phone-hotspots",
-    "studio-growth",
-    "laya-canvas-isolation",
-    "interactive-fast-editing",
+    "first-one-tap-video",
+    "journey-8-missions",
+    "strategy-choice",
+    "live-video-analytics",
+    "reward-float",
     "save-migration"
   ]
 }

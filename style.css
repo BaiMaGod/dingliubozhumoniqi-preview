@@ -24,3 +24,21 @@ body{background:radial-gradient(circle at 48% 8%,#735474,#171427 75%)}
 .edit-tool-buttons button{border:1px solid #f8cfab;background:#f5d7b9;border-radius:9px;color:#64425a;display:flex;align-items:center;justify-content:center;gap:3px;font-size:11px;font-weight:900;padding:8px 3px;min-width:0}
 .edit-tool-buttons button:disabled{opacity:.5;background:#c3b2af}
 .edit-tool-buttons button b{font-size:16px}.editing-cta{background:linear-gradient(180deg,#b9e9ea,#81c4e9,#84a4d8);border-color:#d6faff;color:#344466}
+
+/* V0.4: journey objectives and tangible video results */
+.journey-banner{display:flex;align-items:center;gap:7px;border:1px solid #d3a16f;background:linear-gradient(105deg,#523650,#6b4455);box-shadow:0 3px 0 #24172d;border-radius:14px;padding:8px;margin:8px 0 10px;color:#fff4e1;min-height:67px}
+.journey-icon{width:34px;height:34px;display:grid;place-items:center;font-size:24px;flex-shrink:0;background:#fcddac;border-radius:11px}
+.journey-text{flex:1;min-width:0}.journey-text small,.journey-text strong,.journey-text span{display:block;line-height:1.35}.journey-text small{color:#fbd89b;font-size:9px;letter-spacing:.2px}.journey-text strong{font-size:12px;margin:2px 0}.journey-text span{font-size:9px;color:#e3c7d1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.journey-banner button{flex-shrink:0;border:1px solid #ffe3af;border-radius:10px;background:linear-gradient(#ffeabf,#ffc97e);color:#70435c;font-size:11px;font-weight:950;padding:10px 8px}
+.journey-ready{border-color:#ffe7aa;box-shadow:0 0 0 2px #ffdc8b2e,0 3px 0 #4b3042;animation:journey-glow 1.5s ease-in-out infinite}.journey-ready button{background:linear-gradient(#fff6c2,#ffc253)}
+.journey-banner.graduation{font-size:12px;min-height:43px}
+.strategy-intro{font-size:13px;line-height:1.65;color:#f3dbd8;margin-bottom:12px}.strategy-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.strategy-grid button{border:2px solid #edc39c;text-align:left;border-radius:16px;background:linear-gradient(145deg,#755071,#3d3356);min-height:156px;padding:14px 10px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 4px 0 #1d1930}.strategy-grid b{font-size:16px;color:#fff0cb}.strategy-grid small{font-size:12px;color:#fce1b7;line-height:1.65}.strategy-grid span{font-size:10px;color:#d8c8e9}
+.live-board{border:2px solid #e5b999;background:linear-gradient(160deg,#58405d,#302943);border-radius:18px;padding:13px;box-shadow:inset 0 1px #ffffff26}
+.live-head{display:flex;align-items:center;justify-content:space-between;gap:7px;font-size:11px;color:#ffe0a9}.live-head small{font-size:9px;color:#efd1dc}.live-board h3{font-size:14px;margin:13px 0}.live-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.live-stats div{background:#241c37aa;border:1px solid #95728e;border-radius:11px;padding:10px 4px;text-align:center;min-width:0}.live-stats small,.live-stats b{display:block}.live-stats small{font-size:10px;color:#cdb9d8}.live-stats b{font-size:22px;color:#ffe6a7;margin-top:4px;overflow-wrap:anywhere}.live-board p{font-size:12px;line-height:1.6;color:#f4d8d8}
+.result-advice{font-size:12px;line-height:1.7;color:#dec7dd;padding:10px 4px}
+.claim-in-live{width:100%;border-radius:12px;border:1px solid #ffe3b0;background:#eacb91;color:#513952;padding:12px;font-weight:950;font-size:12px}
+.reward-float{z-index:100;position:fixed;top:33%;left:50%;transform:translate(-50%,0);width:max-content;max-width:90vw;border-radius:30px;border:2px solid #ffebba;background:linear-gradient(130deg,#fff5c6,#f8cb9f);color:#633d54;padding:13px 18px;font-weight:1000;font-size:18px;box-shadow:0 8px 26px #1309239e;pointer-events:none;animation:float-reward 1.5s ease-out forwards}
+@keyframes float-reward{0%{opacity:0;transform:translate(-50%,20px) scale(.75)}24%{opacity:1;transform:translate(-50%,-3px) scale(1.1)}72%{opacity:1;transform:translate(-50%,-32px) scale(1)}100%{opacity:0;transform:translate(-50%,-62px) scale(1)}}
+@keyframes journey-glow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.08)}}
+@media(max-width:370px){.journey-text span{display:none}.journey-banner{min-height:56px}.journey-banner button{padding:8px 6px}.strategy-grid b{font-size:13px}.strategy-grid{gap:6px}}
+@media(prefers-reduced-motion:reduce){.reward-float{animation:none;opacity:1}}
