@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "engineVersion": "3.4.0",
+  "sourceCommit": "f7354c5896dd6ab339236d62ed89f0b107bccc5f",
+  "target": "github-pages",
+  "version": "V0.1.0",
+  "buildMode": "direct-static-preview"
+}
