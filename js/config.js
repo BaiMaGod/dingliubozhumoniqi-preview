@@ -9,11 +9,11 @@ const data=[
 ['知识','三分钟讲清热门科技',83,3,2],['知识','每天学一个冷知识',50,1,0],['知识','辟谣生活小误区',64,2,0],['知识','为什么手机电池衰减',58,1,0],['知识','AI工具效率实测',87,3,2],['知识','简单理财常识',52,2,0],['知识','小学生也能懂的科学',48,1,0]];
 export const TOPICS=data.map((d,i)=>({id:'T'+String(i+1).padStart(3,'0'),niche:d[0],title:d[1],heat:d[2],competition:d[3],duration:d[4]}));
 export const MODES=[
-{id:'casual',name:'随手拍',seconds:30,cost:0,opening:-1,completion:-2,engagement:1,sharing:0,follow:.9,desc:'免费 · 快速试水'},
-{id:'twist',name:'反转整活',seconds:45,cost:0,opening:7,completion:-1,engagement:2,sharing:7,follow:1,desc:'高传播 · 随机波动'},
-{id:'premium',name:'精致制作',seconds:90,cost:30,opening:3,completion:9,engagement:3,sharing:3,follow:1.08,desc:'高完播 · 花费30'},
-{id:'tutorial',name:'干货教学',seconds:60,cost:10,opening:-1,completion:7,engagement:3,sharing:4,follow:1.2,desc:'易转粉 · 花费10'},
-{id:'emotion',name:'情绪共鸣',seconds:40,cost:0,opening:2,completion:1,engagement:8,sharing:6,follow:1.1,desc:'高互动 · 易疲劳'}];
+{id:'casual',name:'随手拍',seconds:2.8,cost:0,opening:-1,completion:-2,engagement:1,sharing:0,follow:.9,desc:'免费 · 快速试水'},
+{id:'twist',name:'反转整活',seconds:4.5,cost:0,opening:7,completion:-1,engagement:2,sharing:7,follow:1,desc:'高传播 · 随机波动'},
+{id:'premium',name:'精致制作',seconds:7,cost:30,opening:3,completion:9,engagement:3,sharing:3,follow:1.08,desc:'高完播 · 花费30'},
+{id:'tutorial',name:'干货教学',seconds:5.5,cost:10,opening:-1,completion:7,engagement:3,sharing:4,follow:1.2,desc:'易转粉 · 花费10'},
+{id:'emotion',name:'情绪共鸣',seconds:4,cost:0,opening:2,completion:1,engagement:8,sharing:6,follow:1.1,desc:'高互动 · 易疲劳'}];
 export const POOLS=[
 {name:'初始测试',min:200,max:800,threshold:43,exp:0},
 {name:'小流量推荐',min:2000,max:20000,threshold:47,exp:10},

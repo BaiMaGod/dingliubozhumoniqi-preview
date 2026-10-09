@@ -1,13 +1,16 @@
 {
   "schemaVersion": 1,
   "engineVersion": "3.4.0",
-  "sourceCommit": "123f45243d350854dcd53207060cc14e461848a3",
-  "version": "V0.2.0-room-rework",
+  "sourceCommit": "7896b71bb200fe8ed44806cd4ea901bfbea898f3",
+  "version": "V0.3.0-room-visible-fast-edit",
   "buildMode": "direct-static-preview",
   "features": [
     "room-scene",
     "manual-publish",
     "phone-hotspots",
-    "studio-growth"
+    "studio-growth",
+    "laya-canvas-isolation",
+    "interactive-fast-editing",
+    "save-migration"
   ]
 }
