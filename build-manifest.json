@@ -1,8 +1,13 @@
 {
   "schemaVersion": 1,
   "engineVersion": "3.4.0",
-  "sourceCommit": "08f8cbc8bf43190271943c232755e5c39a168725",
-  "target": "github-pages",
-  "version": "V0.1.1",
-  "buildMode": "direct-static-preview"
+  "sourceCommit": "123f45243d350854dcd53207060cc14e461848a3",
+  "version": "V0.2.0-room-rework",
+  "buildMode": "direct-static-preview",
+  "features": [
+    "room-scene",
+    "manual-publish",
+    "phone-hotspots",
+    "studio-growth"
+  ]
 }
