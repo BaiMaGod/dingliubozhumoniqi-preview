@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "engineVersion": "3.4.0",
-  "sourceCommit": "7896b71bb200fe8ed44806cd4ea901bfbea898f3",
+  "sourceCommit": "f5f9f24e9cb8d43c45c081a2474372836e15b215",
   "version": "V0.3.0-room-visible-fast-edit",
   "buildMode": "direct-static-preview",
   "features": [
