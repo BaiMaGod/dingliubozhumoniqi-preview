@@ -26,7 +26,7 @@ export function actorLayers(tier,art){
 }
 
 export class RoomMotion{
- node=null;runtime=null;running=false;maps=[];lastFrame=0;
+ node=null;runtime=null;running=false;maps=[];lastFrame=0;domDriver=false;domTimer=null;
  media=matchMedia('(prefers-reduced-motion: reduce)');
  constructor(){
   this.media.addEventListener('change',()=>this.sync());
@@ -34,18 +34,19 @@ export class RoomMotion{
   window.addEventListener('pagehide',()=>this.stop());
   window.addEventListener('pageshow',()=>this.sync());
  }
- setRuntime(runtime){this.runtime=runtime;this.sync();}
+ setRuntime(runtime){this.stop();this.runtime=runtime;this.domDriver=false;this.sync();}
+ useDOMDriver(){this.stop();this.runtime=null;this.domDriver=true;this.sync();}
  connect(node){
   if(this.node!==node){this.stop();this.node=node;this.maps=node?[...node.querySelectorAll('[data-motion]')]:[];}
   this.sync();
  }
  sync(){
-  const active=!!(this.runtime&&this.node?.isConnected&&!document.hidden&&!document.querySelector('.sheet')&&!this.media.matches);
-  if(active&&!this.running){this.running=true;this.node.dataset.motionRunning='true';this.tick();this.runtime.timer.loop(50,this,this.tick);}
+  const active=!!((this.runtime||this.domDriver)&&this.node?.isConnected&&!document.hidden&&!document.querySelector('.sheet')&&!this.media.matches);
+  if(active&&!this.running){this.running=true;this.node.dataset.motionRunning='true';this.node.dataset.motionDriver=this.domDriver?'dom':'laya';this.tick();if(this.domDriver)this.domTimer=setInterval(()=>this.tick(),50);else this.runtime.timer.loop(50,this,this.tick);}
   else if(!active)this.stop();
  }
  stop(){
-  this.runtime?.timer.clear(this,this.tick);this.running=false;
+  this.runtime?.timer.clear(this,this.tick);clearInterval(this.domTimer);this.domTimer=null;this.running=false;
   if(this.node){this.node.dataset.motionRunning='false';if(this.media.matches)this.maps.forEach(el=>el.setAttribute('scale','0'));}
  }
  tick(){

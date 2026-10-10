@@ -1,14 +1,14 @@
 {
-  "version": "0.8.0",
+  "version": "0.8.1",
   "sourceRepository": "BaiMaGod/dingliubozhumoniqi",
-  "sourceCommit": "17d95d29226a75010014c6f29431c393f7efa4c2",
+  "sourceCommit": "9b8db9dfbfdb5cb517cd06fe1e15909330a79166",
   "buildScript": "scripts/build.mjs",
-  "builtAt": "2026-10-10T13:20:28.317Z",
+  "builtAt": "2026-10-10T13:36:16.362Z",
   "qa": {
-    "commit": "ee0f404065cf7f72c2d7c6fe57f66a20284835f4",
-    "tree": "6914a83376422a6996e921b7149d2e1b433f7195",
-    "workflowRun": 38054830326,
-    "artifact": 11669764692,
+    "commit": "5bc1924e706400e929511486fd2b6693d2511f58",
+    "tree": "c5f6ef2a3a50bfad76a4a50b29bc0382897b8084",
+    "workflowRun": 38055721069,
+    "artifact": 11670950921,
     "status": "passed",
     "ruleTests": 17,
     "typecheck": true,
@@ -21,7 +21,7 @@
       "844x390"
     ],
     "realInputs": true,
-    "screenshots": 106,
+    "screenshots": 108,
     "motion": {
       "tierCount": 4,
       "backgroundChanges": 0,
@@ -31,12 +31,20 @@
       "repeatedNavigation": 6,
       "maxRewardParticles": 7
     },
-    "physicalDevices": "pending"
+    "physicalDevices": "pending",
+    "noWebGL": {
+      "realBrowser": true,
+      "realInput": true,
+      "localPixelMotion": true,
+      "modalPause": true,
+      "reducedMotion": true,
+      "p95": 16.8
+    }
   },
   "files": [
     {
       "path": "index.html",
-      "sha": "9b6d4a42306e15802f8bcd4d0c1b54638a2a9228",
+      "sha": "821eab5e120a4c8711836bf4f1e57ceaa5dd4759",
       "bytes": 733
     },
     {
@@ -51,7 +59,7 @@
     },
     {
       "path": "js/engine.js",
-      "sha": "1c5f59ca7e02070bf2cbbb592279f4dc7899687a",
+      "sha": "878228d3c3a5e94f9bba95d03fbda8fec50e849d",
       "bytes": 11780
     },
     {
@@ -61,18 +69,18 @@
     },
     {
       "path": "js/room-scene.js",
-      "sha": "cbd1a16c25341b81b197e0dc3859e895a7b21d96",
+      "sha": "85d165fc1bbcedcb4df2794d04e40748414a0f32",
       "bytes": 1834
     },
     {
       "path": "js/room-motion.js",
-      "sha": "50ad55df157718d9ef5f231598e44c19f5951144",
-      "bytes": 6646
+      "sha": "60274bed68c16d5ed65b92584641d480b9fecbf3",
+      "bytes": 6983
     },
     {
       "path": "js/main.js",
-      "sha": "273e584deee708b2448107a7f9b72fa7afec0742",
-      "bytes": 29058
+      "sha": "7240155243937a280be38121a22b92d86331711a",
+      "bytes": 29373
     },
     {
       "path": "assets/room-rental-v05.webp",
