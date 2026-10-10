@@ -3,7 +3,8 @@ import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 const require=createRequire(import.meta.url);
-const {chromium}=require((process.env.QA_MODULES||process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES)+'/playwright');
+const modules=process.env.QA_MODULES||process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES;
+const {chromium}=require(modules?modules+'/playwright':'playwright');
 const url=process.env.QA_URL||'http://127.0.0.1:4173/';
 const out=process.env.QA_OUT||'evidence/browser';mkdirSync(out,{recursive:true});
 const b=await chromium.launch({headless:true});
@@ -25,7 +26,7 @@ for(const profile of profiles){
   return {overflow:document.documentElement.scrollWidth>innerWidth,ctaBottom:cta.bottom,navTop:nav.top,ctaWidth:cta.width,viewport:innerHeight,hotspots:[...document.querySelectorAll('.room-hotspot')].map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,clickable:document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===e};})};
  });
  assert(!geometry.overflow,'no horizontal overflow');assert(geometry.ctaBottom<geometry.navTop,'CTA and navigation do not overlap');assert(geometry.ctaWidth>250);assert(geometry.hotspots.every(h=>h.clickable&&h.w>=44&&h.h>=40),'room controls visible and hit-testable');
- const missionBottom=await p.locator('.mission-card').evaluate(e=>e.getBoundingClientRect().bottom);console.log(JSON.stringify({profile:profile.name,geometry,missionBottom}));await shot(p,profile.name+'-home');if(profile.name.startsWith('mobile'))assert(missionBottom<=await p.locator('.room-bottom .main-cta').evaluate(e=>e.getBoundingClientRect().top-10),'mission and action cards fully above CTA');
+ const missionBottom=await p.locator('.mission-card').evaluate(e=>e.getBoundingClientRect().bottom);console.log(JSON.stringify({profile:profile.name,geometry,missionBottom}));await shot(p,profile.name+'-home');assert(missionBottom<=await p.locator('.room-bottom .main-cta').evaluate(e=>e.getBoundingClientRect().top-10),'mission and action cards fully above CTA');
  await activate('.pc-hotspot');await p.locator('.edit-tools').waitFor();
  await shot(p,profile.name+'-editing');await activate('[data-action="edit"][data-id="cut"]');
  await p.locator('.main-cta[data-action="publish"]').waitFor({timeout:10000});
@@ -42,7 +43,7 @@ for(const profile of profiles){
  await activate('[data-action="buyroom"]');await p.locator('.room-illustration[src*="cozy"]').waitFor();await p.locator('.room-illustration').evaluate(img=>img.decode());await shot(p,profile.name+'-upgraded');
  await activate('.main-cta[data-action="pc"]');await p.getByRole('dialog',{name:'创作者工作台'}).waitFor();await activate('[data-action="next"]');await activate('[data-action="next"]');await activate('[data-action="start"]');await p.locator('.main-cta[data-action="publish"]').waitFor({timeout:10000});await activate('.main-cta[data-action="publish"]');await activate('[data-action="publishWith"][data-id="share"]');await p.getByRole('dialog',{name:'本条作品成绩出炉！'}).waitFor({timeout:10000});await activate('[data-action="closeLive"]');
  await p.reload();await p.locator('.room-illustration').evaluate(img=>img.decode());assert(await p.locator('#view-counter').innerText()!=='0','save persists');
- const frames=await p.evaluate(()=>new Promise(resolve=>{const v=[];let last;function f(t){if(last!==undefined)v.push(t-last);last=t;if(v.length<180)requestAnimationFrame(f);else resolve(v.sort((a,b)=>a-b));}requestAnimationFrame(f);}));const p95=frames[Math.floor(frames.length*.95)];assert(p95<=35,'browser frame budget');
+ const frames=await p.evaluate(()=>new Promise(resolve=>{const v=[];let last;function f(t){if(last!==undefined)v.push(t-last);last=t;if(v.length<180)requestAnimationFrame(f);else resolve(v.sort((a,b)=>a-b));}requestAnimationFrame(f);}));const p95=frames[Math.floor(frames.length*.95)];console.log(JSON.stringify({profile:profile.name,p95}));assert(p95<=35,'browser frame budget: '+p95);
  report.profiles.push({name:profile.name,status:'passed',firstVideoViews:views,realInput:true,secondVideo:true,roomPurchase:true,saveRestore:true,p95,geometry,errors});report.errors.push(...errors);
  await ctx.close();
 }
