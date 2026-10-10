@@ -1,101 +1,139 @@
 {
-  "version": "0.7.0",
+  "version": "0.8.0",
   "sourceRepository": "BaiMaGod/dingliubozhumoniqi",
-  "sourceCommit": "2027f8d4f69c11f51b71b04e01451c4f0c11bfde",
+  "sourceCommit": "17d95d29226a75010014c6f29431c393f7efa4c2",
   "buildScript": "scripts/build.mjs",
-  "builtAt": "2026-10-10T05:10:01.421Z",
+  "builtAt": "2026-10-10T13:20:28.317Z",
   "qa": {
-    "commit": "fce50050fa8391dbfd614a380022b1edab51a620",
-    "workflowRun": 38025957898,
-    "artifactId": 11659413738,
+    "commit": "ee0f404065cf7f72c2d7c6fe57f66a20284835f4",
+    "tree": "6914a83376422a6996e921b7149d2e1b433f7195",
+    "workflowRun": 38054830326,
+    "artifact": 11669764692,
     "status": "passed",
     "ruleTests": 17,
+    "typecheck": true,
     "viewports": [
+      "512x768",
       "360x740",
       "390x844",
       "430x932",
-      "512x768",
       "1280x900",
-      "844x390 rotation"
+      "844x390"
     ],
     "realInputs": true,
-    "screenshots": 67
+    "screenshots": 106,
+    "motion": {
+      "tierCount": 4,
+      "backgroundChanges": 0,
+      "chairChanges": 0,
+      "modalPause": true,
+      "reducedMotion": true,
+      "repeatedNavigation": 6,
+      "maxRewardParticles": 7
+    },
+    "physicalDevices": "pending"
   },
-  "assets": [
+  "files": [
     {
-      "file": "room-cozy-v05.webp",
-      "source": "AI generated from visual-target-v05",
-      "width": 1448,
-      "height": 1086,
-      "bytes": 291788,
-      "sha256": "99645e33af116bff025dade5717f4809d812250e470c5ed7ea9ec98857147fb6"
+      "path": "index.html",
+      "sha": "9b6d4a42306e15802f8bcd4d0c1b54638a2a9228",
+      "bytes": 733
     },
     {
-      "file": "room-pro-v05.webp",
-      "source": "AI generated from visual-target-v05",
-      "width": 1448,
-      "height": 1086,
-      "bytes": 282768,
-      "sha256": "d98b83a05a609d3e795576b377d78989169080a1b47b9dff3411c7728d78ed07"
+      "path": "style.css",
+      "sha": "cc607d6d9f50664391025a2e53470da16ab25d26",
+      "bytes": 46347
     },
     {
-      "file": "room-rental-v05.webp",
-      "source": "AI generated from visual-target-v05",
-      "width": 1448,
-      "height": 1086,
-      "bytes": 283586,
-      "sha256": "dff78c0b6138521857ab51220b73ada7f77c9a8ebb5ca327bea120c0919330c0"
+      "path": "js/config.js",
+      "sha": "d288761e048c409e9c751ce8ba159156dd2770a8",
+      "bytes": 4258
     },
     {
-      "file": "room-star-v05.webp",
-      "source": "AI generated from visual-target-v05",
-      "width": 1448,
-      "height": 1086,
-      "bytes": 312056,
-      "sha256": "8b9e1b372b7b2178003b9a86876ddd0074fa84908d2f3670ad0287ff8a750bb4"
+      "path": "js/engine.js",
+      "sha": "1c5f59ca7e02070bf2cbbb592279f4dc7899687a",
+      "bytes": 11780
     },
     {
-      "file": "entry-equipment-v07.webp",
-      "source": "ImageGen, referenced approved visual-target-v05",
-      "width": 512,
-      "height": 512,
-      "alpha": true,
-      "bytes": 48610,
-      "sha256": "6e76b7ce76415a3ec47b47fe0b4157cafeadf648efd294703ae025e5bf9b3fa1"
+      "path": "js/icons.js",
+      "sha": "de61b0fc9960a6104cbdc1cb1f6a08ac3e84a068",
+      "bytes": 3181
     },
     {
-      "file": "entry-laptop-v07.webp",
-      "source": "ImageGen, referenced approved visual-target-v05",
-      "width": 512,
-      "height": 512,
-      "alpha": true,
-      "bytes": 50328,
-      "sha256": "be2d3a4d34749629e534f7a50c18a3b01925f931bf3f3b7437fdc6434fe4fdec"
+      "path": "js/room-scene.js",
+      "sha": "cbd1a16c25341b81b197e0dc3859e895a7b21d96",
+      "bytes": 1834
     },
     {
-      "file": "entry-phone-v07.webp",
-      "source": "ImageGen, referenced approved visual-target-v05",
-      "width": 512,
-      "height": 512,
-      "alpha": true,
-      "bytes": 43782,
-      "sha256": "72d0be7ae17cbbaaf7ce289ae69c00fa25ac66e1df36b1199e7d5ed870d18d4b"
+      "path": "js/room-motion.js",
+      "sha": "50ad55df157718d9ef5f231598e44c19f5951144",
+      "bytes": 6646
     },
     {
-      "file": "work-cover-v07.webp",
-      "source": "ImageGen, referenced approved visual-target-v05",
-      "width": 768,
-      "height": 512,
-      "alpha": false,
-      "bytes": 90316,
-      "sha256": "55192fbf96dfd510cd8cd135a5c1d3c6d6e717b31b8d86b191aa7b32e84eba37"
+      "path": "js/main.js",
+      "sha": "273e584deee708b2448107a7f9b72fa7afec0742",
+      "bytes": 29058
+    },
+    {
+      "path": "assets/room-rental-v05.webp",
+      "sha": "1b76722cb1bd2f1a2e927b744bc367d97c6d9b32",
+      "bytes": 283586
+    },
+    {
+      "path": "assets/room-cozy-v05.webp",
+      "sha": "8bf6e4ee74f8720586787b0ab96418baaf0ab2ba",
+      "bytes": 291788
+    },
+    {
+      "path": "assets/room-pro-v05.webp",
+      "sha": "1bed12788bbdd5463bc42c7e9b6ea39fb2d5a56d",
+      "bytes": 282768
+    },
+    {
+      "path": "assets/room-star-v05.webp",
+      "sha": "20e4ce6c35f51e45653ef50ee60aa1fcffef6a3f",
+      "bytes": 312056
+    },
+    {
+      "path": "assets/entry-laptop-v07.webp",
+      "sha": "8915de5046d3d385e5845f072dfbb7ac00370f11",
+      "bytes": 50328
+    },
+    {
+      "path": "assets/entry-phone-v07.webp",
+      "sha": "0c73ec40181db08b9190c87329f84d9219213660",
+      "bytes": 43782
+    },
+    {
+      "path": "assets/entry-equipment-v07.webp",
+      "sha": "1451d96feee22eb10668012c4810e6da00df5cd0",
+      "bytes": 48610
+    },
+    {
+      "path": "assets/work-cover-v07.webp",
+      "sha": "b7ac06fb4149f4e9afdabc129614f54ea719c6bc",
+      "bytes": 90316
+    },
+    {
+      "path": "fonts/creator-brush-v07.woff2",
+      "sha": "3b1ae0f51ee1620bf6f465da6d567f6ef611cd46",
+      "bytes": 22400
+    },
+    {
+      "path": "fonts/OFL-MaShanZheng.txt",
+      "sha": "25f7174fea7824954ac26f5661d75f3b37747196",
+      "bytes": 4398
+    },
+    {
+      "path": "libs/laya.core.js",
+      "sha": "2588795f05d4cf05b9006784ff3fe119c90304f7",
+      "bytes": 847227
+    },
+    {
+      "path": "libs/laya.webgl_2D.js",
+      "sha": "47c2d87cb1e6c191ca5c6aa6a7eae4d00391cbf3",
+      "bytes": 247075
     }
   ],
-  "font": {
-    "file": "fonts/creator-brush-v07.woff2",
-    "bytes": 22400,
-    "license": "fonts/OFL-MaShanZheng.txt",
-    "gitBlob": "3b1ae0f51ee1620bf6f465da6d567f6ef611cd46"
-  },
   "debugBridge": false
 }
