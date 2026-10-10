@@ -4,7 +4,7 @@ export const ROOM_ART=['room-rental-v05.webp','room-cozy-v05.webp','room-pro-v05
 export function roomScene(game){
  const tier=Math.max(0,Math.min(3,game.s.roomTier||0));
  const state=game.making?'working':game.ready?'ready':game.streaming?'viral':'idle';
- const label=game.ready?'立即发布':game.making?'剪辑中':'开始创作';
+ const label=game.ready?'发布':game.making?'剪辑中':'创作';
  return `<div class="room-art tier-${tier} ${state}">
  <img class="room-illustration" src="./assets/${ROOM_ART[tier]}" alt="${['阳光照进初创出租屋，博主在旧电脑前工作','带补光灯和灵感墙的温馨小工作室','双屏和专业拍摄设备的创作间','配备专业器材与奖杯的顶流工作室'][tier]}" width="1448" height="1086" fetchpriority="high" draggable="false">
  <div class="sun-motes" aria-hidden="true"><i></i><i></i><i></i></div>
