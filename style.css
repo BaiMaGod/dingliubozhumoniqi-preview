@@ -55,3 +55,42 @@
 @keyframes desk-pulse{0%{box-shadow:0 0 0 0 #aac49577}100%{box-shadow:0 0 0 8px #aac49500}}
 @keyframes reward-seed{0%{opacity:0;transform:rotate(var(--angle)) translateY(3px) scale(.5)}20%{opacity:1}100%{opacity:0;transform:rotate(var(--angle)) translateY(-29px) scale(.3)}}
 @media(prefers-reduced-motion:reduce){.actor-motion,.cat-dream,.desk-response,.reward-flare{display:none}.illustrated-actions button:active img{transform:none}}
+
+
+/* V0.9 — focused first-session learning: one goal at a time, no blocking overlay. */
+.guide-help{border:1px solid #d9dfcd;background:#fffdf6;color:#738e72;border-radius:12px;min-height:32px;padding:4px 10px;font-size:10px;font-weight:800;white-space:nowrap}
+.guide-help .ui-icon{width:14px;height:14px;margin-right:3px}
+.tutorial-mode #app{padding-bottom:calc(91px + env(safe-area-inset-bottom))}
+.tutorial-mode .hud-tag{display:none}
+.tutorial-mode .resource-bar{margin-top:9px}
+.tutorial-mode .room-title{margin-top:14px;margin-bottom:7px}
+.tutorial-mode .room-title p{font-size:11px;line-height:1.45}
+.tutorial-mode .room-art{width:min(100%,440px);margin-inline:auto}
+.tutorial-mode .room-bottom{bottom:calc(10px + env(safe-area-inset-bottom));padding-bottom:12px;z-index:14}
+.tutorial-mode .phone-hotspot,.tutorial-mode .decor-hotspot{display:none}
+.tutorial-mode .pc-hotspot{top:19%}
+.tutorial-mode .pc-hotspot .hotspot-pill{background:#fff7e7;box-shadow:0 0 0 3px #eab47c40,0 2px 8px #79603930;border-color:#e8c38d}
+.tutorial-mode .room-feedback{height:20px;margin:0 0 2px;background:transparent;padding:0 8px}
+.tutorial-mode .room-feedback.feedback-idle{visibility:hidden}
+.tutorial-card{margin:5px 0 3px;background:linear-gradient(125deg,#fffaf0,#eaf1df);border:1px solid #e2d8ba;border-radius:17px;padding:12px 14px 10px;box-shadow:0 4px 12px #99744b13;color:#3b5847}
+.tutorial-top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:5px}
+.tutorial-count{font-size:10px;letter-spacing:.4px;color:#b37f56;font-weight:800}
+.tutorial-count .ui-icon{width:14px;height:14px;margin-right:3px}
+.tutorial-skip{border:0;background:transparent;min-height:30px;padding:5px 0 5px 10px;color:#8d9587;font-size:10px;text-decoration:underline;text-underline-offset:3px}
+.tutorial-card>strong{display:block;font-size:16px;line-height:1.45}
+.tutorial-card p{font-size:11px;line-height:1.55;margin:3px 0 9px;color:#718073}
+.tutorial-progress{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.tutorial-progress i{background:#d7dfd1;height:4px;border-radius:4px}
+.tutorial-progress i.complete{background:#e6a47c}
+.reward-cta{background:#df996a;border-color:#d28861;box-shadow:0 3px 0 #b77a51}
+.novice-live-note{background:#fff1db;border:1px solid #f2dab5;border-radius:12px;padding:10px 12px;margin:0 0 12px;color:#926c4d;font-size:12px;line-height:1.6;font-weight:700}
+.howto-intro{background:#e9f0df;border-radius:13px;color:#597953;font-size:14px;font-weight:800;line-height:1.7;padding:14px}
+.howto-steps{list-style:none;padding:0;margin:12px 0;display:grid;gap:9px}
+.howto-steps li{padding:10px 12px;background:#fffcf5;border:1px solid #ece2d3;border-radius:12px}
+.howto-steps b,.howto-steps span{display:block}
+.howto-steps b{font-size:12px;color:#567252;margin-bottom:4px}
+.howto-steps span,.howto-footnote{font-size:11px;line-height:1.7;color:#878e80}
+.howto-footnote{margin:8px 3px}
+@media(max-width:370px){.tutorial-card{padding:9px 11px}.tutorial-card>strong{font-size:14px}.tutorial-card p{font-size:10px}.tutorial-mode .room-art{width:min(100%,400px)}}
+@media(max-height:650px){.tutorial-mode .room-art{width:min(100%,300px)}.tutorial-card{padding:8px 10px}.tutorial-card p{margin-bottom:4px}.tutorial-mode .room-title{margin-top:7px}}
+@media(prefers-reduced-motion:reduce){.tutorial-mode .pc-hotspot .hotspot-pill{animation:none}}
