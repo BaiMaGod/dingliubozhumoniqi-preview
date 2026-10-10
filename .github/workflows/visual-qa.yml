@@ -34,8 +34,8 @@ jobs:
         run: |
           python3 -m http.server 4173 > "$RUNNER_TEMP/creator-server.log" 2>&1 &
           export QA_MODULES="$RUNNER_TEMP/creator-qa/node_modules"
-          node .qa/visual-qa.mjs
           node .qa/motion-qa.mjs
+          node .qa/visual-qa.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
