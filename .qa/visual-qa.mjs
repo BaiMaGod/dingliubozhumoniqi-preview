@@ -25,8 +25,7 @@ for(const profile of profiles){
   return {overflow:document.documentElement.scrollWidth>innerWidth,ctaBottom:cta.bottom,navTop:nav.top,ctaWidth:cta.width,viewport:innerHeight,hotspots:[...document.querySelectorAll('.room-hotspot')].map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,clickable:document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===e};})};
  });
  assert(!geometry.overflow,'no horizontal overflow');assert(geometry.ctaBottom<geometry.navTop,'CTA and navigation do not overlap');assert(geometry.ctaWidth>250);assert(geometry.hotspots.every(h=>h.clickable&&h.w>=44&&h.h>=40),'room controls visible and hit-testable');
- if(profile.name.startsWith('mobile'))assert(await p.evaluate(()=>document.querySelector('.mission-card').getBoundingClientRect().bottom<=document.querySelector('.room-bottom .main-cta').getBoundingClientRect().top-10),'mission and action cards fully above CTA');
- await shot(p,profile.name+'-home');
+ const missionBottom=await p.locator('.mission-card').evaluate(e=>e.getBoundingClientRect().bottom);console.log(JSON.stringify({profile:profile.name,geometry,missionBottom}));await shot(p,profile.name+'-home');if(profile.name.startsWith('mobile'))assert(missionBottom<=await p.locator('.room-bottom .main-cta').evaluate(e=>e.getBoundingClientRect().top-10),'mission and action cards fully above CTA');
  await activate('.pc-hotspot');await p.locator('.edit-tools').waitFor();
  await shot(p,profile.name+'-editing');await activate('[data-action="edit"][data-id="cut"]');
  await p.locator('.main-cta[data-action="publish"]').waitFor({timeout:10000});
