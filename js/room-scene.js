@@ -1,6 +1,6 @@
 // @ts-nocheck
-import {icon} from './icons.js?v=0.8.0';
-import {actorLayers} from './room-motion.js?v=0.8.0';
+import {icon} from './icons.js?v=0.8.1';
+import {actorLayers} from './room-motion.js?v=0.8.1';
 export const ROOM_ART=['room-rental-v05.webp','room-cozy-v05.webp','room-pro-v05.webp','room-star-v05.webp'];
 export function roomScene(game){
  const tier=Math.max(0,Math.min(3,game.s.roomTier||0));

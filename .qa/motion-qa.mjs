@@ -6,7 +6,7 @@ const require=createRequire(import.meta.url),modules=process.env.QA_MODULES;
 const {chromium}=require(modules+'/playwright'),{PNG}=require(modules+'/pngjs');
 const out=(process.env.QA_OUT||'evidence/browser')+'/motion';mkdirSync(out,{recursive:true});
 const url=process.env.QA_URL||'http://127.0.0.1:4173/',KEY='creator-simulator-save-v01';
-const report={version:'0.8.0',time:new Date().toISOString(),errors:[],shots:[],tiers:[]};
+const report={version:'0.8.1',time:new Date().toISOString(),errors:[],shots:[],tiers:[]};
 const b=await chromium.launch({headless:true});
 async function shot(page,name,locator){const path=out+'/'+name+'.png';await (locator||page).screenshot({path});report.shots.push({name,path,sha256:createHash('sha256').update(readFileSync(path)).digest('hex')});return path;}
 function pixelMotion(aPath,bPath,regions){
@@ -61,5 +61,21 @@ try{
   await page.emulateMedia({reducedMotion:'reduce'});const s1=await shot(page,'tier-'+tier+'-still',page.locator('.room-art'));await page.waitForTimeout(250);const s2=await page.locator('.room-art').screenshot();assert.equal(createHash('sha256').update(readFileSync(s1)).digest('hex'),createHash('sha256').update(s2).digest('hex'),'reduced-motion room is pixel stable');
   report.tiers.push({tier,localPixelMotion:pixels,backgroundStable:true,chairStable:true,reducedMotionPixelStable:true});await c.close();
  }
+ // A real browser with WebGL disabled exercises the shipped compatibility path.
+ const noGL=await chromium.launch({headless:true,args:['--disable-webgl']});
+ try{
+  const c=await noGL.newContext({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true}),page=await c.newPage();const errors=[];
+  page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+  await page.goto(url);await page.locator('.room-illustration').evaluate(i=>i.decode());await page.waitForFunction(()=>document.querySelector('.room-art').dataset.motionRunning==='true');
+  assert.equal(await page.evaluate(()=>!!document.createElement('canvas').getContext('webgl')),false,'WebGL is genuinely disabled');assert.equal(await page.locator('.room-art').getAttribute('data-motion-driver'),'dom');
+  await page.addStyleTag({content:'.sun-motes,.cat-dream,.room-hotspot,.scene-state,.desk-response{visibility:hidden!important}'});
+  await page.waitForFunction(()=>Number(document.querySelector('[data-motion="sleep"]').getAttribute('scale'))>15);const a=await shot(page,'no-webgl-inhale',page.locator('.room-art'));
+  await page.waitForFunction(()=>Number(document.querySelector('[data-motion="sleep"]').getAttribute('scale'))<-15);const z=await shot(page,'no-webgl-exhale',page.locator('.room-art'));const pixels=pixelMotion(a,z,regions[0]);
+  await page.addStyleTag({content:'.sun-motes,.cat-dream,.room-hotspot,.scene-state,.desk-response{visibility:visible!important}'});
+  await page.locator('.pc-hotspot').tap();await page.locator('.edit-tools').waitFor();await page.locator('.main-cta[data-action="publish"]').waitFor();await page.locator('.main-cta[data-action="publish"]').tap();assert.equal(await page.locator('.room-art').getAttribute('data-motion-running'),'false');await page.locator('.sheet .close').tap();assert.equal(await page.locator('.room-art').getAttribute('data-motion-running'),'true');
+  await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>document.querySelector('.room-art').dataset.motionRunning==='false');await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForFunction(()=>document.querySelector('.room-art').dataset.motionRunning==='true');
+  const frames=await page.evaluate(()=>new Promise(resolve=>{const times=[];let last;function f(t){if(last)times.push(t-last);last=t;if(times.length<180)requestAnimationFrame(f);else resolve(times.sort((a,b)=>a-b));}requestAnimationFrame(f);}));const p95=frames[Math.floor(frames.length*.95)];assert(p95<=35,'no-WebGL frame budget '+p95);assert.equal(errors.length,0);
+  report.noWebGL={realInput:true,localPixelMotion:pixels,modalPause:true,reducedMotion:true,p95,errors};await c.close();
+ }finally{await noGL.close();}
  assert.equal(report.errors.length,0);report.status='passed';
 }catch(e){report.status='failed';report.failure=e.stack||String(e);process.exitCode=1;}finally{await b.close();writeFileSync(out+'/report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report));}
