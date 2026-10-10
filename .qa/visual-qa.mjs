@@ -25,6 +25,7 @@ for(const profile of profiles){
   return {overflow:document.documentElement.scrollWidth>innerWidth,ctaBottom:cta.bottom,navTop:nav.top,ctaWidth:cta.width,viewport:innerHeight,hotspots:[...document.querySelectorAll('.room-hotspot')].map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height,clickable:document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===e};})};
  });
  assert(!geometry.overflow,'no horizontal overflow');assert(geometry.ctaBottom<geometry.navTop,'CTA and navigation do not overlap');assert(geometry.ctaWidth>250);assert(geometry.hotspots.every(h=>h.clickable&&h.w>=44&&h.h>=40),'room controls visible and hit-testable');
+ if(profile.name.startsWith('mobile'))assert(await p.evaluate(()=>document.querySelector('.mission-card').getBoundingClientRect().bottom<=document.querySelector('.room-bottom .main-cta').getBoundingClientRect().top-10),'mission and action cards fully above CTA');
  await shot(p,profile.name+'-home');
  await activate('.pc-hotspot');await p.locator('.edit-tools').waitFor();
  await shot(p,profile.name+'-editing');await activate('[data-action="edit"][data-id="cut"]');
@@ -48,14 +49,17 @@ for(const profile of profiles){
 }
 // State fixtures below are visual-only, separate from genuine playthrough above.
 const ctx=await b.newContext({viewport:{width:390,height:844},deviceScaleFactor:2});const p=await ctx.newPage();await p.goto(url);
-const state=await p.evaluate(key=>JSON.parse(localStorage.getItem(key)),KEY);
-// A fresh context has no save. Use the completed playthrough save from a dedicated real input run.
-await p.locator('.main-cta').click();await p.locator('.main-cta[data-action="publish"]').waitFor({timeout:10000});await p.locator('.main-cta[data-action="publish"]').click();await p.locator('[data-action="publishWith"][data-id="reply"]').click();await p.getByRole('dialog',{name:'本条作品成绩出炉！'}).waitFor({timeout:10000});await p.locator('[data-action="closeLive"]').click();
-await p.evaluate(()=>document.dispatchEvent(new Event('visibilitychange')));await p.reload();
+// Complete a genuine first video, then copy its save into isolated visual-only contexts.
+await p.locator('.main-cta').click();await p.locator('.main-cta[data-action="publish"]').waitFor({timeout:10000});await p.locator('.main-cta[data-action="publish"]').click();await p.locator('[data-action="publishWith"][data-id="reply"]').click();await p.getByRole('dialog',{name:'本条作品成绩出炉！'}).waitFor({timeout:10000});await p.locator('[data-action="closeLive"]').click();await p.reload();
+const visualState=await p.evaluate(key=>JSON.parse(localStorage.getItem(key)),KEY);await ctx.close();
 for(let tier=0;tier<4;tier++){
- await p.evaluate(({key,tier})=>{const s=JSON.parse(localStorage.getItem(key));s.roomTier=tier;s.day=26;s.level=4;s.fans=404;s.views=27500;s.wallet=185;s.guideStep=4;s.pendingEvent=null;s.lastSavedAt=Date.now();localStorage.setItem(key,JSON.stringify(s));},{key:KEY,tier});
- await p.reload();await p.locator('.room-illustration').evaluate(img=>img.decode());await shot(p,'visual-room-tier-'+tier);
+ const visual=await b.newContext({viewport:{width:390,height:844},deviceScaleFactor:2});
+ const fixture={...visualState,roomTier:tier,day:26,level:4,fans:404,views:27500,wallet:185,guideStep:4,pendingEvent:null,lastSavedAt:Date.now()};
+ await visual.addInitScript(({key,state})=>localStorage.setItem(key,JSON.stringify(state)),{key:KEY,state:fixture});
+ const page=await visual.newPage();await page.goto(url);await page.locator('.room-illustration').evaluate(img=>img.decode());
+ assert.equal(await page.locator('.room-illustration').getAttribute('src'),'./assets/'+['room-rental-v05.webp','room-cozy-v05.webp','room-pro-v05.webp','room-star-v05.webp'][tier]);
+ assert.equal(await page.locator('#fan-counter').innerText(),'404');await shot(page,'visual-room-tier-'+tier);
+ await page.emulateMedia({reducedMotion:'reduce'});assert.equal(await page.locator('.sun-motes').evaluate(e=>getComputedStyle(e).display),'none');await visual.close();
 }
-await p.emulateMedia({reducedMotion:'reduce'});assert.equal(await p.locator('.sun-motes').evaluate(e=>getComputedStyle(e).display),'none');await ctx.close();
 assert.equal(report.errors.length,0,JSON.stringify(report.errors));report.status='passed';
 }catch(e){report.status='failed';report.failure=String(e);process.exitCode=1;}finally{await b.close();report.screenshots=shots;writeFileSync(out+'/report.json',JSON.stringify(report,null,2));console.log(JSON.stringify({status:report.status,failure:report.failure,profiles:report.profiles.map(p=>({name:p.name,p95:p.p95})),screenshots:shots.length,errors:report.errors}));}
