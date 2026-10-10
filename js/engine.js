@@ -1,5 +1,5 @@
 // @ts-nocheck
-import {TOPICS,MODES,POOLS,EVENTS} from './config.js?v=0.7.0';
+import {TOPICS,MODES,POOLS,EVENTS} from './config.js?v=0.8.0';
 export const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 export const number=(n)=>n>=1e8?(n/1e8).toFixed(2)+'亿':n>=1e4?(n/1e4).toFixed(2)+'万':Math.floor(n).toLocaleString('zh-CN');
 export function seeded(...parts){let h=2166136261;for(const ch of parts.join('|'))h=Math.imul(h^ch.charCodeAt(0),16777619);h>>>=0;h^=h<<13;h^=h>>>17;h^=h<<5;return(h>>>0)/4294967296;}

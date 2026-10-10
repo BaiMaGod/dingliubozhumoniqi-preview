@@ -1,4 +1,4 @@
-name: V0.7 visual and interaction QA
+name: V0.8 visual and interaction QA
 on:
   push:
     branches: ['art/visual-v05-20261010']
@@ -15,7 +15,7 @@ jobs:
           node-version: '22'
       - name: Install QA dependencies
         run: |
-          npm install --prefix "$RUNNER_TEMP/creator-qa" playwright@1.62.1 typescript@5.9.3
+          npm install --prefix "$RUNNER_TEMP/creator-qa" playwright@1.62.1 typescript@5.9.3 pngjs@7.0.0
           node "$RUNNER_TEMP/creator-qa/node_modules/playwright/cli.js" install --with-deps chromium
       - name: Bundle display font
         run: |
@@ -35,10 +35,11 @@ jobs:
           python3 -m http.server 4173 > "$RUNNER_TEMP/creator-server.log" 2>&1 &
           export QA_MODULES="$RUNNER_TEMP/creator-qa/node_modules"
           node .qa/visual-qa.mjs
+          node .qa/motion-qa.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: creator-v07-visual-qa
+          name: creator-v08-visual-qa
           path: evidence/browser
           retention-days: 7
 

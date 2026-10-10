@@ -9,7 +9,7 @@ const url=process.env.QA_URL||'http://127.0.0.1:4173/';
 const out=process.env.QA_OUT||'evidence/browser';mkdirSync(out,{recursive:true});
 const b=await chromium.launch({headless:true});
 const profiles=[{name:'target-512',width:512,height:768},{name:'mobile-360',width:360,height:740},{name:'mobile-390',width:390,height:844},{name:'mobile-430',width:430,height:932},{name:'desktop',width:1280,height:900}];
-const report={version:'0.7.0',time:new Date().toISOString(),profiles:[],errors:[]};
+const report={version:'0.8.0',time:new Date().toISOString(),profiles:[],errors:[]};
 const shots=[];const KEY='creator-simulator-save-v01';
 async function shot(p,name){const path=out+'/'+name+'.png';await p.screenshot({path});shots.push({name,path,sha256:createHash('sha256').update(readFileSync(path)).digest('hex')});}
 try{
