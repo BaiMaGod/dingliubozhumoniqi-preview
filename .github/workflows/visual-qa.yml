@@ -1,0 +1,37 @@
+name: V0.5 visual and interaction QA
+on:
+  push:
+    branches: ['art/visual-v05-20261010']
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install QA dependencies
+        run: |
+          npm install --prefix "$RUNNER_TEMP/creator-qa" playwright@1.62.1 typescript@5.9.3
+          node "$RUNNER_TEMP/creator-qa/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Type check and rule regression
+        run: |
+          node "$RUNNER_TEMP/creator-qa/node_modules/typescript/bin/tsc" --noEmit --project .qa/tsconfig.json
+          node --import ./.qa/storage.mjs --test .qa/engine.test.mjs
+      - name: Real input and screenshots
+        env:
+          QA_URL: http://127.0.0.1:4173/
+          QA_OUT: evidence/browser
+        run: |
+          python3 -m http.server 4173 > "$RUNNER_TEMP/creator-server.log" 2>&1 &
+          export QA_MODULES="$RUNNER_TEMP/creator-qa/node_modules"
+          node .qa/visual-qa.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: creator-v05-visual-qa
+          path: evidence/browser
+          retention-days: 7
