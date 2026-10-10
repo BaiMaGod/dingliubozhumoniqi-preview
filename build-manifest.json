@@ -1,23 +1,25 @@
 {
-  "version": "0.6.0",
+  "version": "0.7.0",
   "sourceRepository": "BaiMaGod/dingliubozhumoniqi",
-  "sourceCommit": "fe3da0cd6db52c2cadd1b707f0dd195f1d89317f",
+  "sourceCommit": "2027f8d4f69c11f51b71b04e01451c4f0c11bfde",
   "buildScript": "scripts/build.mjs",
-  "builtAt": "2026-10-10T04:24:45.010Z",
+  "builtAt": "2026-10-10T05:10:01.421Z",
   "qa": {
-    "commit": "4dea27b9f95189cba9b6d1a8128188b2736ee734",
-    "workflowRun": 38023636198,
+    "commit": "fce50050fa8391dbfd614a380022b1edab51a620",
+    "workflowRun": 38025957898,
+    "artifactId": 11659413738,
     "status": "passed",
     "ruleTests": 17,
     "viewports": [
       "360x740",
       "390x844",
       "430x932",
+      "512x768",
       "1280x900",
       "844x390 rotation"
     ],
     "realInputs": true,
-    "screenshots": 54
+    "screenshots": 67
   },
   "assets": [
     {
@@ -51,7 +53,49 @@
       "height": 1086,
       "bytes": 312056,
       "sha256": "8b9e1b372b7b2178003b9a86876ddd0074fa84908d2f3670ad0287ff8a750bb4"
+    },
+    {
+      "file": "entry-equipment-v07.webp",
+      "source": "ImageGen, referenced approved visual-target-v05",
+      "width": 512,
+      "height": 512,
+      "alpha": true,
+      "bytes": 48610,
+      "sha256": "6e76b7ce76415a3ec47b47fe0b4157cafeadf648efd294703ae025e5bf9b3fa1"
+    },
+    {
+      "file": "entry-laptop-v07.webp",
+      "source": "ImageGen, referenced approved visual-target-v05",
+      "width": 512,
+      "height": 512,
+      "alpha": true,
+      "bytes": 50328,
+      "sha256": "be2d3a4d34749629e534f7a50c18a3b01925f931bf3f3b7437fdc6434fe4fdec"
+    },
+    {
+      "file": "entry-phone-v07.webp",
+      "source": "ImageGen, referenced approved visual-target-v05",
+      "width": 512,
+      "height": 512,
+      "alpha": true,
+      "bytes": 43782,
+      "sha256": "72d0be7ae17cbbaaf7ce289ae69c00fa25ac66e1df36b1199e7d5ed870d18d4b"
+    },
+    {
+      "file": "work-cover-v07.webp",
+      "source": "ImageGen, referenced approved visual-target-v05",
+      "width": 768,
+      "height": 512,
+      "alpha": false,
+      "bytes": 90316,
+      "sha256": "55192fbf96dfd510cd8cd135a5c1d3c6d6e717b31b8d86b191aa7b32e84eba37"
     }
   ],
+  "font": {
+    "file": "fonts/creator-brush-v07.woff2",
+    "bytes": 22400,
+    "license": "fonts/OFL-MaShanZheng.txt",
+    "gitBlob": "3b1ae0f51ee1620bf6f465da6d567f6ef611cd46"
+  },
   "debugBridge": false
 }
