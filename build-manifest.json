@@ -1,16 +1,56 @@
 {
-  "schemaVersion": 1,
-  "engineVersion": "3.4.0",
-  "sourceCommit": "3bc4f79a1fb2a62dd5a8153b7c2415ed529deaf1",
-  "version": "V0.4.0-novice-journey-feedback",
-  "buildMode": "direct-static-preview",
-  "features": [
-    "room-scene",
-    "first-one-tap-video",
-    "journey-8-missions",
-    "strategy-choice",
-    "live-video-analytics",
-    "reward-float",
-    "save-migration"
-  ]
+  "version": "0.5.0",
+  "sourceRepository": "BaiMaGod/dingliubozhumoniqi",
+  "sourceCommit": "9556c1ae5e1791c937d620575976291b9f92c616",
+  "buildScript": "scripts/build.mjs",
+  "builtAt": "2026-10-10T00:59:30.143Z",
+  "qa": {
+    "commit": "52c7238d88af55d3dd43948758844a4cbdd5ae54",
+    "workflowRun": 38011065564,
+    "status": "passed",
+    "ruleTests": 17,
+    "viewports": [
+      "360x740",
+      "390x844",
+      "430x932",
+      "1280x900"
+    ],
+    "realInputs": true,
+    "screenshots": 40
+  },
+  "assets": [
+    {
+      "file": "room-cozy-v05.webp",
+      "source": "AI generated from visual-target-v05",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 291788,
+      "sha256": "99645e33af116bff025dade5717f4809d812250e470c5ed7ea9ec98857147fb6"
+    },
+    {
+      "file": "room-pro-v05.webp",
+      "source": "AI generated from visual-target-v05",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 282768,
+      "sha256": "d98b83a05a609d3e795576b377d78989169080a1b47b9dff3411c7728d78ed07"
+    },
+    {
+      "file": "room-rental-v05.webp",
+      "source": "AI generated from visual-target-v05",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 283586,
+      "sha256": "dff78c0b6138521857ab51220b73ada7f77c9a8ebb5ca327bea120c0919330c0"
+    },
+    {
+      "file": "room-star-v05.webp",
+      "source": "AI generated from visual-target-v05",
+      "width": 1448,
+      "height": 1086,
+      "bytes": 312056,
+      "sha256": "8b9e1b372b7b2178003b9a86876ddd0074fa84908d2f3670ad0287ff8a750bb4"
+    }
+  ],
+  "debugBridge": false
 }
