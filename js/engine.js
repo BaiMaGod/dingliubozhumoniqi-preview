@@ -1,5 +1,5 @@
 // @ts-nocheck
-import {TOPICS,MODES,POOLS,EVENTS} from './config.js';
+import {TOPICS,MODES,POOLS,EVENTS} from './config.js?v=0.7.0';
 export const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 export const number=(n)=>n>=1e8?(n/1e8).toFixed(2)+'亿':n>=1e4?(n/1e4).toFixed(2)+'万':Math.floor(n).toLocaleString('zh-CN');
 export function seeded(...parts){let h=2166136261;for(const ch of parts.join('|'))h=Math.imul(h^ch.charCodeAt(0),16777619);h>>>=0;h^=h<<13;h^=h>>>17;h^=h<<5;return(h>>>0)/4294967296;}
@@ -72,4 +72,3 @@ chooseEvent(i){const s=this.s;if(s.pendingEvent===null)return false;const e=EVEN
 nextDay(offline){const s=this.s;s.day++;s.dayMs=0;if(s.day>3)s.fans=Math.max(0,s.fans-Math.floor(s.fans*.0003));if(!offline&&s.day%5===0&&s.videos.length&&!this.making&&!this.ready&&!this.streaming&&s.pendingEvent===null)s.pendingEvent=s.eventCursor++%EVENTS.length;}
 advance(ms,offline=false){if(!this.s.videos.length){this.s.day=1;this.s.dayMs=0;return;}let remaining=clamp(ms,0,8*3600000);for(let n=0;n<10000&&remaining>0.001;n++){const v=this.making||this.streaming;const dt=Math.min(remaining,DAY-this.s.dayMs,v?(v.status==='producing'?Math.max(0,v.remaining):Math.max(0,v.nextTick)):Infinity);if(dt<=0){if(v?.status==='producing')this.finishProduction(v);else if(v?.status==='recommending')this.settle(v);else this.nextDay(offline);continue;}this.s.dayMs+=dt;if(v?.status==='producing')v.remaining-=dt;else if(v?.status==='recommending')v.nextTick-=dt;remaining-=dt;if(this.s.dayMs>=DAY-.001)this.nextDay(offline);if(v?.status==='producing'&&v.remaining<=.001)this.finishProduction(v);if(v?.status==='recommending'&&v.nextTick<=.001)this.settle(v);}}
 }
-

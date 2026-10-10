@@ -1,4 +1,4 @@
-name: V0.6 visual and interaction QA
+name: V0.7 visual and interaction QA
 on:
   push:
     branches: ['art/visual-v05-20261010']
@@ -17,6 +17,12 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/creator-qa" playwright@1.62.1 typescript@5.9.3
           node "$RUNNER_TEMP/creator-qa/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Bundle display font
+        run: |
+          python3 -m pip install fonttools==4.60.1 brotli==1.1.0
+          if [ ! -f fonts/creator-brush-v07.woff2 ]; then python3 .qa/build-font.py; fi
+          mkdir -p evidence/browser/derived-font
+          cp fonts/* evidence/browser/derived-font/
       - name: Type check and rule regression
         run: |
           node "$RUNNER_TEMP/creator-qa/node_modules/typescript/bin/tsc" --noEmit --project .qa/tsconfig.json
@@ -32,6 +38,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: creator-v06-visual-qa
+          name: creator-v07-visual-qa
           path: evidence/browser
           retention-days: 7
+
