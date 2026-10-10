@@ -1,4 +1,4 @@
-name: V0.5 visual and interaction QA
+name: V0.6 visual and interaction QA
 on:
   push:
     branches: ['art/visual-v05-20261010']
@@ -32,6 +32,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: creator-v05-visual-qa
+          name: creator-v06-visual-qa
           path: evidence/browser
           retention-days: 7
