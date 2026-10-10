@@ -29,9 +29,9 @@ try{
  const room=p.locator('.room-art'),original=await room.elementHandle();
  assert.equal(await p.locator('.actor-motion').count(),2);
  const begin=Number(await room.getAttribute('data-motion-frame'));await p.waitForTimeout(250);assert(Number(await room.getAttribute('data-motion-frame'))>begin,'Laya timer drives real local movement');
- await p.locator('.pc-hotspot').tap();await p.locator('.edit-tools').waitFor();assert(await original.evaluate(el=>el.isConnected),'same room subtree survives gameplay render');
+ await p.locator('.pc-hotspot').tap();await p.locator('.edit-tools').waitFor();assert.equal(await p.locator('.pc-hotspot .hotspot-pill span').innerText(),'剪辑中');assert.equal(await p.locator('.phone-hotspot .hotspot-pill span').innerText(),'热点');assert.equal(await p.locator('.decor-hotspot .hotspot-pill span').innerText(),'升级');assert(await original.evaluate(el=>el.isConnected),'same room subtree survives gameplay render');
  await p.waitForTimeout(130);assert(Math.abs(Number(await p.locator('[data-motion="hands"]').getAttribute('scale')))>0.1,'working hands move');assert.equal(await room.getAttribute('data-response'),'start');await shot(p,'real-start');
- await p.locator('[data-action="edit"][data-id="cut"]').tap();assert.equal(await room.getAttribute('data-response'),'edit');await p.waitForTimeout(130);await shot(p,'real-edit');
+ await p.locator('.edit-tools [data-action="edit"][data-id="cut"]').tap();assert.equal(await room.getAttribute('data-response'),'edit');await p.waitForTimeout(130);await shot(p,'real-edit');
  await p.locator('.main-cta[data-action="publish"]').waitFor();await p.locator('.main-cta[data-action="publish"]').tap();
  assert.equal(await room.getAttribute('data-motion-running'),'false');const frozen=await room.getAttribute('data-motion-frame');await p.waitForTimeout(400);assert.equal(await room.getAttribute('data-motion-frame'),frozen,'modal pauses the animation timer');
  await p.locator('.sheet .close').tap();await p.waitForTimeout(160);assert.equal(await room.getAttribute('data-motion-running'),'true');
@@ -43,10 +43,10 @@ try{
  await p.emulateMedia({reducedMotion:'reduce'});assert.equal(await room.getAttribute('data-motion-running'),'false');assert(await p.locator('.actor-motion').evaluateAll(es=>es.every(el=>getComputedStyle(el).display==='none')));await p.locator('.phone-hotspot').tap();await p.keyboard.press('Escape');assert.equal(await room.getAttribute('data-motion-running'),'false');await p.emulateMedia({reducedMotion:'no-preference'});await p.waitForTimeout(160);assert.equal(await room.getAttribute('data-motion-running'),'true');
  const save=await p.evaluate(k=>JSON.parse(localStorage.getItem(k)),KEY);report.realInput={start:true,editing:true,modalPause:true,rewardDelta:40,rewardParticleCap:7,reclaimed:true,repeatedNavigation:6,ticksPerSecond:ticks,reducedMotion:true,roomNodePreserved:true};await ctx.close();
  const regions=[
-  {creator:[740,330,280,330],cat:[470,780,240,120],chair:[776,555,105,80]},
-  {creator:[735,320,280,340],cat:[465,775,250,125],chair:[776,557,95,90]},
-  {creator:[710,315,285,355],cat:[435,750,240,140],chair:[725,570,95,70]},
-  {creator:[720,305,285,365],cat:[450,750,245,145],chair:[738,565,99,80]}
+  {creator:[740,330,280,330],cat:[470,780,240,120],chair:[780,575,70,55]},
+  {creator:[735,320,280,340],cat:[465,775,250,125],chair:[780,580,65,55]},
+  {creator:[710,315,285,355],cat:[435,750,240,140],chair:[730,585,70,55]},
+  {creator:[720,305,285,365],cat:[450,750,245,145],chair:[760,575,65,55]}
  ];
  // Isolated tier fixtures test appearance only; the real-input assertions above use genuine progression.
  for(let tier=0;tier<4;tier++){

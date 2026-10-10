@@ -65,7 +65,7 @@ export function preserveRoom(previous,fresh){
  const reacting=previous.classList.contains('responding');
  previous.className=fresh.className+(reacting?' responding':'');
  fresh.querySelectorAll('.room-hotspot').forEach(button=>{
-  const old=previous.querySelector('.'+[...button.classList].find(c=>c.endsWith('-hotspot')));
+  const old=previous.querySelector('.'+[...button.classList].find(c=>c!=='room-hotspot'&&c.endsWith('-hotspot')));
   if(old)old.innerHTML=button.innerHTML;
  });
  previous.querySelector('.scene-state')?.remove();
