@@ -1,7 +1,19 @@
 {
-  "version": "1.0.0",
-  "builtAt": "2026-10-11T06:30:21.058Z",
+  "version": "1.0.1",
+  "builtAt": "2026-10-11T08:37:49.211Z",
   "files": [
+    {
+      "path": "art-review/baseline.html",
+      "bytes": 58145
+    },
+    {
+      "path": "art-review/candidate.html",
+      "bytes": 71435
+    },
+    {
+      "path": "art-review/index.html",
+      "bytes": 925
+    },
     {
       "path": "assets/entry-equipment-v07.webp",
       "bytes": 48610
@@ -13,6 +25,14 @@
     {
       "path": "assets/entry-phone-v07.webp",
       "bytes": 43782
+    },
+    {
+      "path": "assets/ftue-rental-lamp-v101.webp",
+      "bytes": 185948
+    },
+    {
+      "path": "assets/ftue-rental-v101.webp",
+      "bytes": 199184
     },
     {
       "path": "assets/room-cozy-v05.webp",
@@ -36,7 +56,7 @@
     },
     {
       "path": "creator.css",
-      "bytes": 21657
+      "bytes": 33552
     },
     {
       "path": "fonts/OFL-MaShanZheng.txt",
@@ -48,7 +68,7 @@
     },
     {
       "path": "index.html",
-      "bytes": 587
+      "bytes": 656
     },
     {
       "path": "js/classic.js",
@@ -60,7 +80,7 @@
     },
     {
       "path": "js/creator-art.js",
-      "bytes": 5636
+      "bytes": 6503
     },
     {
       "path": "js/creator-engine.js",
@@ -68,7 +88,7 @@
     },
     {
       "path": "js/creator.js",
-      "bytes": 19981
+      "bytes": 20568
     },
     {
       "path": "js/engine.js",
@@ -102,12 +122,5 @@
       "path": "style.css",
       "bytes": 49728
     }
-  ],
-  "sourceRepository": "BaiMaGod/dingliubozhumoniqi",
-  "sourceCommit": "9f3688a5cc7a06ec317c83540b8d938d1c9d6ccf",
-  "validation": {
-    "ruleTests": 28,
-    "browserTouchQA": "not-run",
-    "reason": "Browser control capability unavailable"
-  }
+  ]
 }
