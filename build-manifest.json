@@ -1,6 +1,6 @@
 {
-  "version": "1.0.1",
-  "builtAt": "2026-10-11T08:37:49.211Z",
+  "version": "1.0.2",
+  "builtAt": "2026-10-11T09:41:21.544Z",
   "files": [
     {
       "path": "art-review/baseline.html",
@@ -8,11 +8,19 @@
     },
     {
       "path": "art-review/candidate.html",
-      "bytes": 71435
+      "bytes": 70205
     },
     {
       "path": "art-review/index.html",
-      "bytes": 925
+      "bytes": 961
+    },
+    {
+      "path": "assets/cat-performer-v102.webp",
+      "bytes": 213152
+    },
+    {
+      "path": "assets/creator-avatar-v102.webp",
+      "bytes": 174472
     },
     {
       "path": "assets/entry-equipment-v07.webp",
@@ -56,7 +64,7 @@
     },
     {
       "path": "creator.css",
-      "bytes": 33552
+      "bytes": 32147
     },
     {
       "path": "fonts/OFL-MaShanZheng.txt",
@@ -80,7 +88,7 @@
     },
     {
       "path": "js/creator-art.js",
-      "bytes": 6503
+      "bytes": 6699
     },
     {
       "path": "js/creator-engine.js",
@@ -88,7 +96,7 @@
     },
     {
       "path": "js/creator.js",
-      "bytes": 20568
+      "bytes": 20881
     },
     {
       "path": "js/engine.js",
