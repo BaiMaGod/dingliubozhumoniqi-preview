@@ -94,3 +94,4 @@
 @media(max-width:370px){.tutorial-card{padding:9px 11px}.tutorial-card>strong{font-size:14px}.tutorial-card p{font-size:10px}.tutorial-mode .room-art{width:min(100%,400px)}}
 @media(max-height:650px){.tutorial-mode .room-art{width:min(100%,300px)}.tutorial-card{padding:8px 10px}.tutorial-card p{margin-bottom:4px}.tutorial-mode .room-title{margin-top:7px}}
 @media(prefers-reduced-motion:reduce){.tutorial-mode .pc-hotspot .hotspot-pill{animation:none}}
+

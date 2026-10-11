@@ -1,147 +1,113 @@
 {
-  "version": "0.8.1",
-  "sourceRepository": "BaiMaGod/dingliubozhumoniqi",
-  "sourceCommit": "9b8db9dfbfdb5cb517cd06fe1e15909330a79166",
-  "buildScript": "scripts/build.mjs",
-  "builtAt": "2026-10-10T13:36:16.362Z",
-  "qa": {
-    "commit": "5bc1924e706400e929511486fd2b6693d2511f58",
-    "tree": "c5f6ef2a3a50bfad76a4a50b29bc0382897b8084",
-    "workflowRun": 38055721069,
-    "artifact": 11670950921,
-    "status": "passed",
-    "ruleTests": 17,
-    "typecheck": true,
-    "viewports": [
-      "512x768",
-      "360x740",
-      "390x844",
-      "430x932",
-      "1280x900",
-      "844x390"
-    ],
-    "realInputs": true,
-    "screenshots": 108,
-    "motion": {
-      "tierCount": 4,
-      "backgroundChanges": 0,
-      "chairChanges": 0,
-      "modalPause": true,
-      "reducedMotion": true,
-      "repeatedNavigation": 6,
-      "maxRewardParticles": 7
-    },
-    "physicalDevices": "pending",
-    "noWebGL": {
-      "realBrowser": true,
-      "realInput": true,
-      "localPixelMotion": true,
-      "modalPause": true,
-      "reducedMotion": true,
-      "p95": 16.8
-    }
-  },
+  "version": "1.0.0",
+  "builtAt": "2026-10-11T06:30:21.058Z",
   "files": [
     {
-      "path": "index.html",
-      "sha": "821eab5e120a4c8711836bf4f1e57ceaa5dd4759",
-      "bytes": 733
-    },
-    {
-      "path": "style.css",
-      "sha": "cc607d6d9f50664391025a2e53470da16ab25d26",
-      "bytes": 46347
-    },
-    {
-      "path": "js/config.js",
-      "sha": "d288761e048c409e9c751ce8ba159156dd2770a8",
-      "bytes": 4258
-    },
-    {
-      "path": "js/engine.js",
-      "sha": "878228d3c3a5e94f9bba95d03fbda8fec50e849d",
-      "bytes": 11780
-    },
-    {
-      "path": "js/icons.js",
-      "sha": "de61b0fc9960a6104cbdc1cb1f6a08ac3e84a068",
-      "bytes": 3181
-    },
-    {
-      "path": "js/room-scene.js",
-      "sha": "85d165fc1bbcedcb4df2794d04e40748414a0f32",
-      "bytes": 1834
-    },
-    {
-      "path": "js/room-motion.js",
-      "sha": "60274bed68c16d5ed65b92584641d480b9fecbf3",
-      "bytes": 6983
-    },
-    {
-      "path": "js/main.js",
-      "sha": "7240155243937a280be38121a22b92d86331711a",
-      "bytes": 29373
-    },
-    {
-      "path": "assets/room-rental-v05.webp",
-      "sha": "1b76722cb1bd2f1a2e927b744bc367d97c6d9b32",
-      "bytes": 283586
-    },
-    {
-      "path": "assets/room-cozy-v05.webp",
-      "sha": "8bf6e4ee74f8720586787b0ab96418baaf0ab2ba",
-      "bytes": 291788
-    },
-    {
-      "path": "assets/room-pro-v05.webp",
-      "sha": "1bed12788bbdd5463bc42c7e9b6ea39fb2d5a56d",
-      "bytes": 282768
-    },
-    {
-      "path": "assets/room-star-v05.webp",
-      "sha": "20e4ce6c35f51e45653ef50ee60aa1fcffef6a3f",
-      "bytes": 312056
+      "path": "assets/entry-equipment-v07.webp",
+      "bytes": 48610
     },
     {
       "path": "assets/entry-laptop-v07.webp",
-      "sha": "8915de5046d3d385e5845f072dfbb7ac00370f11",
       "bytes": 50328
     },
     {
       "path": "assets/entry-phone-v07.webp",
-      "sha": "0c73ec40181db08b9190c87329f84d9219213660",
       "bytes": 43782
     },
     {
-      "path": "assets/entry-equipment-v07.webp",
-      "sha": "1451d96feee22eb10668012c4810e6da00df5cd0",
-      "bytes": 48610
+      "path": "assets/room-cozy-v05.webp",
+      "bytes": 291788
+    },
+    {
+      "path": "assets/room-pro-v05.webp",
+      "bytes": 282768
+    },
+    {
+      "path": "assets/room-rental-v05.webp",
+      "bytes": 283586
+    },
+    {
+      "path": "assets/room-star-v05.webp",
+      "bytes": 312056
     },
     {
       "path": "assets/work-cover-v07.webp",
-      "sha": "b7ac06fb4149f4e9afdabc129614f54ea719c6bc",
       "bytes": 90316
     },
     {
-      "path": "fonts/creator-brush-v07.woff2",
-      "sha": "3b1ae0f51ee1620bf6f465da6d567f6ef611cd46",
-      "bytes": 22400
+      "path": "creator.css",
+      "bytes": 21657
     },
     {
       "path": "fonts/OFL-MaShanZheng.txt",
-      "sha": "25f7174fea7824954ac26f5661d75f3b37747196",
       "bytes": 4398
     },
     {
+      "path": "fonts/creator-brush-v07.woff2",
+      "bytes": 22400
+    },
+    {
+      "path": "index.html",
+      "bytes": 587
+    },
+    {
+      "path": "js/classic.js",
+      "bytes": 33187
+    },
+    {
+      "path": "js/config.js",
+      "bytes": 4259
+    },
+    {
+      "path": "js/creator-art.js",
+      "bytes": 5636
+    },
+    {
+      "path": "js/creator-engine.js",
+      "bytes": 7707
+    },
+    {
+      "path": "js/creator.js",
+      "bytes": 19981
+    },
+    {
+      "path": "js/engine.js",
+      "bytes": 11781
+    },
+    {
+      "path": "js/icons.js",
+      "bytes": 3182
+    },
+    {
+      "path": "js/main.js",
+      "bytes": 597
+    },
+    {
+      "path": "js/room-motion.js",
+      "bytes": 6984
+    },
+    {
+      "path": "js/room-scene.js",
+      "bytes": 1835
+    },
+    {
       "path": "libs/laya.core.js",
-      "sha": "2588795f05d4cf05b9006784ff3fe119c90304f7",
       "bytes": 847227
     },
     {
       "path": "libs/laya.webgl_2D.js",
-      "sha": "47c2d87cb1e6c191ca5c6aa6a7eae4d00391cbf3",
       "bytes": 247075
+    },
+    {
+      "path": "style.css",
+      "bytes": 49728
     }
   ],
-  "debugBridge": false
+  "sourceRepository": "BaiMaGod/dingliubozhumoniqi",
+  "sourceCommit": "9f3688a5cc7a06ec317c83540b8d938d1c9d6ccf",
+  "validation": {
+    "ruleTests": 28,
+    "browserTouchQA": "not-run",
+    "reason": "Browser control capability unavailable"
+  }
 }
