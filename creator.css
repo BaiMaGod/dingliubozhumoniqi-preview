@@ -17,3 +17,33 @@
 .boost .view-total:before,.viral .view-total:before{content:'✦';position:absolute;left:9%;top:29%;font-size:24px;color:#dcb85e;animation:reward-in .5s ease-out;pointer-events:none}.boost .view-total:after,.viral .view-total:after{content:'✦';position:absolute;right:10%;top:12%;font-size:19px;color:#dcb85e;animation:reward-in .6s ease-out;pointer-events:none}
 /* Keep the shutter on-screen on short portrait displays. */
 @media(max-height:680px) and (max-width:600px){body[data-screen="shoot"] .game-hud{height:48px}body[data-screen="shoot"] .phone-view{padding-top:10px}body[data-screen="shoot"] .game-screenbar{height:45px}body[data-screen="shoot"] .game-screen{padding-bottom:10px}body[data-screen="shoot"] .creation-steps{padding-top:9px;padding-bottom:6px}body[data-screen="shoot"] .screen-title{padding-bottom:9px}body[data-screen="shoot"] .screen-title h2{font-size:16px}body[data-screen="shoot"] .video-stage{height:185px}body[data-screen="shoot"] .performer-position{width:145px;height:178px}body[data-screen="shoot"] .reticle{width:125px;height:155px}}
+/* V1.0.3 — the room IS the game screen. */
+body[data-screen="room"] #app{padding:0;height:100dvh;min-height:560px;background:#96764d}
+body[data-screen="room"] .game-hud{position:absolute;left:14px;right:14px;top:calc(17px + env(safe-area-inset-top));height:62px;z-index:6;filter:drop-shadow(0 3px 4px #392e2855)}
+body[data-screen="room"] .player-badge>.creator-avatar{height:70px;bottom:-6px}
+body[data-screen="room"] .room-view{position:absolute;inset:0;padding:0}
+body[data-screen="room"] .rental-scene{position:absolute;inset:0;margin:0;z-index:0}
+body[data-screen="room"] .rental-interior{width:100%;height:100%;aspect-ratio:auto;object-fit:cover;object-position:right center;mix-blend-mode:normal;pointer-events:none;user-select:none}
+body[data-screen="room"] .rental-scene:after{content:'';position:absolute;inset:0;background:linear-gradient(#463b2926,transparent 32%,transparent 70%,#292d2259);pointer-events:none;z-index:1}
+body[data-screen="room"] .scene-name{position:absolute;left:16px;right:16px;top:calc(89px + env(safe-area-inset-top));padding:0;height:26px;z-index:5;color:#fff1ca;text-shadow:0 2px 3px #493c28}
+body[data-screen="room"] .scene-name>b{background:#3e4e34c9;border:1px solid #d6c39180;border-radius:8px;padding:3px 8px;font-size:11px}
+body[data-screen="room"] .scene-name small{background:#3e4e34b0;padding:3px 7px;border-radius:7px;font-size:9px}
+body[data-screen="room"] .quest-ribbon{position:absolute;top:calc(126px + env(safe-area-inset-top));left:14px;right:14px;z-index:5;background:linear-gradient(105deg,#4a633be8,#739255e8);box-shadow:0 3px #445b3580,inset 0 1px #a9bd86}
+body[data-screen="room"] .only-phone{transform:translate(-50%,-50%);border-radius:50%;left:80%;top:46.3%;min-width:48px;min-height:48px;z-index:4}
+body[data-screen="room"] .only-phone:active{transform:translate(-50%,-50%) scale(.95)}
+body[data-screen="room"] .phone-halo{inset:8%;border:3px solid #fff3a3;box-shadow:0 0 19px #ffd85d,0 0 0 6px #ffd66544}
+body[data-screen="room"] .hotspot-arrow{left:calc(50% - 13px);top:-28px}
+body[data-screen="room"] .phone-label{right:-7px;top:115%;transform:none;animation:phone-bob 2s infinite;border-color:#ffeab4;font-size:12px;padding:8px 11px}
+body[data-screen="room"] .scene-tag{top:calc(199px + env(safe-area-inset-top));bottom:auto;left:17px;transform:none;z-index:3;padding:4px 8px;background:#425537c9;font-size:9px;border-color:#d9cf9e80}
+body[data-screen="room"] .character-dialogue{position:absolute;left:16px;right:16px;bottom:calc(104px + env(safe-area-inset-bottom));margin:0;min-height:93px;background:linear-gradient(#fff7daed,#f5e3b8ed);box-shadow:0 5px 14px #352b2540;border-color:#a68f61;outline-color:#fff0c7bd}
+body[data-screen="room"] .room-unlocks{position:absolute;left:18px;right:18px;bottom:calc(19px + env(safe-area-inset-bottom));margin:0;z-index:5;gap:12px}
+body[data-screen="room"] .room-unlocks button{padding:7px 3px;box-shadow:inset 0 2px #fff4d2,0 4px #6a613dbd,0 6px 11px #2924194d}
+body[data-screen="room"] .room-unlocks button>span{width:29px;height:29px}
+body[data-screen="room"] .locked-unlocks{position:absolute;left:24px;right:24px;bottom:calc(26px + env(safe-area-inset-bottom));padding:0;z-index:5;color:#f3e1b4bb;font-size:12px;text-shadow:0 2px 3px #332b24}
+body[data-screen="room"] .locked-unlocks small{color:#f2e0b6cc}
+body[data-screen="room"] .storage-warning{position:absolute;bottom:0;z-index:8;background:#fff0cbd9;width:100%;padding:3px}
+@media(min-width:700px){body[data-screen="room"] #app{height:calc(100dvh - 40px);border-radius:23px;margin:20px auto}body[data-screen="room"] .rental-scene{margin:0}body[data-screen="room"] .room-view{padding:0}}
+@media(max-width:374px){body[data-screen="room"] .game-hud{left:11px;right:11px}body[data-screen="room"] .quest-ribbon{left:11px;right:11px}body[data-screen="room"] .character-dialogue{left:12px;right:12px;padding-left:80px;min-height:87px}body[data-screen="room"] .phone-label{font-size:11px;padding:7px 9px}body[data-screen="room"] .room-unlocks{left:14px;right:14px;gap:9px}}
+@media(max-height:700px){body[data-screen="room"] .character-dialogue{bottom:calc(98px + env(safe-area-inset-bottom))}body[data-screen="room"] .quest-ribbon{padding-top:6px;padding-bottom:6px}}
+
+body[data-screen="room"] .room-view[data-unlocked="true"] .character-dialogue{bottom:calc(122px + env(safe-area-inset-bottom))}

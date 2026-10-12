@@ -1,6 +1,6 @@
 {
-  "version": "1.0.2",
-  "builtAt": "2026-10-11T09:41:21.544Z",
+  "version": "1.0.3",
+  "builtAt": "2026-10-12T01:01:50.429Z",
   "files": [
     {
       "path": "art-review/baseline.html",
@@ -8,7 +8,7 @@
     },
     {
       "path": "art-review/candidate.html",
-      "bytes": 70205
+      "bytes": 76683
     },
     {
       "path": "art-review/index.html",
@@ -47,6 +47,14 @@
       "bytes": 291788
     },
     {
+      "path": "assets/room-interior-lamp-v103.webp",
+      "bytes": 231086
+    },
+    {
+      "path": "assets/room-interior-v103.webp",
+      "bytes": 260944
+    },
+    {
       "path": "assets/room-pro-v05.webp",
       "bytes": 282768
     },
@@ -64,7 +72,7 @@
     },
     {
       "path": "creator.css",
-      "bytes": 32147
+      "bytes": 37210
     },
     {
       "path": "fonts/OFL-MaShanZheng.txt",
@@ -76,7 +84,7 @@
     },
     {
       "path": "index.html",
-      "bytes": 656
+      "bytes": 658
     },
     {
       "path": "js/classic.js",
@@ -88,7 +96,7 @@
     },
     {
       "path": "js/creator-art.js",
-      "bytes": 6699
+      "bytes": 7087
     },
     {
       "path": "js/creator-engine.js",
@@ -96,7 +104,7 @@
     },
     {
       "path": "js/creator.js",
-      "bytes": 20881
+      "bytes": 21695
     },
     {
       "path": "js/engine.js",

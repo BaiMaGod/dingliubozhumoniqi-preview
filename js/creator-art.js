@@ -1,6 +1,7 @@
 // @ts-nocheck
-// Both backgrounds share the same phone position: 76% x, 47% y.
-export function roomArt(lamp=false) {
+// Interior variants share phone center (83.5%, 46.3%); cover crop is mapped in creator.ts.
+export function roomArt(lamp=false,interior=false) {
+ if(interior)return `<img class="rental-art rental-interior" src="./assets/room-interior${lamp?'-lamp':''}-v103.webp" data-phone-x="0.835" data-phone-y="0.463" width="941" height="1672" alt="置身出租屋内：左边是床，右边是窗边书桌，手机放在桌上${lamp?'，补光灯已装备':''}" fetchpriority="high" decoding="async">`;
  return `<img class="rental-art rental-painted" src="./assets/ftue-rental${lamp?'-lamp':''}-v101.webp" width="1254" height="1254" alt="简陋出租屋：一张床、一张旧桌子和桌上的手机${lamp?'，新买的补光灯已摆好':''}" fetchpriority="high" decoding="async">`;
 }
 export function legacyRoomArt(lamp=false) {
