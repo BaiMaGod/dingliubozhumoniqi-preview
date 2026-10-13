@@ -1,6 +1,6 @@
 {
-  "version": "1.0.4",
-  "builtAt": "2026-10-13T03:52:22.468Z",
+  "version": "1.0.5",
+  "builtAt": "2026-10-13T12:40:32.094Z",
   "files": [
     {
       "path": "art-review/baseline.html",
@@ -72,7 +72,7 @@
     },
     {
       "path": "creator.css",
-      "bytes": 37210
+      "bytes": 38042
     },
     {
       "path": "fonts/OFL-MaShanZheng.txt",
@@ -84,7 +84,7 @@
     },
     {
       "path": "index.html",
-      "bytes": 658
+      "bytes": 807
     },
     {
       "path": "js/classic.js",
@@ -96,7 +96,7 @@
     },
     {
       "path": "js/creator-art.js",
-      "bytes": 9016
+      "bytes": 8259
     },
     {
       "path": "js/creator-engine.js",
@@ -104,7 +104,7 @@
     },
     {
       "path": "js/creator.js",
-      "bytes": 22103
+      "bytes": 22095
     },
     {
       "path": "js/engine.js",
@@ -116,7 +116,7 @@
     },
     {
       "path": "js/main.js",
-      "bytes": 597
+      "bytes": 598
     },
     {
       "path": "js/room-motion.js",
@@ -137,6 +137,18 @@
     {
       "path": "style.css",
       "bytes": 49728
+    },
+    {
+      "path": "assets/creator-performer-v105.json",
+      "bytes": 375
+    },
+    {
+      "path": "assets/creator-dance-v105.webp",
+      "bytes": 729078
+    },
+    {
+      "path": "assets/creator-expressions-v105.webp",
+      "bytes": 357150
     }
   ]
 }

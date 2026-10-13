@@ -1,7 +1,7 @@
 // @ts-nocheck
-import {CreatorGame,STAT_LABELS,TOPICS} from './creator-engine.js?v=1.0.4';
-import {roomArt,catArt,performanceArt} from './creator-art.js?v=1.0.4';
-import {icon} from './icons.js?v=1.0.4';
+import {CreatorGame,STAT_LABELS,TOPICS} from './creator-engine.js?v=1.0.5';
+import {roomArt,performanceArt,updatePerformanceSprite,EXPRESSION_NAMES} from './creator-art.js?v=1.0.5';
+import {icon} from './icons.js?v=1.0.5';
 let storage;try{storage=window.localStorage;}catch{}
 const game=CreatorGame.load(storage),root=document.querySelector('#app');
 let screen=game.s.active?.phase==='ended'?'result':game.s.active?.phase||'room';
@@ -38,7 +38,7 @@ function positionRoomPhone(){const img=$('.rental-interior'),button=$('.only-pho
 window.addEventListener('resize',positionRoomPhone);
 function render(){const builders={room,phone,shoot,edit:editing,ready,live,result,growth,works,equipment};root.innerHTML=header()+(builders[screen]||room)()+`<div id="toast" class="creator-toast" role="status" aria-live="polite"></div>${!storage||game.storageFailed?'<p class="storage-warning">浏览器未能保存进度，关闭页面后可能丢失本次试玩。</p>':''}`;document.body.dataset.screen=screen;if(screen==='room'){positionRoomPhone();$('.rental-interior')?.addEventListener('load',positionRoomPhone,{once:true});}if(screen==='shoot')updateCamera();if(previousScreen!==screen)window.scrollTo(0,0);previousScreen=screen;}
 function updateCamera(){const v=game.s.active;if(v?.phase!=='shoot'||!$('#shot-score'))return;const score=game.shootScore();$('#shot-score').textContent=score+' / 100';$('#shot-rating').textContent=score>=85?'丝滑连舞':score>=55?'动作连贯':'逐帧表演';$('#score-fill').style.width=score+'%';$('#shoot-time').textContent=(v.shootAt?Math.max(0,7000-(Date.now()-v.shootAt))/1000:7).toFixed(1);const button=$('[data-do="dance"] b');if(button)button.textContent=v.shootAt?'继续点击 · 推进动作':'开始 7 秒拍摄';$('#steady-copy').textContent=`已拍 ${v.shootTaps||0} 帧 · 连贯衔接 ${v.shootSmooth||0} 次`;}
-function danceTap(){const v=game.s.active;if(v?.phase!=='shoot')return;if(!v.shootAt)game.beginShoot();if(game.shootTap()){const actor=$('#dance-performer');actor.innerHTML=performanceArt(v.shootTaps,v.topicId);$('#dance-cue').textContent=['左摆','抬手','摇摆','比心','右摆','眨眼'][Math.floor(v.shootTaps/4)%6];feedback();updateCamera();}else{screen=game.s.active.phase;render();}}
+function danceTap(){const v=game.s.active;if(v?.phase!=='shoot')return;if(!v.shootAt)game.beginShoot();if(game.shootTap()){updatePerformanceSprite($('#dance-performer .performer-sprite'),v.shootTaps,v.topicId);$('#dance-cue').textContent=v.topicId==='pose'?EXPRESSION_NAMES[v.shootTaps%12]:['左摆','抬手','摇摆','比心','右摆','眨眼'][Math.floor(v.shootTaps/4)%6];feedback();updateCamera();}else{screen=game.s.active.phase;render();}}
 function doRefresh(){if(performance.now()<refreshUntil){hint('正在揭晓本轮数据，稍等片刻再下拉');return;}const event=game.refresh();if(!event)return;refreshUntil=performance.now()+650;feedback(event==='爆火'?'viral':'tap');render();if(event==='推流'||event==='爆火')$('#live-views')?.classList.add('number-pop');}
 root.addEventListener('click',e=>{const el=e.target.closest('[data-do]');if(!el||el.disabled)return;const a=el.dataset.do;
  if(a==='home'){if(game.s.active){hint('先完成当前作品，进度会自动保存');return;}screen='room';}
@@ -61,9 +61,10 @@ function endDrag(e,cancel=false){if(!drag||drag.id!==e.pointerId)return;const d=
 root.addEventListener('pointerup',e=>endDrag(e));root.addEventListener('pointercancel',e=>endDrag(e,true));
 root.addEventListener('keydown',e=>{if(e.target.closest('#dance-stage')&&[' ','Enter'].includes(e.key)&&!e.repeat){e.preventDefault();danceTap();}});
 setInterval(()=>{if(game.s.active?.phase==='edit'){const ready=game.tick();if(ready){screen='ready';render();feedback();}else{const v=game.s.active;if($('#edit-time'))$('#edit-time').innerHTML=(v.remaining/1000).toFixed(1)+'<small>秒</small>';if($('#edit-progress'))$('#edit-progress').style.width=100*(1-v.remaining/v.editTotal)+'%';}}
- const v=game.s.active;if(v&&['edit','ready','live'].includes(screen)){const frame=Math.floor(performance.now()/1000*(v.shootTaps||0)/7)%24;for(const el of root.querySelectorAll('.mini-film,.ready-preview,.feed-preview')){const svg=el.querySelector('svg[aria-label^="卡通小博主"]');if(svg&&svg.dataset.frame!==String(frame)){svg.outerHTML=performanceArt(frame,v.topicId).replace('<svg ','<svg data-frame="'+frame+'" ');}}}
+ const v=game.s.active;if(v&&['edit','ready','live'].includes(screen)){const frame=Math.floor(performance.now()/1000*(v.shootTaps||0)/7)%24;for(const el of root.querySelectorAll('.mini-film,.ready-preview,.feed-preview')){const sprite=el.querySelector('.performer-sprite');if(sprite)updatePerformanceSprite(sprite,frame,v.topicId);}}
  if(screen==='shoot'&&game.s.active){if(game.tick()){screen=game.s.active.phase;render();feedback('capture');}else updateCamera();}},50);
 window.addEventListener('pagehide',()=>game.save());
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&game.s.active?.phase==='edit'&&game.tick()){screen='ready';render();}});
 render();
+
 
