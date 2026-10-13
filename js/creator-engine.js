@@ -4,7 +4,7 @@ export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const STAT_LABELS = {sense:'网感', luck:'幸运', filming:'拍摄', editing:'剪辑', trend:'热点敏感', persistence:'坚持'};
 export const TOPICS = [
  {id:'cat', title:'小博主的第一支舞', tag:'表情舞蹈', heat:0},
- {id:'pose', title:'出租屋变装挑战', tag:'生活记录', heat:4},
+ {id:'pose', title:'表情包挑战', tag:'表情演绎', heat:4},
  {id:'dance', title:'跟着节拍拍起来', tag:'热门舞蹈', heat:8}
 ];
 export function initial(seed = Math.floor(Math.random()*0xffffffff)) {
@@ -156,4 +156,5 @@ export class CreatorGame {
   this.s.wallet-=99;this.s.lamp=true;this.save();return true;
  }
 }
+
 
