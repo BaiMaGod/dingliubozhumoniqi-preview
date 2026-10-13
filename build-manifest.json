@@ -1,6 +1,6 @@
 {
-  "version": "1.0.3",
-  "builtAt": "2026-10-12T01:01:50.429Z",
+  "version": "1.0.4",
+  "builtAt": "2026-10-13T03:52:22.468Z",
   "files": [
     {
       "path": "art-review/baseline.html",
@@ -96,15 +96,15 @@
     },
     {
       "path": "js/creator-art.js",
-      "bytes": 7087
+      "bytes": 9016
     },
     {
       "path": "js/creator-engine.js",
-      "bytes": 7707
+      "bytes": 8649
     },
     {
       "path": "js/creator.js",
-      "bytes": 21695
+      "bytes": 22103
     },
     {
       "path": "js/engine.js",

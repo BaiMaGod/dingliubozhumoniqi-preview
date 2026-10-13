@@ -3,7 +3,7 @@ export const SAVE_KEY = 'creator-simulator-ftue-v10';
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const STAT_LABELS = {sense:'网感', luck:'幸运', filming:'拍摄', editing:'剪辑', trend:'热点敏感', persistence:'坚持'};
 export const TOPICS = [
- {id:'cat', title:'小猫的第一支舞', tag:'萌宠日常', heat:0},
+ {id:'cat', title:'小博主的第一支舞', tag:'表情舞蹈', heat:0},
  {id:'pose', title:'出租屋变装挑战', tag:'生活记录', heat:4},
  {id:'dance', title:'跟着节拍拍起来', tag:'热门舞蹈', heat:8}
 ];
@@ -37,7 +37,7 @@ export class CreatorGame {
   if(this.s.active) return false;
   const topic=this.first?TOPICS[0]:TOPICS.find(t=>t.id===topicId)||TOPICS[0];
   this.s.active={id:this.s.works.length+1, topicId:topic.id, title:topic.title, phase:'shoot',
-   x:-64,y:42, shot:0, taps:0, cuts:[],remaining:10000, editAt:0,
+   x:0,y:0, shootAt:0, shootTaps:0, shootLast:0, shootSmooth:0, shot:0, taps:0, cuts:[],remaining:10000, editAt:0,
    views:0,likes:0,comments:0,fans:0,round:0,tier:0,event:'测试流量',history:[],claimed:false};
   this.save(); return true;
  }
@@ -45,14 +45,34 @@ export class CreatorGame {
   const v=this.s.active;if(v?.phase!=='shoot')return false;
   v.x=clamp(v.x+dx,-130,130);v.y=clamp(v.y+dy,-100,100);this.save();return true;
  }
+ beginShoot(now=Date.now()) {
+  const v=this.s.active;if(v?.phase!=='shoot'||v.shootAt)return false;
+  v.shootAt=now;v.shootTaps=0;v.shootSmooth=0;v.shootLast=0;this.save();return true;
+ }
+ shootTap(now=Date.now()) {
+  const v=this.s.active;if(v?.phase!=='shoot'||!v.shootAt)return false;
+  if(now-v.shootAt>=7000){this.capture(v.shootAt+7000);return false;}
+  if(now<v.shootAt||now<v.shootLast)return false;
+  const gap=v.shootLast?now-v.shootLast:0;
+  if(gap>0&&gap<=350)v.shootSmooth++;
+  v.shootTaps++;v.shootLast=now;this.save();return true;
+ }
+ shootScore() {
+  const v=this.s.active;if(!v)return 0;
+  return Math.round(clamp(20+Math.min(60,(v.shootTaps||0)*1.5)+Math.min(20,(v.shootSmooth||0)*.5),20,100));
+ }
  capture(now=Date.now()) {
-  const v=this.s.active;if(v?.phase!=='shoot')return false;
-  v.shot=composition(v.x,v.y);v.phase='edit';v.editAt=now;
+  const v=this.s.active;if(v?.phase!=='shoot'||!v.shootAt||now-v.shootAt<7000)return false;
+  v.shot=this.shootScore();v.phase='edit';v.editAt=now;
   v.remaining=this.first?10000:Math.max(3500,10000/(1+.06*(this.s.stats.editing-1)));
   v.editTotal=v.remaining;this.save();return true;
  }
  tick(now=Date.now()) {
-  const v=this.s.active;if(v?.phase!=='edit')return false;
+  const v=this.s.active;if(v?.phase==='shoot'){
+   if(v.shootAt&&now-v.shootAt>=7000){this.capture(v.shootAt+7000);this.tick(now);return true;}
+   return false;
+  }
+  if(v?.phase!=='edit')return false;
   const elapsed=Math.max(0,now-v.editAt);v.remaining=Math.max(0,v.remaining-elapsed);v.editAt=now;
   if(v.remaining===0)v.phase='ready';this.save();return v.phase==='ready';
  }
@@ -136,3 +156,4 @@ export class CreatorGame {
   this.s.wallet-=99;this.s.lamp=true;this.save();return true;
  }
 }
+

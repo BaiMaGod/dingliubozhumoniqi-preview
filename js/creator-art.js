@@ -25,3 +25,13 @@ export function legacyCatArt(topic='cat') {
 }
 
 export function catArt(topic="cat"){return `<img class="cat-performer cat-sprite topic-${topic}" src="./assets/cat-performer-v102.webp" alt="跳舞的小猫" width="1213" height="1296">`;}
+
+
+// One tap advances exactly one pose; adjacent poses form a looping dance.
+export function performanceArt(frame=0,topic='cat') {
+ const t=(frame%24)/24*Math.PI*2, sway=Math.sin(t)*9, lift=Math.cos(t)*7;
+ const armL=-35+Math.sin(t)*65,armR=35+Math.sin(t+Math.PI)*65;
+ const face=topic==='pose'?Math.floor(frame/3)%4:Math.floor(frame/6)%4;
+ const eyes=['<path d="M92 91q8-12 16 0m24 0q8-12 16 0"/>','<path d="M92 87l16 5m24-5l16 5"/>','<circle cx="100" cy="89" r="4"/><circle cx="140" cy="89" r="4"/>','<path d="M92 91q8-12 16 0"/><circle cx="140" cy="89" r="4"/>'][face];
+ return `<svg viewBox="0 0 240 300" width="240" height="300" role="img" aria-label="卡通小博主，动作第 ${frame+1} 帧" style="width:100%;height:100%"><ellipse cx="120" cy="276" rx="58" ry="10" fill="#52426c" opacity=".18"/><g transform="translate(${sway} ${lift})" stroke="#594456" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M107 219l${-10+Math.sin(t)*18} 42h-20m52-42l${10-Math.sin(t)*18} 42h20" fill="none" stroke="#55517f" stroke-width="19"/><path d="M91 147q29-17 58 0l8 73q-37 19-74 0z" fill="#edaa91"/><g transform="rotate(${armL} 92 156)"><path d="M92 156l-22 46" stroke="#edaa91" stroke-width="19"/><circle cx="70" cy="207" r="10" fill="#ffdfbf"/></g><g transform="rotate(${armR} 148 156)"><path d="M148 156l22 46" stroke="#edaa91" stroke-width="19"/><circle cx="170" cy="207" r="10" fill="#ffdfbf"/></g><path d="M110 164l10 9 10-9" fill="none" stroke="#fff4df"/><g transform="rotate(${sway} 120 115)"><ellipse cx="120" cy="89" rx="48" ry="49" fill="#ffdfbf"/><path d="M74 84q-7-59 47-55 55-1 48 58l-16-22-15-5-6 14-20-20-26 20z" fill="#68516a"/><g fill="none">${eyes}<path d="${face===2?'M111 111q9-17 18 0q-9 16-18 0':'M109 108q11 17 22 0'}"/></g><ellipse cx="84" cy="105" rx="9" ry="5" fill="#f4a598" stroke="none"/><ellipse cx="155" cy="105" rx="9" ry="5" fill="#f4a598" stroke="none"/></g></g></svg>`;
+}
