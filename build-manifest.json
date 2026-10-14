@@ -1,6 +1,7 @@
 {
-  "version": "1.0.5",
-  "builtAt": "2026-10-13T12:45:18.271Z",
+  "version": "1.0.6",
+  "builtAt": "2026-10-14T12:29:19.968Z",
+  "sourceSha": "baa2c1df16bf4c106d83f6ed5a89df47841be5ce",
   "files": [
     {
       "path": "art-review/baseline.html",
@@ -8,7 +9,7 @@
     },
     {
       "path": "art-review/candidate.html",
-      "bytes": 76683
+      "bytes": 76840
     },
     {
       "path": "art-review/index.html",
@@ -21,6 +22,26 @@
     {
       "path": "assets/creator-avatar-v102.webp",
       "bytes": 174472
+    },
+    {
+      "path": "assets/creator-dance-v105.webp",
+      "bytes": 729078
+    },
+    {
+      "path": "assets/creator-expressions-v105.webp",
+      "bytes": 357150
+    },
+    {
+      "path": "assets/creator-performer-v105.json",
+      "bytes": 375
+    },
+    {
+      "path": "assets/creator-xingqiyao-v106.json",
+      "bytes": 345
+    },
+    {
+      "path": "assets/creator-xingqiyao-v106.webp",
+      "bytes": 532962
     },
     {
       "path": "assets/entry-equipment-v07.webp",
@@ -72,7 +93,7 @@
     },
     {
       "path": "creator.css",
-      "bytes": 38042
+      "bytes": 38148
     },
     {
       "path": "fonts/OFL-MaShanZheng.txt",
@@ -84,7 +105,7 @@
     },
     {
       "path": "index.html",
-      "bytes": 807
+      "bytes": 882
     },
     {
       "path": "js/classic.js",
@@ -92,27 +113,27 @@
     },
     {
       "path": "js/config.js",
-      "bytes": 4259
+      "bytes": 4258
     },
     {
       "path": "js/creator-art.js",
-      "bytes": 8259
+      "bytes": 8340
     },
     {
       "path": "js/creator-engine.js",
-      "bytes": 8644
+      "bytes": 8638
     },
     {
       "path": "js/creator.js",
-      "bytes": 22233
+      "bytes": 22371
     },
     {
       "path": "js/engine.js",
-      "bytes": 11781
+      "bytes": 11780
     },
     {
       "path": "js/icons.js",
-      "bytes": 3182
+      "bytes": 3181
     },
     {
       "path": "js/main.js",
@@ -120,11 +141,11 @@
     },
     {
       "path": "js/room-motion.js",
-      "bytes": 6984
+      "bytes": 6983
     },
     {
       "path": "js/room-scene.js",
-      "bytes": 1835
+      "bytes": 1834
     },
     {
       "path": "libs/laya.core.js",
@@ -137,18 +158,6 @@
     {
       "path": "style.css",
       "bytes": 49728
-    },
-    {
-      "path": "assets/creator-performer-v105.json",
-      "bytes": 375
-    },
-    {
-      "path": "assets/creator-dance-v105.webp",
-      "bytes": 729078
-    },
-    {
-      "path": "assets/creator-expressions-v105.webp",
-      "bytes": 357150
     }
   ]
 }

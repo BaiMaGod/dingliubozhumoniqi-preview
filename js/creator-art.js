@@ -32,11 +32,11 @@ export const EXPRESSION_NAMES=['嘟嘴','震惊','得意','嫌弃','困惑','大
 export function performerFrame(frame=0,topic='cat') {
  const expression=topic==='pose',count=expression?12:24;
  const index=((Math.floor(frame)||0)%count+count)%count,rows=expression?3:6;
- return {index,expression,rows,x:(index%4)*100/3,y:Math.floor(index/4)*100/(rows-1),label:expression?EXPRESSION_NAMES[index]:`舞蹈第 ${index+1} 帧`};
+ return {index,expression,rows,x:(index%4)*100/3,y:Math.floor(index/4)*100/(rows-1),label:expression?EXPRESSION_NAMES[index]:topic==='dance'?`星奇摇第 ${index+1} 帧`:`舞蹈第 ${index+1} 帧`};
 }
 export function performanceArt(frame=0,topic='cat') {
  const f=performerFrame(frame,topic);
- return `<div class="performer-sprite ${f.expression?'expression-sprite':'dance-sprite'}" role="img" aria-label="卡通小博主，${f.label}" data-frame="${f.index}" style="background-position:${f.x}% ${f.y}%"></div>`;
+ return `<div class="performer-sprite ${f.expression?'expression-sprite':topic==='dance'?'xingqiyao-sprite':'dance-sprite'}" role="img" aria-label="卡通小博主，${f.label}" data-frame="${f.index}" style="background-position:${f.x}% ${f.y}%"></div>`;
 }
 export function updatePerformanceSprite(el,frame,topic='cat') {
  const f=performerFrame(frame,topic);if(el.dataset.frame===String(f.index))return;

@@ -1,9 +1,9 @@
 // @ts-nocheck
-import {NICHES,TOPICS,MODES,POOLS,EVENTS,STATS} from './config.js?v=1.0.3';
-import {Game,number,need,cap} from './engine.js?v=1.0.3';
-import {roomScene,ROOM_ART} from './room-scene.js?v=1.0.3';
-import {icon} from './icons.js?v=1.0.3';
-import {RoomMotion,preserveRoom,roomResponse,rewardResponse} from './room-motion.js?v=1.0.3';
+import {NICHES,TOPICS,MODES,POOLS,EVENTS,STATS} from './config.js?v=1.0.6';
+import {Game,number,need,cap} from './engine.js?v=1.0.6';
+import {roomScene,ROOM_ART} from './room-scene.js?v=1.0.6';
+import {icon} from './icons.js?v=1.0.6';
+import {RoomMotion,preserveRoom,roomResponse,rewardResponse} from './room-motion.js?v=1.0.6';
 const roomMotion=new RoomMotion();
 const game=Game.load();
 let tab='room',panel='',step=0,last=performance.now(),lastSave=last,lastSig='',drawnFans=game.s.fans,drawnViews=game.s.views;

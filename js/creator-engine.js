@@ -5,7 +5,7 @@ export const STAT_LABELS = {sense:'网感', luck:'幸运', filming:'拍摄', edi
 export const TOPICS = [
  {id:'cat', title:'小博主的第一支舞', tag:'表情舞蹈', heat:0},
  {id:'pose', title:'表情包挑战', tag:'表情演绎', heat:4},
- {id:'dance', title:'跟着节拍拍起来', tag:'热门舞蹈', heat:8}
+ {id:'dance', title:'星奇摇挑战', tag:'热门舞蹈', heat:8}
 ];
 export function initial(seed = Math.floor(Math.random()*0xffffffff)) {
  return {version:1, seed:seed>>>0, fans:0, wallet:100, views:0, points:0, lamp:false,

@@ -52,6 +52,7 @@ body[data-screen="room"] .room-view[data-unlocked="true"] .character-dialogue{bo
 /* Generated transparent performer atlases. Fixed cell ratio prevents stretching. */
 .performer-sprite{display:block;height:100%;width:auto;aspect-ratio:8/11;max-width:100%;margin-inline:auto;background-repeat:no-repeat;pointer-events:none;user-select:none;flex-shrink:0}
 .dance-sprite{background-image:url('./assets/creator-dance-v105.webp');background-size:400% 600%}
+.xingqiyao-sprite{background-image:url('./assets/creator-xingqiyao-v106.webp');background-size:400% 600%}
 .expression-sprite{background-image:url('./assets/creator-expressions-v105.webp');background-size:400% 300%}
 .feed-preview>.performer-sprite{height:88px;width:64px;margin:0;flex:none}
 .ready-preview>.performer-sprite{height:calc(100% - 24px);width:auto}

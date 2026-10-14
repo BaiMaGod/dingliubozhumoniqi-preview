@@ -90,4 +90,3 @@ export function rewardResponse(){
  flare.innerHTML=Array.from({length:7},(_,i)=>`<i style="--angle:${i*51.4}deg;--delay:${i*12}ms"></i>`).join('');
  wallet.appendChild(flare);setTimeout(()=>flare.remove(),800);
 }
-
