@@ -1,0 +1,132 @@
+{
+  "engine": "LayaAir",
+  "engineVersion": "3.4.0",
+  "builtAt": "2026-10-15T11:50:03.966Z",
+  "officialBuild": true,
+  "browserSmokePassed": true,
+  "files": [
+    {
+      "path": "Scene.ls",
+      "bytes": 153,
+      "sha256": "1a99f8f3f9c24cf6423c422bfe9ffd3b287a33c385eda76d0cf798b263ccfea4"
+    },
+    {
+      "path": "fileconfig.json",
+      "bytes": 641,
+      "sha256": "8313b328b2439ec0529176fd1bee1bf500aea1a131a48dc135288dcc6f14fcef"
+    },
+    {
+      "path": "index.html",
+      "bytes": 1115,
+      "sha256": "dd1f2fcdc956cbbb040f41de7639b6fdd89532285e26d9cb8f8ed9b5866aeea8"
+    },
+    {
+      "path": "js/bundle.js",
+      "bytes": 60872,
+      "sha256": "252ca04a108d42348517169d2dc4943f9a49459de1ca013f3b64043cce3180e8"
+    },
+    {
+      "path": "js/index.js",
+      "bytes": 4546,
+      "sha256": "142f5f8923a7377e055ae332630180288ebea58edc004cd71a8cd50c2cdbcc44"
+    },
+    {
+      "path": "libs/laya.core.js",
+      "bytes": 847227,
+      "sha256": "227c335c5fdb3c6abe5a6a1b6685413c5d3d1cdc391a8e2fd733248c22d0f643"
+    },
+    {
+      "path": "libs/laya.ui.js",
+      "bytes": 110780,
+      "sha256": "f14954700e2906a25ca5bb324afe385091474a90effbbd8d14302cb98b628dfd"
+    },
+    {
+      "path": "libs/laya.webgl_2D.js",
+      "bytes": 247075,
+      "sha256": "9031e335e1cca1e3214b7aa9dda74c4c39ff8212e380aad5eb6126d330df9d4e"
+    },
+    {
+      "path": "resources/audio/capture.wav",
+      "bytes": 5336,
+      "sha256": "eacd0dc3a44b8c7535d1ac553e7b771841f00da866b2a1e5f8f49f1d09e0d6c7"
+    },
+    {
+      "path": "resources/audio/tap.wav",
+      "bytes": 3130,
+      "sha256": "3997a70d16925311f62cfed4f41297d09dbf5351e4708e1b3d895308a6ebea5c"
+    },
+    {
+      "path": "resources/audio/viral.wav",
+      "bytes": 7982,
+      "sha256": "d60f5cc833c60e8e0a0b7d49e44b800504e26b5c1a33e5616333186b713fc99c"
+    },
+    {
+      "path": "resources/creator-avatar-v102.webp",
+      "bytes": 174472,
+      "sha256": "934b721acacf06b3d2ffa5b8d42b853bf8b6aa9f1dfc5b04180a10c6e229a290"
+    },
+    {
+      "path": "resources/creator-dance-v105.webp",
+      "bytes": 729078,
+      "sha256": "6a9bfc6c52b03d912d8170bccb4979b7086aec2dfd3d392c235d664e547769b2"
+    },
+    {
+      "path": "resources/creator-expressions-v105.webp",
+      "bytes": 357150,
+      "sha256": "e5591fab486aceec6326d40fb40970a3ad00161cc98fadbbbd644a3f1b9cc4f9"
+    },
+    {
+      "path": "resources/creator-xingqiyao-v106.webp",
+      "bytes": 532962,
+      "sha256": "1e27439e84818fe64acf1c1ee68df8ac6cb06ee3c478c9ca2583839ae9622614"
+    },
+    {
+      "path": "resources/layaAir.png",
+      "bytes": 7731,
+      "sha256": "ef747ba1544684249c7b6127a4b30aad5b86491490251f3dc832e083f4ddd8e0"
+    },
+    {
+      "path": "resources/room-cozy-v130.webp",
+      "bytes": 141726,
+      "sha256": "c4fe5839a6da0b24fed43235fa115b465e61d1c3ad01dc4c0225ffc6585ba378"
+    },
+    {
+      "path": "resources/room-interior-lamp-v103.webp",
+      "bytes": 231086,
+      "sha256": "4aa765ed7d734dfa40e18969be04968d31b6669c4c8eefd0f035bcd66e90f16e"
+    },
+    {
+      "path": "resources/room-interior-v103.webp",
+      "bytes": 260944,
+      "sha256": "0b7fc0d7c17c1caca3ea6dfe176c6be67290d41fa3083b9ce59cf41df2cb40f5"
+    },
+    {
+      "path": "resources/room-studio-v130.webp",
+      "bytes": 155224,
+      "sha256": "c5336a251ce546c0eb6c906a966ecdff11397210e423f07eac1cce7e919de80a"
+    }
+  ],
+  "browserSmokeAt": "2026-10-15T11:56:18.488Z",
+  "smoke": {
+    "realEngineInput": true,
+    "filmingReload": true,
+    "oneTapOneFrame": true,
+    "downPull": true,
+    "rewardOnce": true,
+    "tasks": true,
+    "growth": true,
+    "equipment": true,
+    "legacySave": true,
+    "touchScroll": true
+  },
+  "browserSmokeViewport": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 375,
+      "height": 667
+    }
+  ]
+}
