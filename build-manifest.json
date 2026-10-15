@@ -1,7 +1,7 @@
 {
-  "version": "1.0.6",
-  "builtAt": "2026-10-14T12:29:19.968Z",
-  "sourceSha": "baa2c1df16bf4c106d83f6ed5a89df47841be5ce",
+  "version": "1.0.7",
+  "builtAt": "2026-10-15T04:46:05.323Z",
+  "sourceSha": "9979587db88fab1b53f17d0e681ee7d196b2935c",
   "files": [
     {
       "path": "art-review/baseline.html",
@@ -93,7 +93,7 @@
     },
     {
       "path": "creator.css",
-      "bytes": 38148
+      "bytes": 42214
     },
     {
       "path": "fonts/OFL-MaShanZheng.txt",
@@ -125,7 +125,7 @@
     },
     {
       "path": "js/creator.js",
-      "bytes": 22371
+      "bytes": 22134
     },
     {
       "path": "js/engine.js",
