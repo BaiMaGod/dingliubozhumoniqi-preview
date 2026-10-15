@@ -1,6 +1,6 @@
 // @ts-nocheck
-import {icon} from './icons.js?v=1.0.6';
-import {actorLayers} from './room-motion.js?v=1.0.6';
+import {icon} from './icons.js?v=1.1.0';
+import {actorLayers} from './room-motion.js?v=1.1.0';
 export const ROOM_ART=['room-rental-v05.webp','room-cozy-v05.webp','room-pro-v05.webp','room-star-v05.webp'];
 export function roomScene(game){
  const tier=Math.max(0,Math.min(3,game.s.roomTier||0));
@@ -16,3 +16,4 @@ export function roomScene(game){
  ${state!=='idle'?`<span class="scene-state">${icon(state==='working'?'film':state==='ready'?'check':'chart')}${state==='working'?'正在创作':state==='ready'?'作品已就绪':'推荐进行中'}</span>`:''}
  </div>`;
 }
+

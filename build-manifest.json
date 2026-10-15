@@ -1,163 +1,191 @@
 {
-  "version": "1.0.8",
-  "builtAt": "2026-10-15T05:40:33.435Z",
-  "sourceSha": "9979587db88fab1b53f17d0e681ee7d196b2935c",
+  "version": "1.1.0",
+  "builtAt": "2026-10-15T06:27:45.697Z",
   "files": [
     {
-      "path": "art-review/baseline.html",
-      "bytes": 58145
-    },
-    {
-      "path": "art-review/candidate.html",
-      "bytes": 76840
-    },
-    {
-      "path": "art-review/index.html",
-      "bytes": 961
-    },
-    {
       "path": "assets/cat-performer-v102.webp",
-      "bytes": 213152
+      "bytes": 213152,
+      "sha256": "850391c11fb9336c737833e8ef2578e16ecc851235ed64483382a0a786048aee"
     },
     {
       "path": "assets/creator-avatar-v102.webp",
-      "bytes": 174472
+      "bytes": 174472,
+      "sha256": "934b721acacf06b3d2ffa5b8d42b853bf8b6aa9f1dfc5b04180a10c6e229a290"
     },
     {
       "path": "assets/creator-dance-v105.webp",
-      "bytes": 729078
+      "bytes": 729078,
+      "sha256": "6a9bfc6c52b03d912d8170bccb4979b7086aec2dfd3d392c235d664e547769b2"
     },
     {
       "path": "assets/creator-expressions-v105.webp",
-      "bytes": 357150
+      "bytes": 357150,
+      "sha256": "e5591fab486aceec6326d40fb40970a3ad00161cc98fadbbbd644a3f1b9cc4f9"
     },
     {
       "path": "assets/creator-performer-v105.json",
-      "bytes": 375
+      "bytes": 375,
+      "sha256": "0061de6a22165fd8e13517999fdb7283383e4bbe0b188b92b6bea2028ec352df"
     },
     {
       "path": "assets/creator-xingqiyao-v106.json",
-      "bytes": 345
+      "bytes": 345,
+      "sha256": "2e5021246cd5ed0c70bc10eb923c8ba9a67fc9836e4122b2d3d8d8d94e82e61b"
     },
     {
       "path": "assets/creator-xingqiyao-v106.webp",
-      "bytes": 532962
+      "bytes": 532962,
+      "sha256": "1e27439e84818fe64acf1c1ee68df8ac6cb06ee3c478c9ca2583839ae9622614"
     },
     {
       "path": "assets/entry-equipment-v07.webp",
-      "bytes": 48610
+      "bytes": 48610,
+      "sha256": "6e76b7ce76415a3ec47b47fe0b4157cafeadf648efd294703ae025e5bf9b3fa1"
     },
     {
       "path": "assets/entry-laptop-v07.webp",
-      "bytes": 50328
+      "bytes": 50328,
+      "sha256": "be2d3a4d34749629e534f7a50c18a3b01925f931bf3f3b7437fdc6434fe4fdec"
     },
     {
       "path": "assets/entry-phone-v07.webp",
-      "bytes": 43782
+      "bytes": 43782,
+      "sha256": "72d0be7ae17cbbaaf7ce289ae69c00fa25ac66e1df36b1199e7d5ed870d18d4b"
     },
     {
       "path": "assets/ftue-rental-lamp-v101.webp",
-      "bytes": 185948
+      "bytes": 185948,
+      "sha256": "a916130f2013da687c9a3d3d3fa133fd9c2194b4f81b70616059ba0107d7bbf8"
     },
     {
       "path": "assets/ftue-rental-v101.webp",
-      "bytes": 199184
+      "bytes": 199184,
+      "sha256": "583f6f748d57fd69c4826dc73f3edc6aed23b708e50f1b9e7038c282d971e416"
     },
     {
       "path": "assets/room-cozy-v05.webp",
-      "bytes": 291788
+      "bytes": 291788,
+      "sha256": "99645e33af116bff025dade5717f4809d812250e470c5ed7ea9ec98857147fb6"
     },
     {
       "path": "assets/room-interior-lamp-v103.webp",
-      "bytes": 231086
+      "bytes": 231086,
+      "sha256": "4aa765ed7d734dfa40e18969be04968d31b6669c4c8eefd0f035bcd66e90f16e"
     },
     {
       "path": "assets/room-interior-v103.webp",
-      "bytes": 260944
+      "bytes": 260944,
+      "sha256": "0b7fc0d7c17c1caca3ea6dfe176c6be67290d41fa3083b9ce59cf41df2cb40f5"
     },
     {
       "path": "assets/room-pro-v05.webp",
-      "bytes": 282768
+      "bytes": 282768,
+      "sha256": "d98b83a05a609d3e795576b377d78989169080a1b47b9dff3411c7728d78ed07"
     },
     {
       "path": "assets/room-rental-v05.webp",
-      "bytes": 283586
+      "bytes": 283586,
+      "sha256": "dff78c0b6138521857ab51220b73ada7f77c9a8ebb5ca327bea120c0919330c0"
     },
     {
       "path": "assets/room-star-v05.webp",
-      "bytes": 312056
+      "bytes": 312056,
+      "sha256": "8b9e1b372b7b2178003b9a86876ddd0074fa84908d2f3670ad0287ff8a750bb4"
     },
     {
       "path": "assets/work-cover-v07.webp",
-      "bytes": 90316
+      "bytes": 90316,
+      "sha256": "55192fbf96dfd510cd8cd135a5c1d3c6d6e717b31b8d86b191aa7b32e84eba37"
     },
     {
       "path": "creator.css",
-      "bytes": 42214
+      "bytes": 46499,
+      "sha256": "9e8d26d0082f433a876f6a698b26098846431fa5172b86ba77cd761abc8e8836"
     },
     {
       "path": "fonts/OFL-MaShanZheng.txt",
-      "bytes": 4398
+      "bytes": 4398,
+      "sha256": "c45fe93767f65884e55629684dc0aea7a96559653f2b693b600e78b13c6cf7ae"
     },
     {
       "path": "fonts/creator-brush-v07.woff2",
-      "bytes": 22400
+      "bytes": 22400,
+      "sha256": "70dc07ed8d2966ada081b2ffa55d7988f2e0bf201889a9aa48aaf570eda3d6e3"
     },
     {
       "path": "index.html",
-      "bytes": 882
+      "bytes": 883,
+      "sha256": "0807d4f1b268957d10f97efc0a0d2ffe539934c20a5baa9fce3111737406fd0c"
     },
     {
       "path": "js/classic.js",
-      "bytes": 33187
+      "bytes": 33188,
+      "sha256": "20f3c5614454b7d1817d8d769a005cab3d89637f44caaac9c1d82c46e0b2ee84"
     },
     {
       "path": "js/config.js",
-      "bytes": 4258
+      "bytes": 4259,
+      "sha256": "cfce96106d5531854e9dac8f9476a971a1a7cf5ae5028d04caa86f7ed7ee20ac"
     },
     {
       "path": "js/creator-art.js",
-      "bytes": 8340
+      "bytes": 8341,
+      "sha256": "c5bfa5f9c60086d92435a3dda56f638e4851930cadffdbb9e1ebd7a12427a64d"
     },
     {
       "path": "js/creator-engine.js",
-      "bytes": 9406
+      "bytes": 9782,
+      "sha256": "84c7d06435deecef213100f47269d35a93b8eb9e5528f3e2067db62fff881f41"
     },
     {
       "path": "js/creator.js",
-      "bytes": 22174
+      "bytes": 26458,
+      "sha256": "3c6a5d4d47872a321d79ce4aaab570617193409b55c49dee54abd5f7906852bd"
     },
     {
       "path": "js/engine.js",
-      "bytes": 11780
+      "bytes": 11781,
+      "sha256": "f60ca380b15619be68bd2f9c4476f8d346e9fc6a0a0be269e758b261993b3102"
     },
     {
       "path": "js/icons.js",
-      "bytes": 3181
+      "bytes": 3182,
+      "sha256": "79d473dccd8f96130d19c18143d5b6d491be782beae59bfe1fd3d69ed1433c1f"
     },
     {
       "path": "js/main.js",
-      "bytes": 598
+      "bytes": 599,
+      "sha256": "a3d05f0fc9e6247aab558376c363f02b1b04856af05a6371b21c3ac610b0c56c"
     },
     {
       "path": "js/room-motion.js",
-      "bytes": 6983
+      "bytes": 6984,
+      "sha256": "6ca9f0a309613b7a798b736b469102f9ee456f015d0503c27c6bc5b1141fb0df"
     },
     {
       "path": "js/room-scene.js",
-      "bytes": 1834
+      "bytes": 1835,
+      "sha256": "b020ee6dc1f5325bf45b245472988dbbdd40f70341c98ca59c68b091e8f91f4a"
+    },
+    {
+      "path": "js/tasks.js",
+      "bytes": 3479,
+      "sha256": "d0585dadac984b58fe1eb2a929129aeba41162bb60f782bb09c87304e68a2826"
     },
     {
       "path": "libs/laya.core.js",
-      "bytes": 847227
+      "bytes": 847227,
+      "sha256": "227c335c5fdb3c6abe5a6a1b6685413c5d3d1cdc391a8e2fd733248c22d0f643"
     },
     {
       "path": "libs/laya.webgl_2D.js",
-      "bytes": 247075
+      "bytes": 247075,
+      "sha256": "9031e335e1cca1e3214b7aa9dda74c4c39ff8212e380aad5eb6126d330df9d4e"
     },
     {
       "path": "style.css",
-      "bytes": 49728
+      "bytes": 49728,
+      "sha256": "89d36124e405e7a2f88a80248500cb893b086e62641425ba799f91661e410f68"
     }
   ]
 }

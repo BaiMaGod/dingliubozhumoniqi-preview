@@ -1,9 +1,9 @@
 // @ts-nocheck
-import {NICHES,TOPICS,MODES,POOLS,EVENTS,STATS} from './config.js?v=1.0.6';
-import {Game,number,need,cap} from './engine.js?v=1.0.6';
-import {roomScene,ROOM_ART} from './room-scene.js?v=1.0.6';
-import {icon} from './icons.js?v=1.0.6';
-import {RoomMotion,preserveRoom,roomResponse,rewardResponse} from './room-motion.js?v=1.0.6';
+import {NICHES,TOPICS,MODES,POOLS,EVENTS,STATS} from './config.js?v=1.1.0';
+import {Game,number,need,cap} from './engine.js?v=1.1.0';
+import {roomScene,ROOM_ART} from './room-scene.js?v=1.1.0';
+import {icon} from './icons.js?v=1.1.0';
+import {RoomMotion,preserveRoom,roomResponse,rewardResponse} from './room-motion.js?v=1.1.0';
 const roomMotion=new RoomMotion();
 const game=Game.load();
 let tab='room',panel='',step=0,last=performance.now(),lastSave=last,lastSig='',drawnFans=game.s.fans,drawnViews=game.s.views;
@@ -107,5 +107,6 @@ function initLaya(){
 initLaya();render();
 setInterval(()=>{const t=performance.now(),delta=Math.max(0,Math.min(1600,t-last));last=t;game.advance(delta);if(game.latest?.history?.length>lastSeen){lastSeen=game.latest.history.length;{const h=game.latest.history.at(-1);burst('作品收获 +'+number(h.delta)+' 播放 · +'+number(h.fans)+' 粉丝');notify(h.passed?'突破推荐流量池！':'本条视频流量结算完成');}}if(key()!==lastSig)render();drawnFans+=Math.ceil((game.s.fans-drawnFans)*.2);drawnViews+=Math.ceil((game.s.views-drawnViews)*.2);const f=$('#fan-counter'),v=$('#view-counter'),lv=$('#live-views'),wt=$('#production-time'),bt=$('#cta-time'),pg=$('#production-progress');if(f)f.textContent=number(drawnFans);if(v)v.textContent=number(drawnViews);if(lv&&game.latest)lv.textContent=number(game.latest.views);if(game.making){if(wt)wt.textContent=formatTime(game.making.remaining);if(bt)bt.textContent=formatTime(game.making.remaining);if(pg)pg.style.width=(100*(1-game.making.remaining/game.making.total))+'%';}if(t-lastSave>4000){game.save();lastSave=t;}},100);
 window.addEventListener('pagehide',()=>game.save());document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();});
+
 
 

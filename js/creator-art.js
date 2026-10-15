@@ -42,3 +42,4 @@ export function updatePerformanceSprite(el,frame,topic='cat') {
  const f=performerFrame(frame,topic);if(el.dataset.frame===String(f.index))return;
  el.dataset.frame=String(f.index);el.style.backgroundPosition=`${f.x}% ${f.y}%`;el.setAttribute('aria-label',`卡通小博主，${f.label}`);
 }
+

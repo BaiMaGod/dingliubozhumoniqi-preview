@@ -1,17 +1,9 @@
 // @ts-nocheck
+import {MILESTONES,migrateTasks,taskList,recommendedTask,rankTitle} from './tasks.js?v=1.1.0';
 export const SAVE_KEY = 'creator-simulator-ftue-v10';
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const STAT_LABELS = {sense:'网感', luck:'幸运', filming:'拍摄', editing:'剪辑', trend:'热点敏感', persistence:'坚持'};
-export const FAN_QUESTS = [
-  [100, '冲刺 100 粉丝'],
-  [1000, '冲刺 1,000 粉丝'],
-  [10000, '冲刺 1 万粉丝'],
-  [100000, '冲刺 10 万粉丝'],
-  [1000000, '冲刺 100 万粉丝'],
-  [10000000, '冲刺 1,000 万粉丝'],
-  [100000000, '冲刺 1 亿粉丝'],
-  [1000000000, '冲刺 10 亿粉丝']
-];
+export const FAN_QUESTS = MILESTONES.map(m=>[m[0],'冲刺 '+m[1]+' 粉丝']);
 export const TOPICS = [
  {id:'cat', title:'小博主的第一支舞', tag:'表情舞蹈', heat:0},
  {id:'pose', title:'表情包挑战', tag:'表情演绎', heat:4},
@@ -28,7 +20,7 @@ function random(seed, id, round, channel) {
 }
 export function composition(x,y) { return Math.round(clamp(100-Math.hypot(x,y)*.85,0,100)); }
 export class CreatorGame {
- constructor(state=initial(), storage=null) { this.s=state; this.storage=storage; this.storageFailed=false; }
+ constructor(state=initial(), storage=null) { this.s=state; this.storage=storage; this.storageFailed=false; migrateTasks(this.s); }
  static load(storage) {
   try { const s=JSON.parse(storage.getItem(SAVE_KEY)||'null');
    if(s?.version===1 && Array.isArray(s.works) && s.stats &&
@@ -43,13 +35,19 @@ export class CreatorGame {
  save() { try { this.storage?.setItem(SAVE_KEY,JSON.stringify(this.s)); this.storageFailed=false; } catch { this.storageFailed=true; } }
  get first() { return this.s.works.length===0; }
  get unlocked() { return this.s.works.length>0; }
- get quest() {
-  // Derive from the saved, claimed fan total; no old quest index can become stale.
-  if(!this.unlocked)return {title:'拍摄你的第一条视频',current:0,target:1,complete:false};
-  const next=FAN_QUESTS.find(([target])=>this.s.fans<target);
-  return next
-   ?{title:next[1],current:this.s.fans,target:next[0],complete:false}
-   :{title:'10 亿粉丝达成！继续刷新纪录',current:1000000000,target:1000000000,complete:true};
+ get tasks() {return taskList(this.s);}
+ get title() {return rankTitle(this.s);}
+ get quest() {return recommendedTask(this.s);}
+ get readyTaskCount() {return new Set([...this.tasks.growth,...this.tasks.milestones].filter(t=>t.status==='ready').map(t=>t.id)).size;}
+ claimTasks(id='all') {
+  if(this.s.active)return false;
+  const all=[...this.tasks.growth,...this.tasks.milestones];
+  const ready=[...new Map(all.filter(t=>t.status==='ready'&&!t.workReward&&(id==='all'||t.id===id)).map(t=>[t.id,t])).values()];
+  if(!ready.length)return false;
+  const reward={coins:0,points:0,count:ready.length,badge:false};
+  for(const t of ready){this.s.tasks.claimed.push(t.id);reward.coins+=t.coins;reward.points+=t.points;reward.badge ||= !!t.badge;}
+  this.s.wallet+=reward.coins;this.s.points+=reward.points;
+  this.save();return reward;
  }
  start(topicId='cat') {
   if(this.s.active) return false;
@@ -163,16 +161,19 @@ export class CreatorGame {
   this.s.stats.editing=Math.min(50,this.s.stats.editing+1);
   this.s.stats.persistence=Math.min(50,this.s.stats.persistence+1);
   if(v.shot>=85)this.s.stats.sense=Math.min(50,this.s.stats.sense+1);
-  this.s.works.push({...v,reward,phase:'done'});this.s.active=null;this.save();return reward;
+  this.s.works.push({...v,reward,phase:'done'});this.s.active=null;
+  if(!this.s.tasks.claimed.includes('first'))this.s.tasks.claimed.push('first');
+  this.save();return reward;
  }
  upgrade(stat) {
   if(this.s.active||!this.unlocked||!Object.hasOwn(STAT_LABELS,stat)||this.s.points<1||this.s.stats[stat]>=50)return false;
-  this.s.stats[stat]++;this.s.points--;this.save();return true;
+  this.s.stats[stat]++;this.s.points--;this.s.tasks.manualUpgrades++;this.save();return true;
  }
  buyLamp() {
   if(this.s.active||!this.unlocked||this.s.lamp||this.s.wallet<99)return false;
   this.s.wallet-=99;this.s.lamp=true;this.save();return true;
  }
 }
+
 
 
