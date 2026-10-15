@@ -1,5 +1,5 @@
 // @ts-nocheck
-import {dailyList} from './daily-tasks.js?v=1.2.0';
+import {dailyList} from './daily-tasks.js?v=1.3.0';
 // Rewards are keyed by stable IDs, independent of the current recommendation.
 export const MILESTONES = [
  [100,'100','萌新博主',50,1], [1000,'1,000','小透明UP',100,2],
@@ -9,7 +9,7 @@ export const MILESTONES = [
  [1000000000,'10亿','世界级顶流',10000,12]
 ];
 export function migrateTasks(s) {
- const valid=new Set(['first','upgrade','lamp','topic','score','works',...MILESTONES.map(m=>'fan_'+m[0])]);
+ const valid=new Set(['first','upgrade','lamp','topic','score','works','support_100','support_1000','use_tripod','use_room1','use_mic','use_computer','use_room2','use_camera',...MILESTONES.map(m=>'fan_'+m[0])]);
  if(!s.tasks || s.tasks.version!==1) {
   // Legacy saves had exactly two spendable points per settled work.
   const spent=Math.max(0,s.works.length*2-s.points);
@@ -36,8 +36,21 @@ export function taskList(s,now=Date.now()) {
   make('score','找到拍摄节奏','任意已结算作品的拍摄评分达到80分。',works.reduce((best,w)=>Math.max(best,Number(w.shot)||0),0),80,30,0,'phone'),
   make('works','坚持更新','累计完成并结算3条作品。',works.length,3,0,2,'phone')
  ];
+ const usedGear=id=>works.some(w=>w.inputs?.gear?.[id])?1:0;
+ const usedRoom=tier=>works.some(w=>w.inputs?.roomTier>=tier)?1:0;
+ const lessons=[
+  [100,'support_100','百粉创作补助','达到100粉丝，领取布置创作间的启动资金。',s.fans,100,200,0,'equipment'],
+  [100,'use_tripod','稳稳拍出下一条','购买三脚架，用它完成并结算1条作品。',usedGear('tripod'),1,30,0,'equipment'],
+  [100,'use_room1','在新房间开拍','升级温馨创作间，在新环境完成并结算1条作品。',usedRoom(1),1,0,2,'equipment'],
+  [1000,'support_1000','千粉设备补助','达到1000粉丝，领取专业创作设备补助。',s.fans,1000,500,0,'equipment'],
+  [1000,'use_mic','让声音更清晰','购买麦克风，用它完成并结算1条作品。',usedGear('mic'),1,40,0,'equipment'],
+  [1000,'use_computer','剪辑效率升级','购买剪辑笔记本，用它完成并结算1条作品。',usedGear('computer'),1,0,2,'equipment'],
+  [1000,'use_room2','我的专业工作室','升级专业工作室，在新环境完成并结算1条作品。',usedRoom(2),1,0,3,'equipment'],
+  [10000,'use_camera','用高清记录成长','购买高清相机，用它完成并结算1条作品。',usedGear('camera'),1,0,3,'equipment']
+ ];
+ for(const [gate,...args] of lessons)if(s.fans>=gate||claimed.has(args[0]))growth.push(make(...args));
  const milestones=MILESTONES.map(([target,label,rank,coins,points])=>make('fan_'+target,'冲刺 '+label+' 粉丝',
-  target===1000?'达成小透明UP；满千粉后发布的新作品开放播放收入。':target===1e9?'达成世界级顶流，获得顶流纪念徽章。':'达成称号：'+rank+'。',
+  target===100?'解锁三脚架、温馨创作间和200钱币创作补助。':target===1000?'解锁麦克风、剪辑笔记本、专业工作室和500钱币设备补助；新作品开放播放收入。':target===10000?'解锁高清创作相机。':target===1e9?'达成世界级顶流，获得顶流纪念徽章。':'达成称号：'+rank+'。',
   s.fans,target,coins,points,'phone','milestones',{rank,badge:target===1e9}));
  // The last teaching objective leads to the same 100-fan transaction.
  const hundred=milestones[0];

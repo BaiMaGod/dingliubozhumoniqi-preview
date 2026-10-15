@@ -1,6 +1,7 @@
 // @ts-nocheck
-import {MILESTONES,migrateTasks,taskList,recommendedTask,rankTitle} from './tasks.js?v=1.2.0';
-import {ensureDaily,recordDaily,dailyMeta} from './daily-tasks.js?v=1.2.0';
+import {MILESTONES,migrateTasks,taskList,recommendedTask,rankTitle} from './tasks.js?v=1.3.0';
+import {ensureDaily,recordDaily,dailyMeta} from './daily-tasks.js?v=1.3.0';
+import {EQUIPMENT,ROOMS,migrateStudio,studioBenefits} from './studio.js?v=1.3.0';
 export const SAVE_KEY = 'creator-simulator-ftue-v10';
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const STAT_LABELS = {sense:'网感', luck:'幸运', filming:'拍摄', editing:'剪辑', trend:'热点敏感', persistence:'坚持'};
@@ -21,7 +22,7 @@ function random(seed, id, round, channel) {
 }
 export function composition(x,y) { return Math.round(clamp(100-Math.hypot(x,y)*.85,0,100)); }
 export class CreatorGame {
- constructor(state=initial(), storage=null, clock=Date.now) {this.clock=clock; this.s=state; this.storage=storage; this.storageFailed=false; migrateTasks(this.s); ensureDaily(this.s,this.clock()); }
+ constructor(state=initial(), storage=null, clock=Date.now) {this.clock=clock; this.s=state; this.storage=storage; this.storageFailed=false; migrateStudio(this.s); migrateTasks(this.s); ensureDaily(this.s,this.clock()); }
  static load(storage,clock=Date.now) {
   try { const s=JSON.parse(storage.getItem(SAVE_KEY)||'null');
    if(s?.version===1 && Array.isArray(s.works) && s.stats &&
@@ -34,6 +35,8 @@ export class CreatorGame {
   return new CreatorGame(initial(),storage,clock);
  }
  save() { try { this.storage?.setItem(SAVE_KEY,JSON.stringify(this.s)); this.storageFailed=false; } catch { this.storageFailed=true; } }
+ get room() {return ROOMS[this.s.studio.tier];}
+ get benefits() {return studioBenefits(this.s);}
  get first() { return this.s.works.length===0; }
  get unlocked() { return this.s.works.length>0; }
  syncDaily() {const old=this.s.tasks.daily;ensureDaily(this.s,this.clock());if(old!==this.s.tasks.daily){this.save();return true;}return false;}
@@ -85,7 +88,7 @@ export class CreatorGame {
  capture(now=Date.now()) {
   const v=this.s.active;if(v?.phase!=='shoot'||!v.shootAt||now-v.shootAt<7000)return false;
   v.shot=this.shootScore();v.phase='edit';v.editAt=now;
-  v.remaining=this.first?10000:Math.max(3500,10000/(1+.06*(this.s.stats.editing-1)));
+  v.remaining=this.first?10000:Math.max(2500,10000/(1+.06*(this.s.stats.editing-1))*this.benefits.editFactor);
   v.editTotal=v.remaining;this.save();return true;
  }
  tick(now=Date.now()) {
@@ -107,10 +110,10 @@ export class CreatorGame {
  publish() {
   const v=this.s.active;if(v?.phase!=='ready')return false;
   const s=this.s,t=TOPICS.find(t=>t.id===v.topicId);
-  v.inputs={...s.stats,lamp:s.lamp,audience:s.fans,first:this.first,heat:t.heat};
-  v.quality=Math.round(clamp((28+v.shot*.4+v.cuts.length*5+Math.min(12,(s.stats.filming-1)*1.2))*(s.lamp?1.1:1),15,100));
-  v.completion=Math.round(clamp(35+v.quality*.4+v.cuts.length*4,0,95));
-  v.phase='live';v.views=Math.round(180+v.quality*2);v.likes=Math.floor(v.views*.04);
+  v.inputs={...s.stats,lamp:s.lamp,audience:s.fans,first:this.first,heat:t.heat,gear:{...s.studio.gear},roomTier:s.studio.tier,benefits:{...this.benefits}};
+  v.quality=Math.round(clamp((28+v.shot*.4+v.cuts.length*5+Math.min(12,(s.stats.filming-1)*1.2)+v.inputs.benefits.quality)*(s.lamp?1.1:1),15,100));
+  v.completion=Math.round(clamp(35+v.quality*.4+v.cuts.length*4+v.inputs.benefits.completion,0,95));
+  v.phase='live';v.views=Math.round((180+v.quality*2)*v.inputs.benefits.viewsFactor);v.likes=Math.floor(v.views*.04);
   v.comments=Math.floor(v.views*.004);v.fans=Math.max(1,Math.floor(v.views*.012));
   v.history.push({round:0,event:'测试流量',delta:v.views,target:v.views,tier:0});
   this.save();return true;
@@ -147,6 +150,7 @@ export class CreatorGame {
    delta=Math.round((100+v.quality*3)*scale*(.75+noise*.5)*(event==='爆火'?2.4:event==='推流'?1.25:.3));
    if(v.inputs.first)delta=Math.round((event==='推流'?520:100)*(1+v.quality/150));
   }
+  delta=Math.round(delta*(v.inputs.benefits?.viewsFactor||1));
   v.views+=delta;v.likes+=Math.floor(delta*(.025+v.quality*.0004));v.comments+=Math.floor(delta*.006);
   v.fans+=Math.floor(delta*(.007+v.completion*.0001)*(1+Math.min(.8,(v.inputs.sense-1)*.012)));
   v.event=event;v.history.push({round:v.round,event,delta,target:v.views,tier:v.tier});
@@ -160,7 +164,8 @@ export class CreatorGame {
  }
  claim() {
   const v=this.s.active,reward=this.reward;if(!reward||v.claimed)return false;
-  v.claimed=true;this.s.fans+=reward.fans;this.s.wallet+=reward.income+reward.grant;
+  v.claimed=true;const oldFans=this.s.fans;this.s.fans+=reward.fans;
+  for(const [target] of MILESTONES)if(oldFans<target&&this.s.fans>=target&&!this.s.studio.celebrations.includes(target))this.s.studio.celebrations.push(target);this.s.wallet+=reward.income+reward.grant;
   this.s.views+=v.views;this.s.points+=reward.points;this.s.grantClaimed=true;
   this.s.stats.filming=Math.min(50,this.s.stats.filming+1);
   this.s.stats.editing=Math.min(50,this.s.stats.editing+1);
@@ -176,10 +181,19 @@ export class CreatorGame {
   if(this.s.active||!this.unlocked||!Object.hasOwn(STAT_LABELS,stat)||this.s.points<1||this.s.stats[stat]>=50)return false;
   this.s.stats[stat]++;this.s.points--;this.s.tasks.manualUpgrades++;this.save();return true;
  }
- buyLamp() {
-  if(this.s.active||!this.unlocked||this.s.lamp||this.s.wallet<99)return false;
-  this.s.wallet-=99;this.s.lamp=true;this.save();return true;
+ buyLamp() {return this.buyEquipment('lamp');}
+ buyEquipment(id) {
+  const item=EQUIPMENT.find(e=>e.id===id),s=this.s;
+  if(!item||s.active||!this.unlocked||s.studio.gear[id]||s.fans<item.fans||s.wallet<item.price)return false;
+  s.wallet-=item.price;s.studio.gear[id]=true;if(id==='lamp')s.lamp=true;this.save();return true;
  }
+ upgradeRoom() {
+  const s=this.s,next=ROOMS[s.studio.tier+1];
+  if(!next||s.active||!this.unlocked||s.fans<next.fans||s.wallet<next.price)return false;
+  s.wallet-=next.price;s.studio.tier=next.tier;this.save();return true;
+ }
+ dismissMilestones() {this.s.studio.celebrations=[];this.save();}
+
 }
 
 

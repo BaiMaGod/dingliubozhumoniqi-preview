@@ -1,6 +1,6 @@
 {
-  "version": "1.2.0",
-  "builtAt": "2026-10-15T06:45:06.431Z",
+  "version": "1.3.0",
+  "builtAt": "2026-10-15T07:10:45.747Z",
   "files": [
     {
       "path": "assets/cat-performer-v102.webp",
@@ -68,6 +68,11 @@
       "sha256": "99645e33af116bff025dade5717f4809d812250e470c5ed7ea9ec98857147fb6"
     },
     {
+      "path": "assets/room-cozy-v130.webp",
+      "bytes": 141726,
+      "sha256": "c4fe5839a6da0b24fed43235fa115b465e61d1c3ad01dc4c0225ffc6585ba378"
+    },
+    {
       "path": "assets/room-interior-lamp-v103.webp",
       "bytes": 231086,
       "sha256": "4aa765ed7d734dfa40e18969be04968d31b6669c4c8eefd0f035bcd66e90f16e"
@@ -93,14 +98,19 @@
       "sha256": "8b9e1b372b7b2178003b9a86876ddd0074fa84908d2f3670ad0287ff8a750bb4"
     },
     {
+      "path": "assets/room-studio-v130.webp",
+      "bytes": 155224,
+      "sha256": "c5336a251ce546c0eb6c906a966ecdff11397210e423f07eac1cce7e919de80a"
+    },
+    {
       "path": "assets/work-cover-v07.webp",
       "bytes": 90316,
       "sha256": "55192fbf96dfd510cd8cd135a5c1d3c6d6e717b31b8d86b191aa7b32e84eba37"
     },
     {
       "path": "creator.css",
-      "bytes": 47507,
-      "sha256": "836d6e95b580f2efc74cd2f80f61e5129afaf9efa87e8606d932c5d6a13d0410"
+      "bytes": 51591,
+      "sha256": "80314028d16dceec576fc32b6d177ab062e072d323ed9bc4c6c8c26a8a557b8c"
     },
     {
       "path": "fonts/OFL-MaShanZheng.txt",
@@ -115,12 +125,12 @@
     {
       "path": "index.html",
       "bytes": 883,
-      "sha256": "b15efdb133b4aff98eeb1da34cdb8951cdf9d42d37e2b1a3252df3cb87ed4090"
+      "sha256": "55dec9f40dbba1eeb2a7be0050049cd5beeaa1288a5e6e296e4b767738753902"
     },
     {
       "path": "js/classic.js",
       "bytes": 33188,
-      "sha256": "8100194c486dd81aca0b2d11cfed21aef3d56dfa82adf6e075360f456dad864d"
+      "sha256": "6511a15faae7f18a89b087a0c51cdca52e477e89b7034663b6d7326f257f8b44"
     },
     {
       "path": "js/config.js",
@@ -129,18 +139,18 @@
     },
     {
       "path": "js/creator-art.js",
-      "bytes": 8341,
-      "sha256": "c5bfa5f9c60086d92435a3dda56f638e4851930cadffdbb9e1ebd7a12427a64d"
+      "bytes": 8686,
+      "sha256": "4b2c9b3edc77d4d2c77c600a4edc7f06a0ab53591599b2b8c7a9236f02e4203f"
     },
     {
       "path": "js/creator-engine.js",
-      "bytes": 10926,
-      "sha256": "53b820c3af4385b750e87619a7370ebd0090116d637c962b6e41c523be4d654b"
+      "bytes": 12031,
+      "sha256": "5c91de537cf74005d75ac798de6778471695c87ce45cb94f4bcbc7ab9fcb6715"
     },
     {
       "path": "js/creator.js",
-      "bytes": 27714,
-      "sha256": "07f2cd8f4ea53dbeeaedb1ccf18278c0d195ab9424e0ea463b08abbcaa43633a"
+      "bytes": 32078,
+      "sha256": "1f73a3a8afb392795d10020088e813a8e532ba3d9780aa37ab01aef00dcc5dbc"
     },
     {
       "path": "js/daily-tasks.js",
@@ -150,7 +160,7 @@
     {
       "path": "js/engine.js",
       "bytes": 11781,
-      "sha256": "2282128fb3a79091029948d8258afbb23beba4c45314206b1e351d36c8c91283"
+      "sha256": "00f921e69177b10d8bfc5b1a556acd8165e2d89d855d30adfb6b9415496ded0c"
     },
     {
       "path": "js/icons.js",
@@ -160,7 +170,7 @@
     {
       "path": "js/main.js",
       "bytes": 599,
-      "sha256": "06a0befd9ee7870e5014d73d1cc2829a9e594e1083b39fe87a28f52fbe78a83a"
+      "sha256": "2cb3b8cd69929988facc48b270d50ab31cb1d7a4a13845b4e5b1f61c94c226e4"
     },
     {
       "path": "js/room-motion.js",
@@ -170,12 +180,22 @@
     {
       "path": "js/room-scene.js",
       "bytes": 1835,
-      "sha256": "a6a443b777358410f189a7897758923b9da83be08ae5e094f2053091687d55a1"
+      "sha256": "3cd394264fcf10de73f7818ad9d7b5093f898ee1e4170525ea5a1b5b7886f848"
+    },
+    {
+      "path": "js/studio-art.js",
+      "bytes": 2847,
+      "sha256": "66f37e8e5a0882d9bd6f34df189af33e19def010bae2a45bf75204268e6c8d92"
+    },
+    {
+      "path": "js/studio.js",
+      "bytes": 2133,
+      "sha256": "06dcfa409d5092da1e55794ec28b4fb6cc11b4a8ceb609a9507e3794f00e5a49"
     },
     {
       "path": "js/tasks.js",
-      "bytes": 3641,
-      "sha256": "87732de5a7aba43102d42cd4a58d704977c6dc0603040669941ce90934220d67"
+      "bytes": 5259,
+      "sha256": "ddab6e04a08446ee17ef9027a9010becccd53aebb87715685db67cfb6b794da9"
     },
     {
       "path": "libs/laya.core.js",
