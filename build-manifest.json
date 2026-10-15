@@ -1,6 +1,6 @@
 {
-  "version": "1.0.7",
-  "builtAt": "2026-10-15T04:46:05.323Z",
+  "version": "1.0.8",
+  "builtAt": "2026-10-15T05:40:33.435Z",
   "sourceSha": "9979587db88fab1b53f17d0e681ee7d196b2935c",
   "files": [
     {
@@ -121,11 +121,11 @@
     },
     {
       "path": "js/creator-engine.js",
-      "bytes": 8638
+      "bytes": 9406
     },
     {
       "path": "js/creator.js",
-      "bytes": 22134
+      "bytes": 22174
     },
     {
       "path": "js/engine.js",

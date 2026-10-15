@@ -2,6 +2,16 @@
 export const SAVE_KEY = 'creator-simulator-ftue-v10';
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const STAT_LABELS = {sense:'网感', luck:'幸运', filming:'拍摄', editing:'剪辑', trend:'热点敏感', persistence:'坚持'};
+export const FAN_QUESTS = [
+  [100, '冲刺 100 粉丝'],
+  [1000, '冲刺 1,000 粉丝'],
+  [10000, '冲刺 1 万粉丝'],
+  [100000, '冲刺 10 万粉丝'],
+  [1000000, '冲刺 100 万粉丝'],
+  [10000000, '冲刺 1,000 万粉丝'],
+  [100000000, '冲刺 1 亿粉丝'],
+  [1000000000, '冲刺 10 亿粉丝']
+];
 export const TOPICS = [
  {id:'cat', title:'小博主的第一支舞', tag:'表情舞蹈', heat:0},
  {id:'pose', title:'表情包挑战', tag:'表情演绎', heat:4},
@@ -33,6 +43,14 @@ export class CreatorGame {
  save() { try { this.storage?.setItem(SAVE_KEY,JSON.stringify(this.s)); this.storageFailed=false; } catch { this.storageFailed=true; } }
  get first() { return this.s.works.length===0; }
  get unlocked() { return this.s.works.length>0; }
+ get quest() {
+  // Derive from the saved, claimed fan total; no old quest index can become stale.
+  if(!this.unlocked)return {title:'拍摄你的第一条视频',current:0,target:1,complete:false};
+  const next=FAN_QUESTS.find(([target])=>this.s.fans<target);
+  return next
+   ?{title:next[1],current:this.s.fans,target:next[0],complete:false}
+   :{title:'10 亿粉丝达成！继续刷新纪录',current:1000000000,target:1000000000,complete:true};
+ }
  start(topicId='cat') {
   if(this.s.active) return false;
   const topic=this.first?TOPICS[0]:TOPICS.find(t=>t.id===topicId)||TOPICS[0];
