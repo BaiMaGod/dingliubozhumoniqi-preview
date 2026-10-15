@@ -9,3 +9,5 @@
 本次产物来自正式提交 `fc8b30ad1cff3aa4c7abbd00c9e0d800cecaf8f5`，由官方 LayaAir CLI 3.4.0 导出。65项规则/边界检查、390×844和375×667真实触摸流程、旧存档兼容与20项文件哈希验证通过。`_build-evidence.json`记录同一包的浏览器验收和文件哈希。
 
 保留同域存档键，不清空已有创作循环进度。浏览器旧版页面和美术对照记录仅供归档，不是当前游戏入口。
+
+本次发布提交：[042cdb2](https://github.com/BaiMaGod/dingliubozhumoniqi-preview/commit/042cdb244446482703a3b91cef0d36506b047f9b)。
