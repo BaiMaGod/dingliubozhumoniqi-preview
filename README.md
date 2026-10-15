@@ -10,4 +10,6 @@
 
 保留同域存档键，不清空已有创作循环进度。浏览器旧版页面和美术对照记录仅供归档，不是当前游戏入口。
 
-本次发布提交：[042cdb2](https://github.com/BaiMaGod/dingliubozhumoniqi-preview/commit/042cdb244446482703a3b91cef0d36506b047f9b)。
+引擎产物提交：[042cdb2](https://github.com/BaiMaGod/dingliubozhumoniqi-preview/commit/042cdb244446482703a3b91cef0d36506b047f9b)。
+
+2026-10-15 20:15（新加坡时间）再次发布：复用已通过官方构建、真实触摸流程和文件哈希校验的 V1.4.0 引擎产物，保持源码基线 `fc8b30ad1cff3aa4c7abbd00c9e0d800cecaf8f5` 不变，触发 GitHub Pages 重新发布。
