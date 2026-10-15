@@ -1,6 +1,6 @@
 {
   "version": "1.3.0",
-  "builtAt": "2026-10-15T07:10:45.747Z",
+  "builtAt": "2026-10-15T08:52:45.840Z",
   "files": [
     {
       "path": "assets/cat-performer-v102.webp",
@@ -124,8 +124,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 883,
-      "sha256": "55dec9f40dbba1eeb2a7be0050049cd5beeaa1288a5e6e296e4b767738753902"
+      "bytes": 903,
+      "sha256": "a34c2c1692fd068040040b1bbf1596496460ff977edac79e8dd1d6b33476c46f"
     },
     {
       "path": "js/classic.js",
@@ -149,8 +149,8 @@
     },
     {
       "path": "js/creator.js",
-      "bytes": 32078,
-      "sha256": "1f73a3a8afb392795d10020088e813a8e532ba3d9780aa37ab01aef00dcc5dbc"
+      "bytes": 32175,
+      "sha256": "0b18b2f4dac037576363a55b64d6eb6c3785f5f288c2c60deff1b887fecb34fc"
     },
     {
       "path": "js/daily-tasks.js",
@@ -169,8 +169,8 @@
     },
     {
       "path": "js/main.js",
-      "bytes": 599,
-      "sha256": "2cb3b8cd69929988facc48b270d50ab31cb1d7a4a13845b4e5b1f61c94c226e4"
+      "bytes": 619,
+      "sha256": "b8fb3ab921e1ab1a4cbaa32e834348f7301c609f7fe3623a7cc9e98c84fdec69"
     },
     {
       "path": "js/room-motion.js",
@@ -194,8 +194,8 @@
     },
     {
       "path": "js/tasks.js",
-      "bytes": 5259,
-      "sha256": "ddab6e04a08446ee17ef9027a9010becccd53aebb87715685db67cfb6b794da9"
+      "bytes": 5641,
+      "sha256": "bb7653910fd6f4dfd59fa5017f7ed9c5147e6c76a1724f6faa4f1b2dea259eb7"
     },
     {
       "path": "libs/laya.core.js",
