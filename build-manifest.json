@@ -1,6 +1,6 @@
 {
-  "version": "1.1.0",
-  "builtAt": "2026-10-15T06:27:45.697Z",
+  "version": "1.2.0",
+  "builtAt": "2026-10-15T06:45:06.431Z",
   "files": [
     {
       "path": "assets/cat-performer-v102.webp",
@@ -99,8 +99,8 @@
     },
     {
       "path": "creator.css",
-      "bytes": 46499,
-      "sha256": "9e8d26d0082f433a876f6a698b26098846431fa5172b86ba77cd761abc8e8836"
+      "bytes": 47507,
+      "sha256": "836d6e95b580f2efc74cd2f80f61e5129afaf9efa87e8606d932c5d6a13d0410"
     },
     {
       "path": "fonts/OFL-MaShanZheng.txt",
@@ -115,12 +115,12 @@
     {
       "path": "index.html",
       "bytes": 883,
-      "sha256": "0807d4f1b268957d10f97efc0a0d2ffe539934c20a5baa9fce3111737406fd0c"
+      "sha256": "b15efdb133b4aff98eeb1da34cdb8951cdf9d42d37e2b1a3252df3cb87ed4090"
     },
     {
       "path": "js/classic.js",
       "bytes": 33188,
-      "sha256": "20f3c5614454b7d1817d8d769a005cab3d89637f44caaac9c1d82c46e0b2ee84"
+      "sha256": "8100194c486dd81aca0b2d11cfed21aef3d56dfa82adf6e075360f456dad864d"
     },
     {
       "path": "js/config.js",
@@ -134,18 +134,23 @@
     },
     {
       "path": "js/creator-engine.js",
-      "bytes": 9782,
-      "sha256": "84c7d06435deecef213100f47269d35a93b8eb9e5528f3e2067db62fff881f41"
+      "bytes": 10926,
+      "sha256": "53b820c3af4385b750e87619a7370ebd0090116d637c962b6e41c523be4d654b"
     },
     {
       "path": "js/creator.js",
-      "bytes": 26458,
-      "sha256": "3c6a5d4d47872a321d79ce4aaab570617193409b55c49dee54abd5f7906852bd"
+      "bytes": 27714,
+      "sha256": "07f2cd8f4ea53dbeeaedb1ccf18278c0d195ab9424e0ea463b08abbcaa43633a"
+    },
+    {
+      "path": "js/daily-tasks.js",
+      "bytes": 2627,
+      "sha256": "fb580e2a4c45b8aed6f28c0e8edf416de79fcbdbd19c82318c77e87e364f03da"
     },
     {
       "path": "js/engine.js",
       "bytes": 11781,
-      "sha256": "f60ca380b15619be68bd2f9c4476f8d346e9fc6a0a0be269e758b261993b3102"
+      "sha256": "2282128fb3a79091029948d8258afbb23beba4c45314206b1e351d36c8c91283"
     },
     {
       "path": "js/icons.js",
@@ -155,7 +160,7 @@
     {
       "path": "js/main.js",
       "bytes": 599,
-      "sha256": "a3d05f0fc9e6247aab558376c363f02b1b04856af05a6371b21c3ac610b0c56c"
+      "sha256": "06a0befd9ee7870e5014d73d1cc2829a9e594e1083b39fe87a28f52fbe78a83a"
     },
     {
       "path": "js/room-motion.js",
@@ -165,12 +170,12 @@
     {
       "path": "js/room-scene.js",
       "bytes": 1835,
-      "sha256": "b020ee6dc1f5325bf45b245472988dbbdd40f70341c98ca59c68b091e8f91f4a"
+      "sha256": "a6a443b777358410f189a7897758923b9da83be08ae5e094f2053091687d55a1"
     },
     {
       "path": "js/tasks.js",
-      "bytes": 3479,
-      "sha256": "d0585dadac984b58fe1eb2a929129aeba41162bb60f782bb09c87304e68a2826"
+      "bytes": 3641,
+      "sha256": "87732de5a7aba43102d42cd4a58d704977c6dc0603040669941ce90934220d67"
     },
     {
       "path": "libs/laya.core.js",

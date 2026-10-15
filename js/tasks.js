@@ -1,4 +1,5 @@
 // @ts-nocheck
+import {dailyList} from './daily-tasks.js?v=1.2.0';
 // Rewards are keyed by stable IDs, independent of the current recommendation.
 export const MILESTONES = [
  [100,'100','萌新博主',50,1], [1000,'1,000','小透明UP',100,2],
@@ -20,7 +21,7 @@ export function migrateTasks(s) {
  if(s.works.length && !s.tasks.claimed.includes('first'))s.tasks.claimed.push('first');
  return s.tasks;
 }
-export function taskList(s) {
+export function taskList(s,now=Date.now()) {
  const claimed=new Set(s.tasks.claimed),works=s.works;
  const make=(id,title,description,current,target,coins,points,action,group='growth',extra={})=>({
   id,title,description,current,target,coins,points,action,group,...extra,
@@ -41,10 +42,10 @@ export function taskList(s) {
  // The last teaching objective leads to the same 100-fan transaction.
  const hundred=milestones[0];
  growth.push({...hundred,title:'收获第一批关注',description:'收获100粉丝，领取首个粉丝里程碑奖励。',group:'growth',linked:true});
- return {growth,milestones};
+ return {growth,milestones,daily:dailyList(s,now)};
 }
-export function recommendedTask(s) {
- const {growth,milestones}=taskList(s),all=[...growth,...milestones];
- return all.find(t=>t.status==='ready')||growth.find(t=>t.status==='progress')||milestones.find(t=>t.status==='progress')||null;
+export function recommendedTask(s,now=Date.now()) {
+ const {growth,milestones,daily}=taskList(s,now),all=[...growth,...milestones,...daily];
+ return all.find(t=>t.status==='ready')||growth.find(t=>t.status==='progress')||daily.find(t=>t.status==='progress')||milestones.find(t=>t.status==='progress')||null;
 }
 export function rankTitle(s) {return [...MILESTONES].reverse().find(m=>s.fans>=m[0])?.[2]||'新人博主';}

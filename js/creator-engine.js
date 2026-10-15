@@ -1,5 +1,6 @@
 // @ts-nocheck
-import {MILESTONES,migrateTasks,taskList,recommendedTask,rankTitle} from './tasks.js?v=1.1.0';
+import {MILESTONES,migrateTasks,taskList,recommendedTask,rankTitle} from './tasks.js?v=1.2.0';
+import {ensureDaily,recordDaily,dailyMeta} from './daily-tasks.js?v=1.2.0';
 export const SAVE_KEY = 'creator-simulator-ftue-v10';
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const STAT_LABELS = {sense:'网感', luck:'幸运', filming:'拍摄', editing:'剪辑', trend:'热点敏感', persistence:'坚持'};
@@ -20,32 +21,36 @@ function random(seed, id, round, channel) {
 }
 export function composition(x,y) { return Math.round(clamp(100-Math.hypot(x,y)*.85,0,100)); }
 export class CreatorGame {
- constructor(state=initial(), storage=null) { this.s=state; this.storage=storage; this.storageFailed=false; migrateTasks(this.s); }
- static load(storage) {
+ constructor(state=initial(), storage=null, clock=Date.now) {this.clock=clock; this.s=state; this.storage=storage; this.storageFailed=false; migrateTasks(this.s); ensureDaily(this.s,this.clock()); }
+ static load(storage,clock=Date.now) {
   try { const s=JSON.parse(storage.getItem(SAVE_KEY)||'null');
    if(s?.version===1 && Array.isArray(s.works) && s.stats &&
     Object.keys(STAT_LABELS).every(k=>Number.isFinite(s.stats[k])&&s.stats[k]>=1) &&
     ['fans','wallet','views','points'].every(k=>Number.isFinite(s[k])&&s[k]>=0) &&
     (!s.active || ['shoot','edit','ready','live','ended'].includes(s.active.phase))) {
-    const g=new CreatorGame(s,storage); g.tick(Date.now()); return g;
+    const g=new CreatorGame(s,storage,clock); g.tick(Date.now()); return g;
    }
   } catch {}
-  return new CreatorGame(initial(),storage);
+  return new CreatorGame(initial(),storage,clock);
  }
  save() { try { this.storage?.setItem(SAVE_KEY,JSON.stringify(this.s)); this.storageFailed=false; } catch { this.storageFailed=true; } }
  get first() { return this.s.works.length===0; }
  get unlocked() { return this.s.works.length>0; }
- get tasks() {return taskList(this.s);}
+ syncDaily() {const old=this.s.tasks.daily;ensureDaily(this.s,this.clock());if(old!==this.s.tasks.daily){this.save();return true;}return false;}
+ get daily() {return dailyMeta(this.s,this.clock());}
+ get tasks() {this.syncDaily();return taskList(this.s,this.clock());}
  get title() {return rankTitle(this.s);}
- get quest() {return recommendedTask(this.s);}
- get readyTaskCount() {return new Set([...this.tasks.growth,...this.tasks.milestones].filter(t=>t.status==='ready').map(t=>t.id)).size;}
+ get quest() {this.syncDaily();const bank=this.daily.pending;if(bank.count)return {id:'daily_pending',title:'领取往日每日奖励',status:'ready',current:1,target:1,coins:bank.coins,points:bank.points};return recommendedTask(this.s,this.clock());}
+ get readyTaskCount() {const tasks=this.tasks;return new Set([...tasks.growth,...tasks.milestones,...tasks.daily].filter(t=>t.status==='ready').map(t=>t.id)).size+this.daily.pending.count;}
  claimTasks(id='all') {
   if(this.s.active)return false;
-  const all=[...this.tasks.growth,...this.tasks.milestones];
+  const tasks=this.tasks,all=[...tasks.growth,...tasks.milestones,...tasks.daily],pending=this.daily.pending;
+  const bank=(id==='all'||id==='daily_pending')&&pending.count>0;
   const ready=[...new Map(all.filter(t=>t.status==='ready'&&!t.workReward&&(id==='all'||t.id===id)).map(t=>[t.id,t])).values()];
-  if(!ready.length)return false;
-  const reward={coins:0,points:0,count:ready.length,badge:false};
-  for(const t of ready){this.s.tasks.claimed.push(t.id);reward.coins+=t.coins;reward.points+=t.points;reward.badge ||= !!t.badge;}
+  if(!ready.length&&!bank)return false;
+  const reward={coins:bank?pending.coins:0,points:bank?pending.points:0,count:ready.length+(bank?pending.count:0),badge:false};
+  if(bank)this.s.tasks.daily.pending={coins:0,points:0,count:0};
+  for(const t of ready){if(t.group==='daily')this.s.tasks.daily.claimed.push(t.key);else this.s.tasks.claimed.push(t.id);reward.coins+=t.coins;reward.points+=t.points;reward.badge ||= !!t.badge;}
   this.s.wallet+=reward.coins;this.s.points+=reward.points;
   this.save();return reward;
  }
@@ -95,7 +100,7 @@ export class CreatorGame {
  edit(kind='tap',now=Date.now()) {
   this.tick(now);const v=this.s.active;if(v?.phase!=='edit')return false;
   if(kind!=='tap' && (!['open','highlight','end'].includes(kind)||v.cuts.includes(kind)))return false;
-  if(kind!=='tap')v.cuts.push(kind);
+  if(kind!=='tap'){v.cuts.push(kind);recordDaily(this.s,'cut',null,this.clock());}
   v.taps++;v.remaining=Math.max(0,v.remaining-(kind==='tap'?550:1800)*(1+.025*(this.s.stats.editing-1)));
   if(v.remaining===0)v.phase='ready';this.save();return true;
  }
@@ -161,6 +166,8 @@ export class CreatorGame {
   this.s.stats.editing=Math.min(50,this.s.stats.editing+1);
   this.s.stats.persistence=Math.min(50,this.s.stats.persistence+1);
   if(v.shot>=85)this.s.stats.sense=Math.min(50,this.s.stats.sense+1);
+  // Only post-onboarding works count; legacy history is never backdated.
+  recordDaily(this.s,'work',v.topicId,this.clock());
   this.s.works.push({...v,reward,phase:'done'});this.s.active=null;
   if(!this.s.tasks.claimed.includes('first'))this.s.tasks.claimed.push('first');
   this.save();return reward;
