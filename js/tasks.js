@@ -57,6 +57,12 @@ export function taskList(s,now=Date.now()) {
  growth.push({...hundred,title:'收获第一批关注',description:'收获100粉丝，领取首个粉丝里程碑奖励。',group:'growth',linked:true});
  return {growth,milestones,daily:dailyList(s,now)};
 }
+// UI ordering only: preserve the configured sequence within each state.
+// Unfinished objectives take precedence; already-claimed rewards stay at the bottom.
+const TASK_DISPLAY_PRIORITY={progress:0,ready:1,locked:2,claimed:3};
+export function sortTasksForDisplay(items) {
+ return [...items].sort((a,b)=>(TASK_DISPLAY_PRIORITY[a.status]??4)-(TASK_DISPLAY_PRIORITY[b.status]??4));
+}
 export function recommendedTask(s,now=Date.now()) {
  const {growth,milestones,daily}=taskList(s,now),all=[...growth,...milestones,...daily];
  return all.find(t=>t.status==='ready')||growth.find(t=>t.status==='progress')||daily.find(t=>t.status==='progress')||milestones.find(t=>t.status==='progress')||null;
