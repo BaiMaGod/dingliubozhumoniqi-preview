@@ -6,7 +6,7 @@ if (new URLSearchParams(location.search).get('classic') === '1') {
  document.querySelector('link[href*=creator]').remove();
  import('./classic.js?v=1.3.0');
 } else {
- import('./creator.js?v=1.3.0');
+ import('./creator.js?v=1.3.0-task-order-20261015');
 }
 
 
