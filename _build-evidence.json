@@ -1,9 +1,12 @@
 {
+  "gameVersion": "1.5.1",
   "engine": "LayaAir",
   "engineVersion": "3.4.0",
-  "builtAt": "2026-10-15T11:50:03.966Z",
+  "builtAt": "2026-10-16T09:49:52.598Z",
   "officialBuild": true,
   "browserSmokePassed": true,
+  "platformSmokePassed": true,
+  "visualSmokePassed": true,
   "files": [
     {
       "path": "Scene.ls",
@@ -12,23 +15,23 @@
     },
     {
       "path": "fileconfig.json",
-      "bytes": 641,
-      "sha256": "8313b328b2439ec0529176fd1bee1bf500aea1a131a48dc135288dcc6f14fcef"
+      "bytes": 456,
+      "sha256": "773e31d07547b85f30e268534760f601a95d00b5ba30b3f3c7d6e7de15da7c21"
     },
     {
       "path": "index.html",
       "bytes": 1115,
-      "sha256": "dd1f2fcdc956cbbb040f41de7639b6fdd89532285e26d9cb8f8ed9b5866aeea8"
+      "sha256": "9583a3edf01b9d120d8b5655bbd484801474b3995249e6eb6a9e8b217c132bbc"
     },
     {
       "path": "js/bundle.js",
-      "bytes": 60872,
-      "sha256": "252ca04a108d42348517169d2dc4943f9a49459de1ca013f3b64043cce3180e8"
+      "bytes": 183258,
+      "sha256": "dc76c9e058fbcd4c490edd64c58bae2901c9df7acb99e070a827a08abe589c41"
     },
     {
       "path": "js/index.js",
-      "bytes": 4546,
-      "sha256": "142f5f8923a7377e055ae332630180288ebea58edc004cd71a8cd50c2cdbcc44"
+      "bytes": 4547,
+      "sha256": "d57b575d87a05f2f393f84b327202c9d8d00232d9bc92be616478db57d44db05"
     },
     {
       "path": "libs/laya.core.js",
@@ -66,24 +69,24 @@
       "sha256": "934b721acacf06b3d2ffa5b8d42b853bf8b6aa9f1dfc5b04180a10c6e229a290"
     },
     {
-      "path": "resources/creator-dance-v105.webp",
-      "bytes": 729078,
-      "sha256": "6a9bfc6c52b03d912d8170bccb4979b7086aec2dfd3d392c235d664e547769b2"
+      "path": "resources/creator-brush-v07.woff2",
+      "bytes": 22400,
+      "sha256": "70dc07ed8d2966ada081b2ffa55d7988f2e0bf201889a9aa48aaf570eda3d6e3"
     },
     {
-      "path": "resources/creator-expressions-v105.webp",
-      "bytes": 357150,
-      "sha256": "e5591fab486aceec6326d40fb40970a3ad00161cc98fadbbbd644a3f1b9cc4f9"
+      "path": "resources/creator-dance-v105-laya.webp",
+      "bytes": 2064650,
+      "sha256": "a1db180c627bdd194efc10c55df39c1cd02d356bd8a5f266e64fbe55e389a673"
     },
     {
-      "path": "resources/creator-xingqiyao-v106.webp",
-      "bytes": 532962,
-      "sha256": "1e27439e84818fe64acf1c1ee68df8ac6cb06ee3c478c9ca2583839ae9622614"
+      "path": "resources/creator-expressions-v105-laya.webp",
+      "bytes": 1019640,
+      "sha256": "b4d09db09eeba76302411c42f9b5f66f2dde1156f04737c34bfca1042d3a3f1d"
     },
     {
-      "path": "resources/layaAir.png",
-      "bytes": 7731,
-      "sha256": "ef747ba1544684249c7b6127a4b30aad5b86491490251f3dc832e083f4ddd8e0"
+      "path": "resources/creator-xingqiyao-v106-laya.webp",
+      "bytes": 1849028,
+      "sha256": "0724dd404581ac12cfb4f6b93617a51a3ba6b31b82def527004e51a2f84d45bc"
     },
     {
       "path": "resources/room-cozy-v130.webp",
@@ -106,8 +109,10 @@
       "sha256": "c5336a251ce546c0eb6c906a966ecdff11397210e423f07eac1cce7e919de80a"
     }
   ],
-  "browserSmokeAt": "2026-10-15T11:56:18.488Z",
+  "browserSmokeAt": "2026-10-16T15:32:04.910Z",
   "smoke": {
+    "framePixels": true,
+    "characterPixels": true,
     "realEngineInput": true,
     "filmingReload": true,
     "oneTapOneFrame": true,
@@ -119,6 +124,43 @@
     "legacySave": true,
     "touchScroll": true
   },
+  "platformSmoke": {
+    "lazyStartup": true,
+    "failedLoadRetry": true,
+    "h5Blur": true,
+    "backupRecovery": true,
+    "sdkContracts": [
+      {
+        "host": "wx",
+        "safeArea": true,
+        "hideShowDedupe": true,
+        "resize": true,
+        "cleanup": true,
+        "simulatedSDK": true
+      },
+      {
+        "host": "tt",
+        "safeArea": true,
+        "hideShowDedupe": true,
+        "resize": true,
+        "cleanup": true,
+        "simulatedSDK": true
+      }
+    ],
+    "sdkDeviceValidated": false
+  },
+  "platformSmokeAt": "2026-10-16T15:32:38.663Z",
+  "visualSmoke": {
+    "profiles": [
+      "390x844",
+      "375x667-dpr2",
+      "desktop"
+    ],
+    "characterPixels": true,
+    "goldActions": true,
+    "originalComparison": true,
+    "navigationCycles": 18
+  },
   "browserSmokeViewport": [
     {
       "width": 390,
@@ -128,5 +170,8 @@
       "width": 375,
       "height": 667
     }
-  ]
+  ],
+  "sourceCommit": "ffd5933ecd92674d05493349e37947869fe3aa36",
+  "sourceRepository": "BaiMaGod/dingliubozhumoniqi",
+  "publicationValidatedAt": "2026-10-16T15:34:14.627779+00:00"
 }
