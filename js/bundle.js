@@ -666,6 +666,7 @@
         }
       });
       this.soundMuted = false;
+      this.motionReduced = false;
       this.lastSound = 0;
       this.gate = null;
       this.callbacks = null;
@@ -691,7 +692,9 @@
       };
       this.host = detectHost(scope);
       try {
-        this.soundMuted = JSON.parse(this.raw.getItem(PREFERENCES) || "{}").muted === true;
+        const prefs = JSON.parse(this.raw.getItem(PREFERENCES) || "{}");
+        this.soundMuted = prefs.muted === true;
+        this.motionReduced = prefs.reducedMotion === true;
       } catch {
       }
       Laya.SoundManager.soundMuted = this.soundMuted;
@@ -709,6 +712,23 @@
     }
     get muted() {
       return this.soundMuted;
+    }
+    get reducedMotion() {
+      return this.motionReduced;
+    }
+    toggleMotion() {
+      this.motionReduced = !this.motionReduced;
+      this.persistPreferences();
+      return this.motionReduced;
+    }
+    persistPreferences() {
+      const value = JSON.stringify({ muted: this.soundMuted, reducedMotion: this.motionReduced });
+      try {
+        this.raw.setItem(PREFERENCES, value);
+        this.settingsFailed = this.raw.getItem(PREFERENCES) !== value;
+      } catch {
+        this.settingsFailed = true;
+      }
     }
     sound(kind = "tap") {
       if (this.soundMuted || Date.now() - this.lastSound < 35) return;
@@ -728,13 +748,7 @@
     mute() {
       this.soundMuted = !this.soundMuted;
       Laya.SoundManager.soundMuted = this.soundMuted;
-      const value = JSON.stringify({ muted: this.soundMuted });
-      try {
-        this.raw.setItem(PREFERENCES, value);
-        this.settingsFailed = this.raw.getItem(PREFERENCES) !== value;
-      } catch {
-        this.settingsFailed = true;
-      }
+      this.persistPreferences();
       return this.soundMuted;
     }
     bindLifecycle(callbacks) {
@@ -831,28 +845,43 @@
   // src/generated/Catalog.ts
   var CATALOG = { "groups": { "boot": ["creator-avatar-v102.webp", "creator-brush-v07.woff2"], "room_0": ["room-interior-v103.webp"], "room_lamp": ["room-interior-lamp-v103.webp"], "room_1": ["room-cozy-v130.webp"], "room_2": ["room-studio-v130.webp"], "topic_cat": ["creator-dance-v105-laya.webp"], "topic_pose": ["creator-expressions-v105-laya.webp"], "topic_dance": ["creator-xingqiyao-v106-laya.webp"] }, "atlases": { "cat": { "file": "creator-dance-v105-laya.webp", "count": 24 }, "pose": { "file": "creator-expressions-v105-laya.webp", "count": 12 }, "dance": { "file": "creator-xingqiyao-v106-laya.webp", "count": 24 } } };
 
+  // src/Presentation.ts
+  var COLORS = { ink: "#283e34", muted: "#87917d", cream: "#fffaf0", paper: "#f4efe2", green: "#355b46", light: "#edf1e3", peach: "#edc477", line: "#e1e6d7", border: "#dde4d2", goldInk: "#916c31" };
+  var STATUSES = {
+    "测试流量": { fill: "#edf2e4", border: "#dce7cf", ink: "#57774b", icon: "chart", title: "初次推荐", copy: "作品出发了，等待第一批观众的回应" },
+    "维持": { fill: "#edf2e4", border: "#dce7cf", ink: "#57774b", icon: "chart", title: "稳定增长", copy: "喜欢你的人，正在慢慢聚集" },
+    "推流": { fill: "#fff0d5", border: "#f0dcaf", ink: "#9b7136", icon: "growth", title: "正在推流", copy: "更多观众正在发现你的作品" },
+    "爆火": { fill: "#ffe7d8", border: "#f5cdb8", ink: "#c45f3e", icon: "flame", title: "爆款诞生！", copy: "你的作品，正在被越来越多人喜欢" },
+    "沉没": { fill: "#edf0ef", border: "#dce2df", ink: "#748984", icon: "film", title: "暂时沉没", copy: "这次没被看见，下条再试试" },
+    "停流": { fill: "#eeede7", border: "#e1dfd6", ink: "#858775", icon: "check", title: "本轮推荐结束", copy: "推荐已结束，这条作品的收获已保留" }
+  };
+  function statusStyle(event) {
+    return STATUSES[event] || STATUSES["测试流量"];
+  }
+  function displayNumber(n) {
+    const v = Math.max(0, Math.floor(Number.isFinite(n) ? n : 0));
+    return v >= 1e8 ? (v / 1e8).toFixed(2) + "亿" : v >= 1e4 ? (v / 1e4).toFixed(2) + "万" : v.toLocaleString("zh-CN");
+  }
+  function feedLayout(height) {
+    const compact = height < 820, previewH = compact ? 64 : 84, statusH = compact ? 68 : 76;
+    const statusY = 23 + previewH + 16, totalY = statusY + statusH + 16;
+    const metricY = totalY + (compact ? 96 : 134), chartY = metricY + (compact ? 66 : 90);
+    return { compact, previewH, statusH, statusY, totalY, metricY, chartY, chartH: compact ? 30 : 50, top: 157, footerY: height - 90 };
+  }
+
   // src/UI.ts
-  var palette = { ink: "#3f4b36", muted: "#7c805f", cream: "#fff3d1", paper: "#e0dfba", green: "#587943", light: "#dce5b4", peach: "#f3bb53", line: "#c2bb8c", border: "#a59565" };
-  function surface(node, w, h, top, bottom, border, radius = 14, shadow = 3) {
+  var palette = COLORS;
+  function surface(node, w, h, top, bottom, border, radius = 16, shadow = 0) {
     const g = node.graphics;
-    if (shadow) g.drawRoundRect(0, shadow, w, h, radius, radius, radius, radius, "#897a50");
-    g.drawRoundRect(0, 0, w, h, radius, radius, radius, radius, bottom, border, 2);
-    const a = [1, 3, 5].map((i) => parseInt(top.slice(i, i + 2), 16)), b = [1, 3, 5].map((i) => parseInt(bottom.slice(i, i + 2), 16));
-    for (let i = 0; i < 18; i++) {
-      const y = 2 + (h - 4) * i / 18, dh = (h - 4) / 18 + 0.3, r = Math.max(1, radius - 2);
-      const edge = Math.min(y - 2, h - 2 - y - dh), inset = edge < r ? r - Math.sqrt(Math.max(0, r * r - (r - Math.max(0, edge)) ** 2)) : 0;
-      const color = "#" + a.map((v, n) => Math.round(v + (b[n] - v) * i / 17).toString(16).padStart(2, "0")).join("");
-      g.drawRect(2 + inset, y, Math.max(1, w - 4 - inset * 2), dh, color);
-    }
-    g.drawRoundRect(0, 0, w, h, radius, radius, radius, radius, null, border, 2);
-    g.drawRoundRect(3, 3, w - 6, h - 6, Math.max(2, radius - 3), Math.max(2, radius - 3), Math.max(2, radius - 3), Math.max(2, radius - 3), null, "#fff5d180", 1);
+    if (shadow) g.drawRoundRect(0, shadow, w, h, radius, radius, radius, radius, "#d8ddcf");
+    g.drawRoundRect(0, 0, w, h, radius, radius, radius, radius, top, border, 1);
   }
   function box(parent, x, y, w, h, color = palette.cream, radius = 18, name = "") {
     const node = new Laya.Sprite();
     node.name = name;
     node.pos(x, y);
     node.size(w, h);
-    if (radius >= 12 && (color === palette.cream || color === palette.light)) surface(node, w, h, color === palette.cream ? "#fff7df" : "#e2e8bd", color, palette.border, radius);
+    if (radius >= 12 && (color === palette.cream || color === palette.light)) surface(node, w, h, color, color, palette.border, radius);
     else node.graphics.drawRoundRect(0, 0, w, h, radius, radius, radius, radius, color);
     parent.addChild(node);
     return node;
@@ -865,7 +894,7 @@
     node.color = color;
     node.bold = bold;
     node.wordWrap = true;
-    node.leading = 4;
+    node.leading = 3;
     node.pos(x, y);
     node.size(w, h);
     node.mouseEnabled = false;
@@ -884,8 +913,8 @@
     node.pos(x, y);
     node.size(w, h);
     parent.addChild(node);
-    surface(node, w, h, primary ? "#ffdc7a" : "#c2d297", primary ? "#f0b448" : "#8eaa64", primary ? "#ffe9a7" : "#eef2c9", 13, primary ? 5 : 3);
-    const caption = centered(node, label, 8, 0, w - 16, 14, primary ? "#684a24" : "#fff6d5", true, h);
+    surface(node, w, h, primary ? "#edc477" : palette.green, "", primary ? "#dfb76b" : palette.green, 16);
+    const caption = centered(node, label, 8, 0, w - 16, 14, primary ? "#6b502a" : "#fff8dd", true, h);
     caption.name = "button-caption";
     node.mouseEnabled = enabled;
     node.alpha = enabled ? 1 : 0.5;
@@ -963,12 +992,67 @@
   }
   var icon = (parent, name, x, y, size = 22, color = "#7f6936") => artwork(parent, name, x, y, size, size, color);
 
+  // src/Feedback.ts
+  var Feedback = class {
+    constructor() {
+      this.effects = [];
+      this.reduced = false;
+    }
+    animate(node, duration, update, done, delay = 0) {
+      if (node.destroyed) return;
+      if (this.reduced || this.effects.length >= 48) {
+        update(1);
+        done?.();
+        return;
+      }
+      this.effects.push({ node, at: Date.now() + delay, duration: Math.max(1, duration), update, done });
+      Laya.timer.frameLoop(1, this, this.tick);
+    }
+    tick() {
+      const now = Date.now(), current = this.effects;
+      this.effects = [];
+      for (const e of current) {
+        if (e.node.destroyed) continue;
+        const p = Math.min(1, Math.max(0, (now - e.at) / e.duration));
+        e.update(p);
+        if (p === 1) e.done?.();
+        else this.effects.push(e);
+      }
+      if (!this.effects.length) Laya.timer.clear(this, this.tick);
+    }
+    enter(node, delay = 0) {
+      const y = node.y;
+      node.alpha = this.reduced ? 1 : 0;
+      this.animate(node, 280, (p) => {
+        node.alpha = p;
+        node.y = y + 8 * (1 - p) ** 3;
+      }, void 0, delay);
+    }
+    pulse(node, strength = 0.08) {
+      this.animate(node, 420, (p) => {
+        const s = 1 + Math.sin(Math.PI * p) * strength;
+        node.scale(s, s);
+      });
+    }
+    clear() {
+      this.effects = [];
+      Laya.timer.clearAll(this);
+    }
+  };
+
   // src/CreatorApp.ts
-  var num = (n) => n >= 1e8 ? (n / 1e8).toFixed(2) + "亿" : n >= 1e4 ? (n / 1e4).toFixed(2) + "万" : Math.floor(n).toLocaleString("zh-CN");
+  var num = displayNumber;
   var DESC = { sense: "提升推流与爆火概率", luck: "提高稀有爆火概率", filming: "提高作品基础质量", editing: "缩短剪辑并增强加速", trend: "提升热点作品爆火概率", persistence: "降低下一条的沉没概率" };
   var CreatorApp = class {
     constructor() {
       this.platform = new Platform();
+      this.feedback = new Feedback();
+      this.selectedTopic = "cat";
+      this.feed = null;
+      this.feedStatus = null;
+      this.feedChart = null;
+      this.feedAction = null;
+      this.feedParticles = null;
       this.game = CreatorGame.load(this.platform.storage);
       this.background = new Laya.Sprite();
       this.root = new Laya.Sprite();
@@ -1003,6 +1087,7 @@
         this.remember();
         this.suspended = true;
         this.drag = null;
+        this.feedback.clear();
       };
       this.show = () => {
         if (this.destroyed) return;
@@ -1015,6 +1100,9 @@
       this.render = () => {
         if (this.destroyed || this.busy) return;
         this.position();
+        this.feedback.clear();
+        this.feedback.reduced = this.platform.reducedMotion;
+        this.feed = this.feedStatus = this.feedChart = this.feedAction = this.feedParticles = null;
         this.root.cacheAs = this.screen === "room" ? "bitmap" : "none";
         this.drag = null;
         this.modal = false;
@@ -1029,9 +1117,7 @@
         box(this.background, 0, 0, 390, Laya.stage.height, palette.paper, 0);
         this.root.name = "creator-game:" + this.screen;
         if (this.screen !== "room") {
-          box(this.root, 0, 0, 390, this.h, palette.paper, 0);
-          const shell = box(this.root, 14, 88, 362, this.h - 101, palette.cream, 19, "game-screen");
-          shell.mouseEnabled = false;
+          box(this.root, 0, 0, 390, this.h, palette.cream, 0);
         }
         if (this.screen === "room") this.room();
         else {
@@ -1053,7 +1139,7 @@
       return this.view.height;
     }
     phase() {
-      return this.game.s.active?.phase === "ended" ? "result" : this.game.s.active?.phase || "room";
+      return this.game.s.active?.phase === "ended" ? "live" : this.game.s.active?.phase || "room";
     }
     async start() {
       Laya.stage.bgColor = palette.paper;
@@ -1064,6 +1150,7 @@
       Laya.stage.addChild(this.root);
       this.platform.bindLifecycle({ hidden: this.hide, shown: this.show, checkpoint: () => this.game.save(), resize: this.resize });
       Laya.stage.on(Laya.Event.MOUSE_UP, this, this.endPull);
+      Laya.stage.on(Laya.Event.MOUSE_MOVE, this, this.movePull);
       Laya.stage.on(Laya.Event.KEY_DOWN, this, this.keyDown);
       Laya.timer.loop(50, this, this.tick);
       this.game.tick();
@@ -1076,7 +1163,7 @@
         groups.push("room_" + this.game.s.studio.tier);
         if (ROOMS[this.game.s.studio.tier + 1]) groups.push("room_" + (this.game.s.studio.tier + 1));
       }
-      if (screen === "phone") groups.push("topic_cat");
+      if (screen === "phone") groups.push("topic_" + (this.game.first ? "cat" : this.selectedTopic));
       if (["shoot", "edit", "ready", "live"].includes(screen)) groups.push("topic_" + (this.game.s.active?.topicId || "cat"));
       return groups;
     }
@@ -1109,7 +1196,7 @@
       const activate = () => {
         if (this.destroyed || id !== this.requestId) return;
         this.game.tick();
-        const next = ["shoot", "edit", "ready", "live", "result"].includes(screen) ? this.phase() : screen;
+        const next = screen === "result" && this.game.s.active?.phase === "ended" ? "result" : ["shoot", "edit", "ready", "live", "result"].includes(screen) ? this.phase() : screen;
         this.busy = false;
         if (this.screen !== next) this.phaseEnteredAt = Date.now();
         this.screen = next;
@@ -1131,35 +1218,40 @@
       });
     }
     header() {
-      const badge = box(this.root, 16, 19, 194, 52, palette.cream, 16, "player-badge");
-      image(badge, "resources/creator-avatar-v102.webp", -5, -17, 61, 71, true, 0.5);
-      text(badge, this.game.title, 48, 8, 144, 13, palette.ink, true, 21);
-      text(badge, "第 " + (this.game.s.works.length + 1) + " 条创作", 48, 29, 140, 9, palette.muted, false, 20);
-      const level = box(badge, 13, 37, 22, 22, "#6b8956", 11);
-      level.graphics.drawCircle(11, 11, 10, null, "#fff1b3", 2);
-      centered(level, String(this.game.s.works.length + 1), 0, 0, 22, 10, "#fff2c9", true, 22);
-      for (const [i, name, value, label] of [[0, "heart", num(this.game.s.fans), "粉丝"], [1, "coin", num(this.game.s.wallet), "资金"]]) {
-        const row = box(this.root, 226, 20 + i * 29, 149, 24, "#3d5437", 12, "resource:" + name);
-        row.graphics.drawRoundRect(0, 0, 149, 24, 12, 12, 12, 12, null, "#a6b082", 1);
-        const medal = box(row, -5, -3, 29, 29, i ? "#edc25f" : "#e99682", 14);
-        medal.graphics.drawCircle(14.5, 14.5, 13.5, null, "#fff2be", 2);
-        icon(medal, name, 5, 5, 19, i ? "#9c702b" : "#fff4da");
-        text(row, value, 31, 2, 84, 14, "#fff5d6", true, 22);
-        text(row, label, 119, 5, 29, 9, "#e2e7bb", false, 18);
+      const room = this.screen === "room", badge = box(this.root, 20, 24, 173, 48, palette.cream, 17, "player-badge");
+      const avatar = box(badge, 4, 3, 42, 42, "#e6ebd6", 14);
+      const texture = Laya.loader.getRes("resources/creator-avatar-v102.webp");
+      if (texture) {
+        const crop = new Laya.Sprite();
+        crop.mouseEnabled = false;
+        crop.size(42, 42);
+        crop.scrollRect = new Laya.Rectangle(0, 0, 42, 42);
+        crop.graphics.drawImage(texture, -2, 0, 46, 69);
+        avatar.addChild(crop);
+      }
+      text(badge, this.game.title, 54, 5, 116, 13, palette.ink, true, 21);
+      text(badge, "第 " + (this.game.s.works.length + 1) + " 条创作", 54, 27, 114, 9, palette.muted, false, 16);
+      for (const [i, art, value] of [[0, "heart", num(this.game.s.fans)], [1, "coin", num(this.game.s.wallet)]]) {
+        const row = box(this.root, 205 + i * 82, 31, 77, 33, i ? "#fff2d8" : room ? palette.cream : "#edf0e4", 12, "resource:" + art);
+        icon(row, art, 8, 9, 15, i ? "#bc914e" : "#849973");
+        const size = value.length > 7 ? 9 : value.length > 5 ? 10 : 12;
+        centered(row, value, 24, 0, 49, size, i ? palette.goldInk : palette.green, true, 33);
       }
     }
     steps() {
-      const bar = box(this.root, 16, 90, 358, 50, "#607e49", 16, "creation-steps");
-      bar.graphics.drawRect(0, 25, 358, 25, "#607e49");
-      bar.graphics.drawLine(0, 50, 358, 50, "#3f6134", 3);
-      button(this.root, "home", "‹", 26, 98, 32, 32, () => this.home());
+      const bar = box(this.root, 24, 100, 342, 50, palette.cream, 0, "creation-steps");
+      bar.graphics.drawLine(0, 0, 342, 0, palette.line, 1);
+      const back = button(this.root, "home", "‹", 24, 115, 32, 32, () => this.home(), true, false);
+      back.graphics.clear();
+      surface(back, 32, 32, "#f0f2e7", "", palette.border, 10);
+      back.getChildByName("button-caption").color = palette.green;
       const current = { phone: 0, shoot: 1, edit: 2, ready: 3, live: 3, result: 4 }[this.screen] || 0;
       ["选题", "拍视频", "剪辑", "发布"].forEach((name, i) => {
-        const x = 68 + i * 74;
-        if (current === i) box(this.root, x, 95, 69, 40, "#3e6036", 9);
-        const circle = box(this.root, x + 25, 98, 19, 19, current === i ? "#f3c160" : "#87a569", 9);
-        centered(circle, current > i ? "✓" : String(i + 1), 0, 0, 19, 11, current === i ? "#705327" : "#f5f4d0", true, 19);
-        centered(this.root, name, x, 118, 69, 10, current === i ? "#ffe2a2" : "#e4ecc6", true, 16);
+        const x = 66 + i * 75, active = current === i;
+        const circle = box(this.root, x, 122, 16, 16, active ? palette.green : "#e9ecdf", 8);
+        centered(circle, current > i ? "✓" : String(i + 1), 0, 0, 16, 9, active ? "#ffefc4" : "#8ba17b", true, 16);
+        text(this.root, name, x + 21, 121, 53, 10, active ? palette.green : "#95a086", active, 20);
+        if (active) bar.graphics.drawRoundRect(x - 18, 49, 48, 3, 2, 2, 2, 2, "#ddb366");
       });
     }
     panelHeader() {
@@ -1173,98 +1265,94 @@
     room() {
       const s = this.game.s, url = "resources/" + (s.studio.tier ? this.game.room.art : s.lamp ? "room-interior-lamp-v103.webp" : "room-interior-v103.webp");
       image(this.background, url, 0, 0, 390, Laya.stage.height, true, 1);
-      const shade = box(this.background, 0, Laya.stage.height * 0.78, 390, Laya.stage.height * 0.22, "#292d22", 0);
-      shade.alpha = 0.16;
+      const shade = box(this.background, 0, Laya.stage.height * 0.74, 390, Laya.stage.height * 0.26, "#413e2b", 0);
+      shade.alpha = 0.14;
       this.header();
-      const tag = box(this.root, 17, 91, 148, 25, "#43583b", 8);
-      icon(tag, "home", 7, 5, 15, "#f7e9be");
-      text(tag, this.game.room.name, 28, 3, 114, 11, "#fff1cf", true, 22);
-      button(this.root, "sound-toggle", this.platform.muted ? "静" : "音", 338, 91, 34, 28, () => {
+      icon(this.root, "home", 25, 98, 14, "#fff7df");
+      text(this.root, this.game.room.name, 45, 95, 184, 10, "#fff7df", true, 22);
+      button(this.root, "sound-toggle", this.platform.muted ? "静音" : "音效", 319, 92, 48, 29, () => {
         this.platform.mute();
         this.render();
-        if (this.platform.settingsFailed) this.hint("声音设置已生效，这次未能保存");
+        if (this.platform.settingsFailed) this.hint("音效设置已生效，本次未能保存");
       }, true, false);
-      const quest = this.game.quest, task = button(this.root, "tasks", "", 16, 127, 358, 62, () => this.go("tasks"), true, false);
+      button(this.root, "motion-toggle", this.platform.reducedMotion ? "简效" : "动效", 262, 92, 48, 29, () => {
+        this.platform.toggleMotion();
+        this.render();
+        this.hint(this.platform.reducedMotion ? "已减少动态效果" : "已开启动态效果");
+      }, true, false);
+      const quest = this.game.quest, task = button(this.root, "tasks", "", 24, 143, 342, 67, () => this.go("tasks"), true, false);
       task.graphics.clear();
-      surface(task, 358, 62, "#7c985c", "#587744", "#bdcb91", 13, 3);
-      const mark = box(task, 10, 13, 29, 36, "#f2c663", 5);
-      centered(mark, quest?.status === "ready" ? "✓" : "!", 0, 0, 29, 24, "#85612a", true, 36);
-      text(task, quest?.status === "ready" ? "任务完成 · 可领奖" : "当前任务", 49, 10, 202, 9, "#dce8ba", false, 18);
-      text(task, quest?.title || "继续刷新纪录", 49, 29, 232, 14, "#fff4d1", true, 26);
-      const count = box(task, 287, 16, 60, 30, "#39572f", 8);
-      centered(count, quest ? quest.status === "ready" ? "领取奖励" : num(Math.min(quest.current, quest.target)) + " / " + num(quest.target) : "查看", 1, 0, 58, 10, "#fff3c9", true, 30);
-      const sceneTag = box(this.root, 17, 203, 190, 23, "#425537", 8);
-      sceneTag.alpha = 0.86;
-      text(sceneTag, s.studio.tier ? this.game.room.name + " · 品质 +" + this.game.room.quality : s.lamp ? "补光灯已装备 · 品质 +10%" : "我的第一间出租屋", 9, 3, 177, 9, "#fff1cc", false, 20);
+      surface(task, 342, 67, palette.cream, "", palette.border, 17);
+      const mark = box(task, 13, 16, 34, 35, "#e8eedb", 11);
+      icon(mark, quest?.status === "ready" ? "check" : "spark", 8, 8, 19, "#638354");
+      text(task, quest?.status === "ready" ? "今日的小目标 · 已完成" : "今天的小目标", 58, 12, 200, 9, palette.muted, false, 18);
+      text(task, quest?.title || "继续刷新纪录", 58, 33, 204, 13, palette.ink, true, 24);
+      const count = box(task, 269, 21, 61, 28, "#f8ead0", 9);
+      centered(count, quest ? quest.status === "ready" ? "领取奖励" : num(Math.min(quest.current, quest.target)) + "/" + num(quest.target) : "查看", 0, 0, 61, 10, palette.goldInk, true, 28);
       const texture = Laya.loader.getRes(url), scale = Math.max(390 / texture.width, Laya.stage.height / texture.height);
       const worldX = 390 - texture.width * scale + texture.width * scale * 0.835;
-      const x = ((Laya.stage.width - 390) / 2 + worldX - this.view.x) / this.view.scale;
       const worldY = (Laya.stage.height - texture.height * scale) / 2 + texture.height * scale * 0.463;
-      const y = (worldY - this.view.y) / this.view.scale;
+      const px = ((Laya.stage.width - 390) / 2 + worldX - this.view.x) / this.view.scale, py = (worldY - this.view.y) / this.view.scale;
       for (const gear of EQUIPMENT.filter((e) => s.studio.gear[e.id] && (e.id !== "lamp" || s.studio.tier > 0))) {
-        const gx = 390 - texture.width * scale + texture.width * scale * gear.x;
-        const gy = (Laya.stage.height - texture.height * scale) / 2 + texture.height * scale * gear.y;
+        const gx = 390 - texture.width * scale + texture.width * scale * gear.x, gy = (Laya.stage.height - texture.height * scale) / 2 + texture.height * scale * gear.y;
         artwork(this.background, "gear_" + gear.id, gx - 22, gy - 40, 44, 59);
       }
-      const px = Math.max(55, Math.min(335, x)), py = Math.max(265, Math.min(this.h - 295, y));
-      const halo = box(this.root, px - 27, py - 29, 54, 54, "#ffe68b00", 27);
-      halo.graphics.drawCircle(27, 27, 25, null, "#ffd66566", 9);
-      halo.graphics.drawCircle(27, 27, 23, null, "#fff3a3", 3);
-      centered(this.root, "▼", px - 20, py - 53, 40, 27, "#ffda6c", true, 32);
-      const phone = button(this.root, "phone", (this.game.unlocked ? "继续创作" : "点击开始") + "  ›", Math.max(18, Math.min(266, px - 80)), py + 34, 111, 42, () => this.go("phone"));
-      icon(phone, "phone", 9, 11, 17, "#835e28");
-      const phoneCaption = phone.getChildByName("button-caption");
-      phoneCaption.x = 27;
-      phoneCaption.width = 78;
-      const dy = this.h - (this.game.unlocked ? 224 : 199), dialogue = box(this.root, 16, dy, 358, 95, palette.cream, 13, "character-dialogue");
-      image(dialogue, "resources/creator-avatar-v102.webp", -12, -63, 111, 158);
-      const name = box(dialogue, 96, 6, 58, 21, "#6c8b54", 6);
-      centered(name, "小博主", 0, 0, 58, 10, "#fff4cf", true, 21);
-      text(dialogue, this.game.unlocked ? "下一条，一定会更精彩！" : "我的顶流之路，现在开始！", 96, 33, 252, 13, palette.ink, true, 26);
-      text(dialogue, "点击桌上的手机，拍一条表演视频。", 96, 62, 247, 10, palette.muted, false, 22);
-      centered(dialogue, "▼", 331, 75, 20, 9, "#9b8d59", false, 14);
-      if (this.game.unlocked) [["growth", "成长", "growth", s.points + " 点"], ["works", "作品", "film", s.works.length + " 条"], ["equipment", "创作间", "bulb", "升级与装备"]].forEach(([id, label, art, detail], i) => {
-        const b = button(this.root, id, "", 18 + i * 122, this.h - 98, 110, 75, () => this.go(id), true, false);
-        b.graphics.clear();
-        surface(b, 110, 75, "#f8eabd", "#e7cd97", "#99865b", 13);
-        icon(b, art, 43, 6, 24, "#78925d");
-        centered(b, label, 0, 33, 110, 12, palette.ink, true, 20);
-        centered(b, detail, 0, 54, 110, 9, palette.muted, false, 16);
-      });
-      else {
-        for (const [i, label] of ["成长", "作品", "装备"].entries()) {
-          icon(this.root, "lock", 55 + i * 117, this.h - 62, 13, "#ecdfb5");
-          text(this.root, label, 74 + i * 117, this.h - 64, 56, 12, "#f1e5c0", true, 22);
-        }
-        centered(this.root, "完成首条作品后解锁", 30, this.h - 37, 330, 9, "#f3e4bc", false, 20);
+      const hotspot = button(this.root, "phone", "", px - 31, py - 30, 62, 62, () => this.go("phone"));
+      hotspot.graphics.clear();
+      hotspot.graphics.drawCircle(31, 31, 26, null, "#ffec9b", 3);
+      hotspot.graphics.drawCircle(31, 31, 29, null, "#ffda6a55", 5);
+      const caption = box(this.root, Math.min(256, Math.max(24, px - 63)), py + 45, 110, 31, palette.cream, 15);
+      centered(caption, "拍点什么吧 ↗", 0, 0, 110, 10, palette.goldInk, true, 31);
+      caption.mouseEnabled = true;
+      caption.on(Laya.Event.CLICK, this, () => this.go("phone"));
+      if (this.h >= 780) {
+        text(this.root, "MY LITTLE CREATOR LIFE", 25, this.h - 292, 310, 9, "#fff4d9", false, 22);
+        text(this.root, "普通的日子，\n也能闪闪发光。", 24, this.h - 263, 320, 27, "#fff4d9", false, 85);
       }
+      const dy = this.h - (this.game.unlocked ? 181 : 149), dialogue = box(this.root, 22, dy, 346, 81, palette.cream, 20, "character-dialogue");
+      image(dialogue, "resources/creator-avatar-v102.webp", 9, -7, 58, 87);
+      text(dialogue, this.game.unlocked ? "下一条，一定会更精彩。" : "我的顶流之路，现在开始！", 75, 16, 258, 12, palette.ink, true, 24);
+      text(dialogue, "今天的灵感，就从桌上那部手机开始。", 75, 45, 253, 10, palette.muted, false, 26);
+      if (this.game.unlocked) [["growth", "成长", "leaf"], ["works", "作品", "film"], ["equipment", "创作间", "bulb"]].forEach(([id, label, art], i) => {
+        const b = button(this.root, id, "", 22 + i * 117, this.h - 79, 112, 51, () => this.go(id), true, false);
+        b.graphics.clear();
+        surface(b, 112, 51, palette.cream, "", palette.border, 16);
+        icon(b, art, 21, 16, 20, "#829772");
+        centered(b, label, 45, 0, 64, 11, palette.green, true, 51);
+      });
+      else centered(this.root, "完成首条作品后解锁成长、作品与创作间", 24, this.h - 45, 342, 10, "#fff4d9", false, 24);
     }
     title(kicker, title, copy) {
-      centered(this.root, title, 29, 151, 332, 19, palette.green, true, 32);
-      centered(this.root, copy, 30, 185, 330, 10, palette.muted, false, 28);
+      text(this.root, kicker, 24, 170, 342, 9, palette.muted, false, 20);
+      text(this.root, title, 24, 194, 342, 25, palette.ink, false, 39);
+      text(this.root, copy, 24, 232, 342, 10, palette.muted, false, 24);
     }
     phone() {
-      const title = centered(this.root, "想拍什么类型的视频？", 28, 152, 334, 26, palette.green, false, 40);
-      title.font = "creator-brush-v07";
-      const sh = Math.min(285, this.h - 425), card = box(this.root, 28, 201, 334, sh, palette.light, 17, "topic-preview");
-      card.graphics.drawEllipse(167, sh - 38, 80, 8, "#9aab7538", null, 0);
-      this.performer = this.character(card, 0, "cat", (334 - (sh - 28) * 256 / 352) / 2, 7, sh - 28);
-      const sticker = box(card, 13, 16, 64, 27, "#fff3c5", 5);
-      sticker.rotation = -5;
-      centered(sticker, this.game.first ? "新手挑战" : "今日灵感", 0, 0, 64, 10, palette.ink, true, 27);
-      centered(card, "♫", 270, 25, 45, 32, "#b68c47", false, 45);
-      const y = 201 + sh;
+      const topic = this.game.first ? "cat" : this.selectedTopic;
+      this.title("TODAY’S INSPIRATION", "想拍什么类型的视频？", "从一个小小的灵感，开始今天的创作。");
+      const sh = Math.min(278, Math.max(160, this.h - 522)), card = box(this.root, 24, 269, 342, sh, palette.light, 24, "topic-preview");
+      card.graphics.drawEllipse(171, sh - 18, 67, 6, "#b9c49a50", null, 0);
+      this.performer = this.character(card, 0, topic, (342 - (sh - 26) * 256 / 352) / 2, 9, sh - 26);
+      const sticker = box(card, 15, 16, 117, 27, palette.cream, 6);
+      sticker.rotation = -4;
+      centered(sticker, this.game.first ? "新手挑战 · 随心出发" : "今日灵感 · 随心出发", 0, 0, 117, 9, palette.muted, false, 27);
+      centered(card, "♫", 285, 24, 32, 25, "#bbaa72", false, 40);
+      const y = 269 + sh + 15;
       if (this.game.first) {
-        icon(this.root, "gift", 104, y + 19, 19, "#bc8739");
-        text(this.root, "首次完成 ¥ 120 ＋ 成长点", 129, y + 19, 226, 11, "#9b783b", true, 25);
-        const b = button(this.root, "start:cat", "开始拍摄   →", 28, y + 61, 334, 53, () => this.startVideo("cat"));
-        icon(b, "equipment", 92, 17, 19, "#805a28");
+        centered(this.root, "首次完成可得 120 钱币 ＋ 成长点", 24, y + 12, 342, 11, palette.goldInk, true, 29);
       } else TOPICS.forEach((t, i) => {
-        const b = button(this.root, "start:" + t.id, "", 28 + i * 114, y + 27, 106, 99, () => this.startVideo(t.id), true, i === 2);
-        icon(b, t.id === "dance" ? "flame" : t.id === "pose" ? "spark" : "film", 41, 12, 24, "#7b6837");
-        centered(b, t.tag, 2, 43, 102, 12, i === 2 ? "#775023" : "#fff5d0", true, 24);
-        centered(b, t.heat ? "热度 +" + t.heat : "随心记录", 1, 73, 104, 9, i === 2 ? "#8e6d34" : "#e7edcd", false, 18);
+        const selected = topic === t.id, b = button(this.root, "topic:" + t.id, "", 24 + i * 117, y, 108, 94, () => {
+          this.selectedTopic = t.id;
+          this.go("phone");
+        }, true, false);
+        b.graphics.clear();
+        surface(b, 108, 94, selected ? "#fff0d2" : "#f0f2e7", "", selected ? "#dfb56c" : palette.border, 16);
+        icon(b, t.id === "dance" ? "flame" : t.id === "pose" ? "spark" : "film", 43, 13, 22, selected ? "#a37d44" : "#879879");
+        centered(b, t.tag, 3, 42, 102, 11, selected ? palette.goldInk : palette.green, true, 23);
+        centered(b, t.heat ? "热度 +" + t.heat : "随心记录", 3, 69, 102, 9, palette.muted, false, 17);
       });
+      button(this.root, "start:" + topic, this.game.first ? "开始拍摄   →" : "就拍这个，开始创作   →", 24, this.h - 90, 342, 52, () => this.startVideo(topic));
+      centered(this.root, "选题 → 拍视频 → 剪辑 → 发布", 24, this.h - 29, 342, 9, palette.muted, false, 20);
     }
     startVideo(topic) {
       if (this.game.start(topic)) {
@@ -1273,11 +1361,11 @@
       }
     }
     stageArt(y, height, tap) {
-      const view = box(this.root, 28, y, 334, height, this.screen === "shoot" ? "#e4d9e8" : palette.light, 17, "performance-stage");
-      const floor = box(view, 3, height * 0.72, 328, height * 0.28 - 3, this.screen === "shoot" ? "#c8b8ce" : "#c2d099", 0);
+      const view = box(this.root, 24, y, 342, height, palette.light, 24, "performance-stage");
+      const floor = box(view, 2, height * 0.76, 338, height * 0.24 - 2, "#d6ddc7", 0);
       floor.mouseEnabled = false;
       const ph = Math.min(height - 22, 285), pw = ph * 256 / 352;
-      this.performer = this.character(view, this.game.s.active?.shootTaps || 0, this.game.s.active?.topicId || "cat", (334 - pw) / 2, height - ph - 7, ph);
+      this.performer = this.character(view, this.game.s.active?.shootTaps || 0, this.game.s.active?.topicId || "cat", (342 - pw) / 2, height - ph - 7, ph);
       if (tap) {
         view.mouseEnabled = true;
         view.on(Laya.Event.MOUSE_DOWN, view, (e) => {
@@ -1315,15 +1403,15 @@
       this.drawFrame(this.performer, frame, topic);
     }
     shoot() {
-      this.title("7 秒翻页表演", this.game.s.active.topicId === "pose" ? "连点屏幕，演出你的表情包！" : "连点屏幕，让小博主跳起来！", "每点一下换一帧，点得越快，动作越流畅。");
-      const sh = Math.min(340, this.h - 430);
-      this.stageArt(220, sh, () => this.dance());
-      this.labels.time = text(this.root, "", 44, 233, 290, 14, "#8b4c6b", true);
-      const card = box(this.root, 28, 233 + sh, 334, 81, palette.cream, 14);
-      this.labels.score = text(card, "", 13, 10, 310, 14, palette.green, true, 25);
-      this.labels.taps = text(card, "", 13, 45, 310, 10, palette.muted, false, 22);
-      this.labels.rating = text(card, "", 205, 13, 116, 10, "#a98a43", true, 22);
-      button(this.root, "dance", this.game.s.active.shootAt ? "继续点击 · 推进动作" : "开始 7 秒拍摄", 28, this.h - 99, 334, 53, () => this.dance());
+      this.title("7 秒翻页表演", this.game.s.active.topicId === "pose" ? "演出你的表情包。" : "让灵感，跳起来。", "每点一下推进一帧，点得越快，动作越连贯。");
+      const sh = Math.min(323, this.h - 433);
+      this.stageArt(269, sh, () => this.dance());
+      this.labels.time = text(this.root, "", 41, 285, 300, 14, palette.green, true, 24);
+      const y = 269 + sh + 17;
+      this.labels.score = text(this.root, "", 25, y, 270, 12, palette.green, true, 25);
+      this.labels.taps = text(this.root, "", 25, y + 34, 337, 10, palette.muted, false, 22);
+      this.labels.rating = text(this.root, "", 265, y + 2, 100, 10, palette.goldInk, true, 22);
+      button(this.root, "dance", this.game.s.active.shootAt ? "继续点击 · 推进动作" : "点击开始 · 7 秒表演", 24, this.h - 90, 342, 52, () => this.dance());
       this.updateShoot();
     }
     dance() {
@@ -1345,30 +1433,26 @@
       if (this.labels.rating) this.labels.rating.text = this.game.shootScore() >= 85 ? "丝滑连舞" : this.game.shootScore() >= 55 ? "动作连贯" : "逐帧表演";
     }
     editView() {
-      this.title("剪辑挑战", "剪出一个高光瞬间", "点亮三段胶片，剪出你的高光。");
-      const sh = Math.min(240, (this.h - 440) * 0.65), y = 220 + sh;
-      this.stageArt(220, sh, () => this.edit("tap"));
-      const overlay = box(this.root, 31, y - 29, 328, 26, palette.green, 0);
-      icon(overlay, "cut", 102, 5, 16, "#fff3ca");
-      centered(overlay, "点击加速剪辑", 115, 0, 140, 11, "#fff3ca", true, 26);
-      text(this.root, "剪辑剩余", 29, y + 13, 128, 11, palette.muted, false, 32);
-      this.labels.edit = text(this.root, "", 212, y + 9, 148, 24, palette.green, true, 38);
+      this.title("MAKE YOUR LITTLE HIGHLIGHT", "剪出一个高光瞬间。", "给作品加一点节奏，也加一点你的巧思。");
+      const sh = Math.min(232, this.h - 550), y = 269 + sh;
+      this.stageArt(269, sh, () => this.edit("tap"));
+      const overlay = box(this.root, 26, y - 28, 338, 26, "#55714b", 0);
+      centered(overlay, "点击预览，加快剪辑", 0, 0, 338, 10, "#fff7df", true, 26);
+      text(this.root, "正在剪辑你的作品", 24, y + 18, 180, 11, palette.muted, false, 28);
+      this.labels.edit = text(this.root, "", 237, y + 13, 128, 23, palette.green, true, 38);
       this.labels.edit.align = "right";
-      this.editProgress = progress2(this.root, 28, y + 51, 334, 0);
-      const film = box(this.root, 28, y + 78, 334, 117, "#526841", 8, "highlight-film");
-      for (let n = 0; n < 25; n++) {
-        box(film, 7 + n * 13, 4, 7, 5, "#fff0c6", 0);
-        box(film, 7 + n * 13, 108, 7, 5, "#fff0c6", 0);
-      }
-      [["open", "开头", "pen"], ["highlight", "高光", "spark"], ["end", "结尾", "film"]].forEach(([id, label, art], i) => {
-        const included = this.game.s.active.cuts.includes(id), b = button(film, "cut:" + id, "", 5 + i * 109, 13, 106, 91, () => this.edit(id), !included, false);
-        this.character(b, this.game.s.active.shootTaps || 0, this.game.s.active.topicId, 28, 2, 62);
-        icon(b, included ? "check" : art, 82, 7, 15, "#f9efbe");
-        centered(b, label, 0, 59, 106, 11, "#fff1cd", true, 19);
-        centered(b, included ? "已加入" : "−1.8秒 · +品质", 0, 77, 106, 8, "#eff0cb", false, 14);
+      this.editProgress = progress2(this.root, 24, y + 55, 342, 0);
+      const film = box(this.root, 24, y + 78, 342, 88, palette.cream, 0, "highlight-film");
+      [["open", "吸睛开头", "pen"], ["highlight", "高光瞬间", "spark"], ["end", "漂亮结尾", "film"]].forEach(([id, label, art], i) => {
+        const included = this.game.s.active.cuts.includes(id), b = button(film, "cut:" + id, "", i * 117, 0, 108, 88, () => this.edit(id), !included, false);
+        b.graphics.clear();
+        surface(b, 108, 88, included ? "#e7efdb" : "#f1f3e7", "", included ? "#a6be94" : palette.border, 13);
+        b.alpha = 1;
+        icon(b, included ? "check" : art, 44, 15, 20, "#7b9868");
+        centered(b, label, 0, 40, 108, 11, palette.green, true, 23);
+        centered(b, included ? "已加入 · 品质提升" : "加入 · 品质提升", 1, 66, 106, 9, palette.muted, false, 17);
       });
-      centered(this.root, "✓ 拍摄 " + this.game.s.active.shot + " 分 · " + this.game.s.active.cuts.length + " / 3 个高光已加入", 28, y + 199, 334, 9, palette.muted, false, 16);
-      button(this.root, "edit", "点击加速剪辑", 28, this.h - 87, 334, 46, () => this.edit("tap"));
+      button(this.root, "edit", "点击加速剪辑", 24, this.h - 90, 342, 52, () => this.edit("tap"), true, false);
       this.updateEdit();
     }
     edit(kind) {
@@ -1384,81 +1468,155 @@
       const bar = this.editProgress;
       if (bar) {
         bar.graphics.clear();
-        bar.graphics.drawRoundRect(0, 0, 334, 9, 4, 4, 4, 4, palette.line);
-        bar.graphics.drawRoundRect(0, 0, 334 * (1 - this.game.s.active.remaining / this.game.s.active.editTotal), 9, 4, 4, 4, 4, "#85a35d");
+        bar.graphics.drawRoundRect(0, 0, 342, 5, 3, 3, 3, 3, palette.line);
+        bar.graphics.drawRoundRect(0, 0, 342 * (1 - this.game.s.active.remaining / this.game.s.active.editTotal), 5, 3, 3, 3, 3, "#dfb76b");
       }
     }
     ready() {
-      this.title("准备发布", "准备冲击热门！", "剪辑完成，让更多人发现你的作品。");
-      const sh = Math.min(300, this.h - 430);
-      this.stageArt(230, sh);
-      const medal = box(this.root, 311, 242, 37, 37, "#9ebc6e", 18);
-      icon(medal, "check", 8, 8, 22, "#fff4ca");
-      const score = box(this.root, 28, 248 + sh, 334, 61, palette.cream, 14);
-      icon(score, "equipment", 18, 20, 22, "#a28142");
-      text(score, "拍摄 " + this.game.s.active.shot + " 分", 51, 19, 130, 13, palette.green, true);
-      icon(score, "film", 185, 20, 22, "#a28142");
-      text(score, this.game.s.active.cuts.length + " / 3 高光", 217, 19, 110, 13, palette.green, true);
-      const b = button(this.root, "publish", "发布视频   →", 28, this.h - 99, 334, 53, () => {
+      this.title("READY TO BE DISCOVERED", "准备好，被世界看见。", "剪辑完成，让更多人发现你的作品。");
+      const sh = Math.min(270, this.h - 454);
+      this.stageArt(269, sh);
+      const score = box(this.root, 24, 286 + sh, 342, 57, palette.light, 16);
+      icon(score, "equipment", 18, 18, 21, "#839874");
+      text(score, "拍摄 " + this.game.s.active.shot + " 分", 49, 16, 127, 12, palette.green, true, 25);
+      icon(score, "film", 189, 18, 21, "#839874");
+      text(score, this.game.s.active.cuts.length + " / 3 高光", 220, 16, 111, 12, palette.green, true, 25);
+      button(this.root, "publish", "发布视频，让世界看见   →", 24, this.h - 90, 342, 52, () => {
         if (Date.now() - this.phaseEnteredAt < 450) return;
         if (this.game.publish()) {
           this.platform.sound("capture");
           this.go("live");
         }
       });
-      icon(b, "share", 90, 17, 20, "#815d29");
     }
     live() {
-      const v = this.game.s.active, k = Math.min(1, (this.h - 280) / 564);
-      const feed = box(this.root, 28, 150, 334, this.h - 280, "#fff0cc", 0, "feed");
-      feed.mouseEnabled = true;
-      feed.on(Laya.Event.MOUSE_DOWN, this, (e) => {
-        this.drag = { x: Laya.stage.mouseX, y: Laya.stage.mouseY, id: e.touchId };
+      const v = this.game.s.active, layout = feedLayout(this.h);
+      this.feed = box(this.root, 24, layout.top, 342, this.h - 283, palette.cream, 0, "feed");
+      this.feed.mouseEnabled = true;
+      this.feed.on(Laya.Event.MOUSE_DOWN, this, (e) => {
+        if (v.phase === "live") this.drag = { x: Laya.stage.mouseX, y: Laya.stage.mouseY, id: e.touchId };
       });
-      text(feed, "推荐挑战", 0, 0, 200, 10, palette.muted, true, 21);
-      text(feed, "第 " + v.round + " 轮反馈", 245, 0, 89, 10, palette.muted, false, 21);
-      const preview = box(feed, 0, 27 * k, 334, 112 * k, palette.light, 13, "feed-preview");
-      this.performer = this.character(preview, v.shootTaps || 0, v.topicId, 8, 3, 106 * k);
-      text(preview, v.title, 101, 28 * k, 225, 13, palette.green, true, 43);
-      text(preview, "内容质量 " + v.quality, 101, 79 * k, 200, 10, palette.muted, false, 24);
-      const status = box(feed, 0, 154 * k, 334, 73 * k, v.event === "爆火" ? "#efcf8d" : "#e7deb4", 14, "algorithm-status");
-      icon(status, v.event === "爆火" ? "flame" : "chart", 17, 15 * k, 34 * k, "#9aa35c");
-      text(status, v.event === "爆火" ? "爆款诞生！" : v.event, 62, 10 * k, 260, 22, palette.green, true, 32);
-      text(status, v.event === "推流" ? "更多观众正在发现你的作品" : "作品正在接受观众的这一轮反馈", 62, 45 * k, 262, 9, palette.muted, false, 22);
-      centered(feed, "当前播放量", 0, 248 * k, 334, 10, palette.muted, true, 24);
-      centered(feed, num(v.views), 0, 275 * k, 334, 48, palette.green, true, 65);
-      centered(feed, "本轮 +" + num(v.history[v.history.length - 1].delta) + " 播放", 0, 343 * k, 334, 10, "#ac8a40", false, 24);
-      const metrics = box(feed, 0, 383 * k, 334, 65 * k, "#ede5bf", 13);
-      for (const [i, art, value, label] of [[0, "heart", num(v.likes), "点赞"], [1, "chat", num(v.comments), "评论"], [2, "growth", "+" + num(v.fans), "新增粉丝"]]) {
-        icon(metrics, art, 26 + i * 109, 12 * k, 18, "#b88b42");
-        text(metrics, value, 52 + i * 109, 12 * k, 60, 12, palette.green, true, 22);
-        centered(metrics, label, i * 109, 38 * k, 109, 9, palette.muted, false, 20);
+      text(this.feed, "被看见的每一刻", 0, 0, 240, 10, palette.muted, false, 18);
+      this.labels.round = text(this.feed, "", 261, 0, 81, 10, palette.muted, false, 18);
+      const preview = box(this.feed, 0, 23, 342, layout.previewH, palette.light, 17, "feed-preview");
+      this.performer = this.character(preview, v.shootTaps || 0, v.topicId, 9, 3, layout.previewH - 6);
+      text(preview, v.title, 84, layout.compact ? 12 : 20, 245, 12, palette.green, true, 27);
+      text(preview, "内容质量 " + v.quality, 84, layout.compact ? 40 : 53, 230, 10, palette.muted, false, 21);
+      this.feedStatus = box(this.feed, 0, layout.statusY, 342, layout.statusH, palette.light, 19, "algorithm-status");
+      this.labels.status = text(this.feedStatus, "", 68, 12, 262, 22, palette.green, true, 32);
+      this.labels.statusCopy = text(this.feedStatus, "", 68, 46, 263, 9, palette.muted, false, 21);
+      centered(this.feed, "当前播放量", 0, layout.totalY, 342, 10, palette.muted, false, 20);
+      this.labels.views = centered(this.feed, "", 0, layout.totalY + 20, 342, layout.compact ? 43 : 55, palette.green, true, layout.compact ? 58 : 75);
+      this.labels.views.pivot(171, 0);
+      this.labels.views.x = 171;
+      this.labels.delta = centered(this.feed, "", 0, layout.totalY + (layout.compact ? 77 : 99), 342, 10, palette.goldInk, false, 20);
+      const metrics = box(this.feed, 0, layout.metricY, 342, layout.compact ? 60 : 70, palette.cream, 0);
+      metrics.graphics.drawLine(0, 0, 342, 0, palette.line, 1);
+      metrics.graphics.drawLine(0, metrics.height, 342, metrics.height, palette.line, 1);
+      for (const [i, art, key, label] of [[0, "heart", "likes", "点赞"], [1, "chat", "comments", "评论"], [2, "leaf", "fans", "新增粉丝"]]) {
+        this.labels[key] = centered(metrics, "", i * 114, 11, 114, 16, palette.green, true, 25);
+        icon(metrics, art, 25 + i * 114, layout.compact ? 39 : 44, 12, "#9daf8d");
+        text(metrics, label, 42 + i * 114, layout.compact ? 37 : 42, 68, 9, palette.muted, false, 18);
       }
-      const chartY = 476 * k, chartH = 48 * k;
-      feed.graphics.drawLine(0, chartY + chartH, 334, chartY + chartH, "#98ab6d", 1);
-      v.history.forEach((row, i) => box(feed, 6 + i * 35, chartY + chartH * (1 - row.target / v.views), 29, Math.max(3, chartH * row.target / v.views), "#90ad61", 4));
-      centered(this.root, "↓ 向下滑动，刷新一次数据", 28, this.h - 146, 334, 11, "#80935e", true, 24);
-      const b = button(this.root, "refresh", "刷新一次数据", 28, this.h - 106, 334, 48, () => this.refresh(), true, false);
-      icon(b, "chart", 94, 13, 20, "#fff3c9");
-      centered(this.root, v.round ? "成长与创作，影响下一轮推荐的机会" : "首条作品：体验推荐过程，从小小播放开始", 28, this.h - 45, 334, 9, palette.muted, false, 18);
+      text(this.feed, "被看见的轨迹", 0, layout.chartY, 150, 9, palette.muted, false, 18);
+      this.feedChart = box(this.feed, 0, layout.chartY + 22, 342, layout.chartH, palette.cream, 0, "feed-chart");
+      this.feedParticles = box(this.feed, 0, 0, 342, this.h - 283, "#00000000", 0, "feed-effects");
+      this.labels.pull = centered(this.root, "", 24, this.h - 120, 342, 10, palette.muted, false, 22);
+      this.feedAction = box(this.root, 24, layout.footerY, 342, 52, palette.cream, 0);
+      this.updateFeed();
+    }
+    updateFeed(from) {
+      const v = this.game.s.active;
+      if (!this.feed || !this.feedStatus || !this.feedChart || !this.feedAction || !v) return;
+      const style = statusStyle(v.event), layout = feedLayout(this.h), status = this.feedStatus;
+      status.graphics.clear();
+      surface(status, 342, layout.statusH, style.fill, "", style.border, 19);
+      const oldArt = status.getChildByName("status-art");
+      oldArt?.destroy(true);
+      const art = icon(status, style.icon, 20, layout.compact ? 21 : 24, 28, style.ink);
+      art.name = "status-art";
+      this.labels.status.text = style.title;
+      this.labels.status.color = style.ink;
+      this.labels.status.bold = v.event === "推流" || v.event === "爆火";
+      this.labels.status.fontSize = v.event === "爆火" ? 25 : v.event === "推流" ? 23 : 21;
+      this.labels.statusCopy.text = v.phase === "ended" ? v.reason || style.copy : style.copy;
+      for (const key of ["views", "likes", "comments", "fans", "status"]) this.labels[key].name = "feed-value:" + key;
+      this.labels.round.text = "第 " + v.round + " 轮";
+      this.labels.views.color = style.ink;
+      this.labels.delta.text = v.phase === "ended" ? "这条作品的收获已保留" : "本轮 +" + num(v.history[v.history.length - 1]?.delta || 0) + " 播放";
+      this.labels.pull.text = v.phase === "ended" ? "推荐已结束，看看这次的收获" : "↓ 向下轻滑，揭晓下一轮推荐反馈";
+      const totals = { views: v.views, likes: v.likes, comments: v.comments, fans: v.fans }, apply = (p) => {
+        for (const key of ["views", "likes", "comments", "fans"]) {
+          const value = from ? Math.round(from[key] + (totals[key] - from[key]) * (1 - (1 - p) ** 3)) : totals[key];
+          this.labels[key].text = (key === "fans" ? "+" : "") + num(value);
+        }
+      };
+      if (from) {
+        apply(0);
+        this.feedback.animate(this.labels.views, 560, apply, () => {
+          if (v.event === "推流" || v.event === "爆火") this.feedback.pulse(this.labels.views, v.event === "爆火" ? 0.1 : 0.06);
+        });
+        this.feedback.enter(status);
+      } else apply(1);
+      this.feedChart.destroyChildren();
+      this.feedChart.graphics.clear();
+      this.feedChart.graphics.drawLine(0, layout.chartH, 342, layout.chartH, palette.line, 1);
+      const n = v.history.length, gap = 8, width = Math.min(46, (342 - (n - 1) * gap) / Math.max(1, n));
+      v.history.forEach((row, i) => {
+        const height = Math.max(3, layout.chartH * row.target / Math.max(1, v.views)), bar = box(this.feedChart, i * (width + gap), layout.chartH - height, width, height, i === n - 1 ? style.ink : "#d9e3cb", 4, "feed-bar:" + i);
+        if (from && i === n - 1) {
+          bar.pivot(0, height);
+          bar.y = layout.chartH;
+          this.feedback.animate(bar, 420, (p) => bar.scaleY = Math.max(0.02, p));
+        }
+      });
+      this.feedAction.destroyChildren();
+      this.feedAction.graphics.clear();
+      button(this.feedAction, v.phase === "ended" ? "result" : "refresh", v.phase === "ended" ? "查看这条作品的结算   →" : "刷新一次数据", 0, 0, 342, 52, () => {
+        if (v.phase === "ended") {
+          if (Date.now() >= this.refreshAt) this.go("result");
+        } else this.refresh();
+      }, true, false);
+      if (from && v.history[v.history.length - 1].delta > 0 && this.feedParticles) {
+        const delta = this.labels.delta, baseY = delta.y;
+        this.feedback.animate(delta, 380, (p) => {
+          delta.y = baseY + 3 * (1 - p);
+          delta.alpha = p;
+        });
+        if (v.event === "推流" || v.event === "爆火") for (let i = 0; i < (v.event === "爆火" ? 14 : 6); i++) {
+          const particle = box(this.feedParticles, i % 2 ? 35 : 307, layout.totalY + 38, 4, 4, i % 2 ? "#dfb76b" : "#dc9979", 1), x = particle.x, py = particle.y, dx = (i % 2 ? -1 : 1) * (14 + i % 3 * 5), dy = -30 - i % 4 * 22;
+          this.feedback.animate(particle, 750, (p) => {
+            particle.pos(x + dx * p, py + dy * p + 28 * p * p);
+            particle.alpha = 1 - p;
+            particle.rotation = p * 100;
+          }, () => particle.destroy());
+        }
+      }
+    }
+    movePull(e) {
+      if (!this.drag || this.drag.id !== e.touchId || !this.feed || this.screen !== "live") return;
+      const distance = (Laya.stage.mouseY - this.drag.y) / this.view.scale;
+      this.feed.y = feedLayout(this.h).top + Math.min(25, Math.max(0, distance * 0.22));
+      this.labels.pull.text = distance > 55 ? "松开，揭晓本轮反馈" : "继续向下轻滑…";
     }
     endPull(e) {
       const d = this.drag;
       this.drag = null;
-      if (!d || d.id !== e.touchId || this.screen !== "live") return;
-      if (Laya.stage.mouseY - d.y > 55 && Math.abs(Laya.stage.mouseX - d.x) < 95) this.refresh();
+      if (!d || d.id !== e.touchId || this.screen !== "live" || !this.feed) return;
+      const feed = this.feed, y = feed.y, target = feedLayout(this.h).top;
+      this.feedback.animate(feed, 160, (p) => feed.y = y + (target - y) * (1 - (1 - p) ** 3));
+      this.labels.pull.text = "↓ 向下轻滑，揭晓下一轮推荐反馈";
+      if (e.nativeEvent?.type !== "touchcancel" && e.nativeEvent?.type !== "pointercancel" && (Laya.stage.mouseY - d.y) / this.view.scale > 55 && Math.abs(Laya.stage.mouseX - d.x) / this.view.scale < 95) this.refresh();
     }
     refresh() {
-      if (Date.now() < this.refreshAt) {
-        this.hint("正在揭晓本轮数据");
-        return;
-      }
-      const event = this.game.refresh();
+      if (Date.now() < this.refreshAt || this.modal || this.suspended) return;
+      const v = this.game.s.active;
+      if (!v || v.phase !== "live") return;
+      const from = { views: v.views, likes: v.likes, comments: v.comments, fans: v.fans }, event = this.game.refresh();
       if (!event) return;
       this.refreshAt = Date.now() + 650;
       this.platform.sound(event === "爆火" ? "viral" : "tap");
-      if (this.game.s.active.phase === "ended") this.go("result");
-      else this.render();
+      this.updateFeed(from);
     }
     result() {
       const v = this.game.s.active, r = this.game.reward;
@@ -1466,23 +1624,30 @@
         this.go("room");
         return;
       }
-      const medal = box(this.root, 169, 158, 52, 52, "#a2bb72", 26);
-      icon(medal, "trophy", 12, 12, 28, "#fff3c7");
-      centered(this.root, "第 " + v.id + " 条作品 · " + v.event, 28, 222, 334, 10, palette.muted, false, 23);
-      const title = centered(this.root, v.id === 1 ? "首条创作成功！" : "本次创作完成！", 28, 247, 334, 27, palette.green, false, 46);
-      title.font = "creator-brush-v07";
-      const card = box(this.root, 28, 306, 334, Math.max(235, this.h - 456), palette.cream, 19);
-      centered(card, num(v.views), 0, 13, 334, 42, palette.green, true, 59);
-      centered(card, "最终播放", 0, 76, 334, 10, palette.muted, false, 24);
-      const rewards = [["heart", "新增粉丝", "+" + num(r.fans)], ["coin", "作品收入", "¥ " + r.income], ["gift", "首创奖励", "¥ " + r.grant], ["growth", "成长点", "+" + r.points]];
-      rewards.forEach(([art, label, value], i) => {
-        const y = 112 + i * 31;
-        icon(card, art, 24, y, 19, "#ad8b43");
-        text(card, label, 53, y, 145, 12, palette.muted, false, 25);
-        text(card, value, 217, y - 2, 100, 16, palette.green, true, 29);
+      const compact = this.h < 760, top = compact ? 164 : 177, medal = box(this.root, 159, top, 72, 72, "#fff1cb", 26);
+      icon(medal, "trophy", 19, 19, 34, "#b2924d");
+      this.feedback.enter(medal);
+      centered(this.root, "第 " + v.id + " 条作品 · " + v.event, 24, top + 88, 342, 10, palette.muted, false, 23);
+      centered(this.root, v.id === 1 ? "首条创作，闪闪发光。" : "又一次，小小的发光。", 24, top + 116, 342, 26, palette.ink, false, 41);
+      centered(this.root, num(v.views), 24, top + 165, 342, compact ? 40 : 48, palette.green, true, 60);
+      centered(this.root, "这条作品被看见的次数", 24, top + 227, 342, 10, palette.muted, false, 22);
+      const y = top + 265, tileH = compact ? 69 : 92, gap = 11, monetized = (v.inputs?.audience || 0) >= 1e3;
+      const rewards = [
+        ["heart", "新增粉丝", "+" + num(r.fans), "喜欢你的人，又多了一些"],
+        ["leaf", "成长点", "+" + r.points, "为下一次创作积蓄力量"],
+        ["coin", "作品收入", monetized ? num(r.income) + " 钱币" : "暂未开放", monetized ? "本次创作的真实收入" : "千粉后开放作品收入"],
+        r.grant ? ["gift", "首创奖励", num(r.grant) + " 钱币", "可以购买第一盏补光灯"] : ["spark", "拍摄熟练度", "+1", "每一次开拍，都有进步"]
+      ];
+      rewards.forEach(([art, label, value, copy], i) => {
+        const tile = box(this.root, 24 + i % 2 * 177, y + Math.floor(i / 2) * (tileH + gap), 165, tileH, i >= 2 ? "#fbf0da" : palette.light, 17, "reward:" + art);
+        icon(tile, art, 13, 12, 14, i >= 2 ? "#b39a6c" : "#8aa076");
+        text(tile, label, 34, 10, 122, 10, palette.muted, false, 20);
+        text(tile, value, 14, compact ? 33 : 37, 143, value.length > 7 ? 16 : 23, i >= 2 ? "#ab8449" : palette.green, true, 30);
+        if (!compact) text(tile, copy, 14, 70, 142, 9, palette.muted, false, 18);
+        this.feedback.enter(tile, i * 80);
       });
-      centered(this.root, "拍摄 +1 · 剪辑 +1 · 坚持 +1", 28, this.h - 129, 334, 10, "#958745", true, 24);
-      const b = button(this.root, "claim", "领取，回到出租屋   →", 28, this.h - 93, 334, 52, () => {
+      if (!compact) centered(this.root, "剪辑 +1 · 坚持 +1" + (v.shot >= 85 ? " · 网感 +1" : ""), 24, y + tileH * 2 + 26, 342, 10, palette.muted, false, 25);
+      button(this.root, "claim", "收下成长，回到房间   →", 24, this.h - 90, 342, 52, () => {
         if (Date.now() - this.phaseEnteredAt < 450) return;
         const reward = this.game.claim();
         if (!reward) return;
@@ -1490,7 +1655,6 @@
         this.go("room");
         this.hint("新增 " + reward.fans + " 位粉丝，成长 +" + reward.points + " 点");
       });
-      icon(b, "gift", 53, 16, 20, "#8d642d");
     }
     scroll(y = 156) {
       this.panel = scroller(this.root, y, this.h - y - 26);
@@ -1679,6 +1843,7 @@
       }
     }
     destroy() {
+      this.feedback.clear();
       this.destroyed = true;
       this.requestId++;
       this.game.save();

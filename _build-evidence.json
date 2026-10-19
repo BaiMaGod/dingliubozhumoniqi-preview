@@ -1,8 +1,8 @@
 {
-  "gameVersion": "1.5.1",
+  "gameVersion": "1.6.0",
   "engine": "LayaAir",
   "engineVersion": "3.4.0",
-  "builtAt": "2026-10-16T09:49:52.598Z",
+  "builtAt": "2026-10-19T15:43:23.636Z",
   "officialBuild": true,
   "browserSmokePassed": true,
   "platformSmokePassed": true,
@@ -25,8 +25,8 @@
     },
     {
       "path": "js/bundle.js",
-      "bytes": 183258,
-      "sha256": "dc76c9e058fbcd4c490edd64c58bae2901c9df7acb99e070a827a08abe589c41"
+      "bytes": 191716,
+      "sha256": "012e78ab246ecf1c315a938d277dc53a4aeeba0c334b0e94f3b16dbf020727ef"
     },
     {
       "path": "js/index.js",
@@ -109,7 +109,17 @@
       "sha256": "c5336a251ce546c0eb6c906a966ecdff11397210e423f07eac1cce7e919de80a"
     }
   ],
-  "browserSmokeAt": "2026-10-16T15:32:04.910Z",
+  "browserSmokeViewport": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 375,
+      "height": 667
+    }
+  ],
+  "browserSmokeAt": "2026-10-19T15:44:34.002Z",
   "smoke": {
     "framePixels": true,
     "characterPixels": true,
@@ -149,7 +159,7 @@
     ],
     "sdkDeviceValidated": false
   },
-  "platformSmokeAt": "2026-10-16T15:32:38.663Z",
+  "platformSmokeAt": "2026-10-19T15:45:02.193Z",
   "visualSmoke": {
     "profiles": [
       "390x844",
@@ -158,20 +168,14 @@
     ],
     "characterPixels": true,
     "goldActions": true,
-    "originalComparison": true,
-    "navigationCycles": 18
+    "originalComparison": false,
+    "approvedArtDirection": true,
+    "navigationCycles": 18,
+    "feedbackStates": 5,
+    "countTween": true,
+    "retainedFeed": true,
+    "transientCleanup": true
   },
-  "browserSmokeViewport": [
-    {
-      "width": 390,
-      "height": 844
-    },
-    {
-      "width": 375,
-      "height": 667
-    }
-  ],
-  "sourceCommit": "ffd5933ecd92674d05493349e37947869fe3aa36",
-  "sourceRepository": "BaiMaGod/dingliubozhumoniqi",
-  "publicationValidatedAt": "2026-10-16T15:34:14.627779+00:00"
+  "sourceCommit": "e5af8faf3fcd65a2abe2eb42c23292cf04798dcf",
+  "sourceRepository": "BaiMaGod/dingliubozhumoniqi"
 }
