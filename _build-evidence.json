@@ -1,8 +1,8 @@
 {
-  "gameVersion": "1.6.0",
+  "gameVersion": "1.6.2",
   "engine": "LayaAir",
   "engineVersion": "3.4.0",
-  "builtAt": "2026-10-19T15:43:23.636Z",
+  "builtAt": "2026-10-23T15:26:43.111Z",
   "officialBuild": true,
   "browserSmokePassed": true,
   "platformSmokePassed": true,
@@ -15,8 +15,8 @@
     },
     {
       "path": "fileconfig.json",
-      "bytes": 456,
-      "sha256": "773e31d07547b85f30e268534760f601a95d00b5ba30b3f3c7d6e7de15da7c21"
+      "bytes": 708,
+      "sha256": "29156e2038aa545aaab3390bc20ef80cf58aa0c61545bec02ceb2910d9e1b2e2"
     },
     {
       "path": "index.html",
@@ -25,8 +25,8 @@
     },
     {
       "path": "js/bundle.js",
-      "bytes": 191716,
-      "sha256": "012e78ab246ecf1c315a938d277dc53a4aeeba0c334b0e94f3b16dbf020727ef"
+      "bytes": 202506,
+      "sha256": "c2d78a8fc70b6aa4932443b732d957c139098eca453dd494cb00c98c56fecc6d"
     },
     {
       "path": "js/index.js",
@@ -64,6 +64,11 @@
       "sha256": "d60f5cc833c60e8e0a0b7d49e44b800504e26b5c1a33e5616333186b713fc99c"
     },
     {
+      "path": "resources/camera-stage-v161.webp",
+      "bytes": 2154,
+      "sha256": "7bdc23c70fbb2c80e08108e16ad2a10745eaa2e31af9460dd6a61cd888ee0fb9"
+    },
+    {
       "path": "resources/creator-avatar-v102.webp",
       "bytes": 174472,
       "sha256": "934b721acacf06b3d2ffa5b8d42b853bf8b6aa9f1dfc5b04180a10c6e229a290"
@@ -82,6 +87,11 @@
       "path": "resources/creator-expressions-v105-laya.webp",
       "bytes": 1019640,
       "sha256": "b4d09db09eeba76302411c42f9b5f66f2dde1156f04737c34bfca1042d3a3f1d"
+    },
+    {
+      "path": "resources/creator-serif-v161.ttf",
+      "bytes": 56472,
+      "sha256": "13ea06b76672b61183fe65eb55422f683984fab726054a6fb144c0654d031ba3"
     },
     {
       "path": "resources/creator-xingqiyao-v106-laya.webp",
@@ -107,6 +117,16 @@
       "path": "resources/room-studio-v130.webp",
       "bytes": 155224,
       "sha256": "c5336a251ce546c0eb6c906a966ecdff11397210e423f07eac1cce7e919de80a"
+    },
+    {
+      "path": "resources/topic-stage-v161.webp",
+      "bytes": 3876,
+      "sha256": "ba39b74e1740e02bacad52b1052bbb6eea51a4762abaf16a80f1b8cfb88d09e2"
+    },
+    {
+      "path": "resources/ui-shadow-v161.png",
+      "bytes": 4732,
+      "sha256": "6cedb5c423008867ab4bc10de71663b7c5d659faae217657d332ed4032e1bf1e"
     }
   ],
   "browserSmokeViewport": [
@@ -119,7 +139,7 @@
       "height": 667
     }
   ],
-  "browserSmokeAt": "2026-10-19T15:44:34.002Z",
+  "browserSmokeAt": "2026-10-23T15:31:40.939Z",
   "smoke": {
     "framePixels": true,
     "characterPixels": true,
@@ -159,7 +179,7 @@
     ],
     "sdkDeviceValidated": false
   },
-  "platformSmokeAt": "2026-10-19T15:45:02.193Z",
+  "platformSmokeAt": "2026-10-23T15:36:09.368Z",
   "visualSmoke": {
     "profiles": [
       "390x844",
@@ -176,6 +196,86 @@
     "retainedFeed": true,
     "transientCleanup": true
   },
-  "sourceCommit": "e5af8faf3fcd65a2abe2eb42c23292cf04798dcf",
-  "sourceRepository": "BaiMaGod/dingliubozhumoniqi"
+  "navigationPerformancePassed": true,
+  "navigationPerformance": {
+    "budgetMs": 50,
+    "frames": 120,
+    "navigationCycles": 36,
+    "profiles": [
+      {
+        "profile": "390x844",
+        "checkpoints": [
+          {
+            "cycles": 0,
+            "p95": 16.700000000000273,
+            "idleDraws": 0,
+            "resources": 20
+          },
+          {
+            "cycles": 18,
+            "p95": 16.800000000000182,
+            "idleDraws": 2,
+            "resources": 22
+          },
+          {
+            "cycles": 36,
+            "p95": 16.799999999999272,
+            "idleDraws": 0,
+            "resources": 22
+          }
+        ]
+      },
+      {
+        "profile": "375x667-dpr2",
+        "checkpoints": [
+          {
+            "cycles": 0,
+            "p95": 16.700000000000273,
+            "idleDraws": 0,
+            "resources": 20
+          },
+          {
+            "cycles": 18,
+            "p95": 16.80000000000109,
+            "idleDraws": 2,
+            "resources": 22
+          },
+          {
+            "cycles": 36,
+            "p95": 33.30000000000291,
+            "idleDraws": 1,
+            "resources": 22
+          }
+        ]
+      },
+      {
+        "profile": "desktop",
+        "checkpoints": [
+          {
+            "cycles": 0,
+            "p95": 16.799999999999727,
+            "idleDraws": 0,
+            "resources": 20
+          },
+          {
+            "cycles": 18,
+            "p95": 16.799999999999272,
+            "idleDraws": 0,
+            "resources": 22
+          },
+          {
+            "cycles": 36,
+            "p95": 16.799999999999272,
+            "idleDraws": 0,
+            "resources": 22
+          }
+        ]
+      }
+    ],
+    "roomOnDemand": true,
+    "sidePagesWake": true,
+    "timerDrivenRedraw": true,
+    "originalDPR": true
+  },
+  "sourceCommit": "050431d6bae094f59b4506205ba06a8b6af47d8c"
 }
