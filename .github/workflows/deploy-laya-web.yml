@@ -1,0 +1,109 @@
+# Template: generated with scripts/scaffold.py. Never add a push or pull_request
+# trigger to a workflow handling private-source credentials without a security review.
+name: Build private LayaAir game and deploy Pages
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: layaair-pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  verify-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Ensure private-source read token exists
+        shell: bash
+        env:
+          SOURCE_TOKEN: ${{ secrets.LAYA_SOURCE_READ_TOKEN }}
+        run: |
+          if [ -z "$SOURCE_TOKEN" ]; then
+            echo '::error::Missing repository secret LAYA_SOURCE_READ_TOKEN'
+            exit 1
+          fi
+
+      - name: Checkout PUBLIC deployment tooling
+        uses: actions/checkout@v4
+        with:
+          path: deploy-tools
+          persist-credentials: false
+
+      - name: Checkout PRIVATE source (no persisted git credentials)
+        uses: actions/checkout@v4
+        with:
+          repository: BaiMaGod/dingliubozhumoniqi
+          ref: main
+          token: ${{ secrets.LAYA_SOURCE_READ_TOKEN }}
+          path: game-src
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install OFFICIAL LayaAir CLI 3.4.0
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/layabox/layaair-cli/master/install.sh -o "$RUNNER_TEMP/laya-install.sh"
+          bash "$RUNNER_TEMP/laya-install.sh"
+          echo "$HOME/.layaair" >> "$GITHUB_PATH"
+          "$HOME/.layaair/layaair" install 3.4.0
+          "$HOME/.layaair/layaair" list
+
+      - name: Validate source and domain tests
+        working-directory: game-src
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm install --no-audit --no-fund; fi
+          npm run typecheck
+          npm test
+
+      - name: Build REAL LayaAir Web package from private game
+        working-directory: game-src
+        shell: bash
+        run: |
+          set -euo pipefail
+          GITHUB_SHA="$(git rev-parse HEAD)" npm run release:build
+          node --input-type=module -e 'import fs from "node:fs"; import {execSync} from "node:child_process"; const p=".release-out/web/_build-evidence.json"; const e=JSON.parse(fs.readFileSync(p)); e.sourceCommit=execSync("git rev-parse HEAD").toString().trim(); fs.writeFileSync(p,JSON.stringify(e,null,2));'
+
+      - name: Install Playwright for actual gameplay acceptance
+        shell: bash
+        working-directory: game-src
+        run: npx --no-install playwright install --with-deps chromium
+
+      - name: Run browser gameplay acceptance and game-specific verification
+        working-directory: game-src
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run release:smoke
+          npm run release:verify
+
+      - name: Check verified release artifact and prevent private-file leaks
+        shell: bash
+        run: |
+          set -euo pipefail
+          # IMPORTANT: private source SHA, NOT the public preview workflow SHA.
+          export LAYA_SOURCE_COMMIT="$(git -C game-src rev-parse HEAD)"
+          node deploy-tools/scripts/validate-web.mjs game-src/.release-out/web
+
+      - name: Upload VERIFIED compiled Web files only
+        if: success()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: game-src/.release-out/web/
+
+      - name: Publish to GitHub Pages
+        if: success()
+        id: deploy
+        uses: actions/deploy-pages@v4
